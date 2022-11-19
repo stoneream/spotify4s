@@ -11,7 +11,6 @@ lazy val root = (project in file(".")).settings(
   libraryDependencies ++= Seq(
     "com.typesafe.play" %% "play-ahc-ws-standalone" % playWSVersion % "provided",
     "com.typesafe.play" %% "play-ws-standalone-json" % playWSVersion % "provided",
-    "com.github.tototoshi" %% "play-json-naming" % "1.5.0",
     "org.scalatest" %% "scalatest" % "3.2.8"
   )
 )

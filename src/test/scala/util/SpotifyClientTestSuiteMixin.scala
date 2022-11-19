@@ -33,6 +33,5 @@ trait SpotifyClientTestSuiteMixin extends SuiteMixin { this: Suite =>
   implicit val materializer = SystemMaterializer(system).materializer
   val ws = StandaloneAhcWSClient()
 
-  abstract override def withFixture(test: NoArgAsyncTest) = {
-  }
+  abstract override def withFixture(test: NoArgAsyncTest) = {}
 }

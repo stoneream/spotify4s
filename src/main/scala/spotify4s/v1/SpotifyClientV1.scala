@@ -1,5 +1,6 @@
-package spotify4s
+package spotify4s.v1
 
+import spotify4s.SpotifyClient
 import spotify4s.v1.model.Me
 
 object SpotifyClientV1 {
@@ -10,7 +11,7 @@ object SpotifyClientV1 {
      * https://developer.spotify.com/documentation/web-api/reference/#/operations/get-current-users-profile
      */
     def me: Option[Me] = {
-      client.get("/me")(Me.format)
+      client.get[Me]("/me")
     }
   }
 }
