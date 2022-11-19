@@ -2,20 +2,37 @@ package util
 
 import akka.actor.ActorSystem
 import akka.stream.SystemMaterializer
-import org.scalatest.{Args, Outcome, Status, TestSuite, TestSuiteMixin}
+import org.scalatest._
 import play.api.libs.ws.ahc.StandaloneAhcWSClient
 
-trait SpotifyClientTestSuiteMixin extends TestSuiteMixin { self: TestSuite =>
+//trait SpotifyClientTestSuiteMixin { self: TestSuite =>
+//
+//  type FixtureParam = StandaloneAhcWSClient
+//
+//  protected[this] def settingsProvider: SettingsProvider =
+//    SettingsProvider.default
+//
+//  def fixture(ws: StandaloneAhcWSClient): Unit = {}
+//
+//  override def withFixture(test: OneArgTest): Outcome = {
+//    implicit val system = ActorSystem()
+//    implicit val materializer = SystemMaterializer(system).materializer
+//    val ws = StandaloneAhcWSClient()
+//    try {
+//      fixture(ws)
+//
+//      withFixture(test)
+//    } finally {
+//      system.terminate()
+//    }
+//  }
+//}
 
-  abstract override def run(testName: Option[String], args: Args): Status = {
-    implicit val system = ActorSystem()
-    implicit val materializer = SystemMaterializer(system).materializer
-    val ws = StandaloneAhcWSClient()
-    try {
+trait SpotifyClientTestSuiteMixin extends SuiteMixin { this: Suite =>
+  implicit val system = ActorSystem()
+  implicit val materializer = SystemMaterializer(system).materializer
+  val ws = StandaloneAhcWSClient()
 
-      super.run(testName, args)
-    } finally {
-      system.terminate()
-    }
+  abstract override def withFixture(test: NoArgAsyncTest) = {
   }
 }
