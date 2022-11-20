@@ -11,7 +11,7 @@ class SpotifyClient(accessToken: String)(ws: StandaloneWSClient, timeout: Durati
   val protocol = "https"
   val host = "api.spotify.com"
 
-  def get[T](endpoint: String): JsValue = {
+  def get(endpoint: String): JsValue = {
     // todo query parameter
 
     val headers = (
