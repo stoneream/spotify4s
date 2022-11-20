@@ -25,7 +25,14 @@ lazy val root = (project in file(".")).settings(
     "com.typesafe.play" %% "play-ws-standalone-json" % playWSVersion % "provided",
     "org.scalatest" %% "scalatest" % "3.2.14"
   ),
-  publish / skip := false
+  publish / skip := false,
+  Test / publishArtifact := false,
+  Compile / packageBin / publishArtifact := false,
+  Compile / packageDoc / publishArtifact := false,
+  Compile / packageSrc / publishArtifact := false,
+  artifactName := { (sv: ScalaVersion, module: ModuleID, artifact: Artifact) =>
+    artifact.name + "-" + module.revision + "." + artifact.extension
+  }
 )
 
 ThisBuild / semanticdbEnabled := true
