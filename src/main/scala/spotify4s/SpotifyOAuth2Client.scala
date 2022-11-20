@@ -47,8 +47,6 @@ class SpotifyOAuth2Client(clientId: String, clientSecret: String)(ws: Standalone
 
     val response = Await.result(request, timeout)
 
-    println(response.body)
-
     response.body[JsValue]
   }
 
