@@ -30,9 +30,7 @@ lazy val root = (project in file(".")).settings(
   Compile / packageBin / publishArtifact := false,
   Compile / packageDoc / publishArtifact := false,
   Compile / packageSrc / publishArtifact := false,
-  artifactName := { (sv: ScalaVersion, module: ModuleID, artifact: Artifact) =>
-    artifact.name + "-" + module.revision + "." + artifact.extension
-  }
+  crossPaths := false
 )
 
 ThisBuild / semanticdbEnabled := true
