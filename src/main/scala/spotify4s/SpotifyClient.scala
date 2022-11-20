@@ -11,9 +11,9 @@ class SpotifyClient(accessToken: String)(ws: StandaloneWSClient, timeout: Durati
   val protocol = "https"
   val host = "api.spotify.com"
 
-  def get[T](path: String)(implicit format: Format[T]): Option[T] = {
+  def get[T](endpoint: String)(implicit format: Format[T]): Option[T] = {
     // todo query parameter
-    val request = ws.url(s"$protocol://$host$path").get()
+    val request = ws.url(s"$protocol://$host$endpoint").get()
 
     val response = Await.result(request, timeout)
 
