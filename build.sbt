@@ -6,8 +6,8 @@ val playWSVersion = "2.1.10"
 
 lazy val root = (project in file(".")).settings(
   name := "spotify4s",
-//  semanticdbEnabled := true,
-//  semanticdbVersion := scalafixSemanticdb.revision,
+  semanticdbEnabled := true,
+  semanticdbVersion := scalafixSemanticdb.revision,
   libraryDependencies ++= Seq(
     "com.typesafe.play" %% "play-ahc-ws-standalone" % playWSVersion % "provided",
     "com.typesafe.play" %% "play-ws-standalone-json" % playWSVersion % "provided",
@@ -15,9 +15,9 @@ lazy val root = (project in file(".")).settings(
   )
 )
 
-//scalacOptions ++= List(
-//  "-Ywarn-unused",
-//  "-Yrangepos"
-//)
+scalacOptions ++= List(
+  "-Ywarn-unused",
+  "-Yrangepos"
+)
 
 scalafmtOnCompile := true
