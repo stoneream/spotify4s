@@ -23,6 +23,7 @@ class SpotifyClient(accessToken: String)(ws: StandaloneWSClient, timeout: Durati
 
     val response = Await.result(request, timeout)
 
+    // todo 200以外が帰ってきたときのハンドリング
     response.body[JsValue]
   }
 }
