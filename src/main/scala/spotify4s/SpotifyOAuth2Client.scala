@@ -1,6 +1,6 @@
 package spotify4s
 
-import play.api.libs.json.JsValue
+import play.api.libs.json.{Format, JsValue}
 import play.api.libs.ws.DefaultBodyWritables.writeableOf_urlEncodedForm
 import play.api.libs.ws.JsonBodyReadables.readableAsJson
 import play.api.libs.ws.{StandaloneWSClient, WSAuthScheme}
@@ -18,7 +18,7 @@ class SpotifyOAuth2Client(clientId: String, clientSecret: String)(ws: Standalone
    * Access token request
    * https://developer.spotify.com/documentation/general/guides/authorization/code-flow/
    */
-  def accessTokenRequest(code: String, redirectUri: String): Option[AccessTokenRequestResponse] = {
+  def accessTokenRequest(code: String, redirectUri: String)(implicit format: Format[AccessTokenRequestResponse]): Option[AccessTokenRequestResponse] = {
     val url = s"$protocol://$host$tokenEndpoint"
     val body = Map(
       "grant_type" -> Seq("authorization_code"),
@@ -29,7 +29,7 @@ class SpotifyOAuth2Client(clientId: String, clientSecret: String)(ws: Standalone
 
     val response = Await.result(request, timeout)
 
-    response.body[JsValue].validateOpt(AccessTokenRequestResponse.format).get
+    response.body[JsValue].validateOpt.get
   }
 
   /**
