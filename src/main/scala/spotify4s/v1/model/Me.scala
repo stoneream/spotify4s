@@ -9,7 +9,7 @@ case class Me(
     followers: Followers,
     href: String,
     id: String,
-    images: Seq[Images],
+    images: List[Images],
     product: String,
     uri: String
 )

@@ -1,6 +1,6 @@
 package spotify4s
 
-import play.api.libs.json.{JsValue, Json, JsonConfiguration, JsonNaming}
+import play.api.libs.json.{Format, JsValue}
 import play.api.libs.ws.JsonBodyReadables._
 import play.api.libs.ws.StandaloneWSClient
 
@@ -11,15 +11,12 @@ class SpotifyClient(accessToken: String)(ws: StandaloneWSClient, timeout: Durati
   val protocol = "https"
   val host = "api.spotify.com"
 
-  def get[T](path: String): Option[T] = {
+  def get[T](path: String)(implicit format: Format[T]): Option[T] = {
     // todo query parameter
     val request = ws.url(s"$protocol://$host$path").get()
 
     val response = Await.result(request, timeout)
 
-    val config = JsonConfiguration(naming = JsonNaming.SnakeCase)
-    val formatter = Json.configured(config).reads[T]
-
-    response.body[JsValue].validateOpt(formatter).get
+    response.body[JsValue].validateOpt.get
   }
 }
