@@ -4,8 +4,6 @@ import play.api.libs.json.{Format, JsValue}
 import play.api.libs.ws.DefaultBodyWritables.writeableOf_urlEncodedForm
 import play.api.libs.ws.JsonBodyReadables.readableAsJson
 import play.api.libs.ws.{StandaloneWSClient, WSAuthScheme}
-import spotify4s.model.AccessTokenRequestResponse
-
 import scala.concurrent.Await
 import scala.concurrent.duration.Duration
 
@@ -20,7 +18,7 @@ class SpotifyOAuth2Client(clientId: String, clientSecret: String)(ws: Standalone
    *
    * https://developer.spotify.com/documentation/general/guides/authorization/code-flow/
    */
-  def accessTokenRequest(code: String, redirectUri: String)(implicit format: Format[AccessTokenRequestResponse]): Option[AccessTokenRequestResponse] = {
+  def accessTokenRequest(code: String, redirectUri: String): JsValue = {
     val url = s"$protocol://$host$tokenEndpoint"
     val body = Map(
       "grant_type" -> Seq("authorization_code"),
@@ -31,7 +29,7 @@ class SpotifyOAuth2Client(clientId: String, clientSecret: String)(ws: Standalone
 
     val response = Await.result(request, timeout)
 
-    response.body[JsValue].validateOpt.get
+    response.body[JsValue]
   }
 
   /**
@@ -40,7 +38,7 @@ class SpotifyOAuth2Client(clientId: String, clientSecret: String)(ws: Standalone
    *
    * https://developer.spotify.com/documentation/general/guides/authorization/client-credentials/
    */
-  def accessTokenRequest(implicit format: Format[AccessTokenRequestResponse]): Option[AccessTokenRequestResponse] = {
+  def accessTokenRequest: JsValue = {
     val url = s"$protocol://$host$tokenEndpoint"
     val body = Map(
       "grant_type" -> Seq("client_credentials")
@@ -49,7 +47,9 @@ class SpotifyOAuth2Client(clientId: String, clientSecret: String)(ws: Standalone
 
     val response = Await.result(request, timeout)
 
-    response.body[JsValue].validateOpt.get
+    println(response.body)
+
+    response.body[JsValue]
   }
 
   /**
