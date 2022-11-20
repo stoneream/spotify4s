@@ -14,6 +14,10 @@ object SpotifyClientV1 {
       client.get("/v1/me")
     }
 
+    /**
+     * Get Track
+     * https://developer.spotify.com/documentation/web-api/reference/#/operations/get-track
+     */
     def track(id: String): JsValue = {
       client.get(s"/v1/tracks/$id")
     }
