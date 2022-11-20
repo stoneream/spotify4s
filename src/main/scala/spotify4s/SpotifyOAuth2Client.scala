@@ -16,6 +16,8 @@ class SpotifyOAuth2Client(clientId: String, clientSecret: String)(ws: Standalone
 
   /**
    * Access token request
+   * Authorization Code Flow
+   *
    * https://developer.spotify.com/documentation/general/guides/authorization/code-flow/
    */
   def accessTokenRequest(code: String, redirectUri: String)(implicit format: Format[AccessTokenRequestResponse]): Option[AccessTokenRequestResponse] = {
@@ -33,7 +35,27 @@ class SpotifyOAuth2Client(clientId: String, clientSecret: String)(ws: Standalone
   }
 
   /**
+   * Access token request
+   * Client Credentials Flow
+   *
+   * https://developer.spotify.com/documentation/general/guides/authorization/client-credentials/
+   */
+  def accessTokenRequest(implicit format: Format[AccessTokenRequestResponse]): Option[AccessTokenRequestResponse] = {
+    val url = s"$protocol://$host$tokenEndpoint"
+    val body = Map(
+      "grant_type" -> Seq("client_credentials")
+    )
+    val request = ws.url(url).withAuth(clientId, clientSecret, WSAuthScheme.BASIC).post(body)
+
+    val response = Await.result(request, timeout)
+
+    response.body[JsValue].validateOpt.get
+  }
+
+  /**
    * Access token request (PKCE)
+   * Authorization Code Flow
+   *
    * https://developer.spotify.com/documentation/general/guides/authorization/code-flow/
    */
   def accessTokenRequest(code: String, redirectUri: String, codeVerifier: String) = {
@@ -42,6 +64,8 @@ class SpotifyOAuth2Client(clientId: String, clientSecret: String)(ws: Standalone
 
   /**
    * Access token request by refresh token
+   * Authorization Code Flow
+   *
    * https://developer.spotify.com/documentation/general/guides/authorization/code-flow/
    */
   def accessTokenRequestByRefreshToken(refreshToken: String) = {
