@@ -1,6 +1,6 @@
 package spotify4s
 
-import play.api.libs.json.{Format, JsValue}
+import play.api.libs.json.JsValue
 import play.api.libs.ws.DefaultBodyWritables.writeableOf_urlEncodedForm
 import play.api.libs.ws.JsonBodyReadables.readableAsJson
 import play.api.libs.ws.{StandaloneWSClient, WSAuthScheme}
@@ -58,7 +58,7 @@ class SpotifyOAuth2Client(clientId: String, clientSecret: String)(ws: Standalone
    *
    * https://developer.spotify.com/documentation/general/guides/authorization/code-flow/
    */
-  def accessTokenRequest(code: String, redirectUri: String, codeVerifier: String) = {
+  def accessTokenRequest(code: String, redirectUri: String, codeVerifier: String): Nothing = {
     ???
   }
 
@@ -68,7 +68,7 @@ class SpotifyOAuth2Client(clientId: String, clientSecret: String)(ws: Standalone
    *
    * https://developer.spotify.com/documentation/general/guides/authorization/code-flow/
    */
-  def accessTokenRequestByRefreshToken(refreshToken: String) = {
+  def accessTokenRequestByRefreshToken(refreshToken: String): Nothing = {
     ???
   }
 }
