@@ -18,6 +18,12 @@ ThisBuild / credentials += Credentials(
   sys.env.getOrElse("GITHUB_TOKEN", "")
 )
 
+lazy val core = (project in file("core")).settings(
+  name := "spotify4s"
+)
+
+/*
+
 lazy val root = (project in file(".")).settings(
   name := "spotify4s",
   libraryDependencies ++= Seq(
@@ -32,6 +38,7 @@ lazy val root = (project in file(".")).settings(
   Compile / packageSrc / publishArtifact := false,
   crossPaths := false
 )
+ */
 
 ThisBuild / semanticdbEnabled := true
 ThisBuild / semanticdbVersion := scalafixSemanticdb.revision

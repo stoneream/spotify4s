@@ -1,7 +1,5 @@
 package spotify4s.v1.response
 
-import spotify4s.v1.model.PagingObject
-
 case class Search200Response(
     tracks: Option[PagingObject] = None,
     artists: Option[PagingObject] = None,
