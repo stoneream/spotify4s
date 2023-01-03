@@ -279,7 +279,8 @@ object TracksApi {
       .delete(requestUrl)
       .body(removeTracksPlaylistRequest)
       .response(asJsonEither[ErrorObject, ReorderOrReplacePlaylistsTracks200Response])
-      .send(client).body
+      .send(client)
+      .body
   }
 
   /**

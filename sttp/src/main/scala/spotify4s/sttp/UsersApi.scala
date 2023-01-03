@@ -19,7 +19,9 @@ object UsersApi {
    * Check If User Follows Artists or Users
    * Check to see if the current user is following one or more artists or other Spotify users.
    */
-  def checkCurrentUserFollows(`type`: String, ids: String)(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject, circe.Error], List[Boolean]] = {
+  def checkCurrentUserFollows(`type`: String, ids: String)(
+      client: SttpBackend[Identity, Any]
+  ): Either[ResponseException[ErrorObject, circe.Error], List[Boolean]] = {
 
     val queryParams = Map.empty[String, String] + ("type" -> `type`.toString) + ("ids" -> ids.toString)
 
