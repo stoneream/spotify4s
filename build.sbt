@@ -3,7 +3,8 @@ ThisBuild / version := "0.1.0-SNAPSHOT"
 ThisBuild / organization := "com.github.stoneream"
 ThisBuild / scalafixScalaBinaryVersion := CrossVersion.binaryScalaVersion(scalaVersion.value)
 
-val playWSVersion = "2.1.10"
+val circeVersion = "0.14.3"
+val sttpVersion = "3.8.6"
 
 ThisBuild / publishMavenStyle := true
 ThisBuild / publish / skip := true
@@ -19,8 +20,21 @@ ThisBuild / credentials += Credentials(
 )
 
 lazy val core = (project in file("core")).settings(
-  name := "spotify4s"
+  name := "spotify4s-core"
 )
+
+lazy val sttp = (project in file("sttp"))
+  .settings(
+    name := "spotify4s-sttp",
+    libraryDependencies ++= Seq(
+      "com.softwaremill.sttp.client3" %% "core" % sttpVersion,
+      "com.softwaremill.sttp.client3" %% "circe" % sttpVersion,
+      "io.circe" %% "circe-generic" % circeVersion,
+      "io.circe" %% "circe-generic-extras" % circeVersion,
+      "io.circe" %% "circe-literal" % circeVersion
+    )
+  )
+  .dependsOn(core)
 
 /*
 
