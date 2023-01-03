@@ -1,5 +1,6 @@
 package spotify4s.sttp
 
+import io.circe.generic.extras.Configuration
 import io.circe.generic.extras.auto._
 import spotify4s.v1.model.{CurrentlyPlayingContextObject, CursorPagingObject, ErrorObject, QueueObject}
 import spotify4s.v1.response.GetAUsersAvailableDevices200Response
@@ -7,6 +8,8 @@ import sttp.client3._
 import sttp.client3.circe._
 
 object PlayerApi {
+
+  private implicit val jsonConfig: Configuration = Configuration.default.withSnakeCaseMemberNames
 
   private val baseUri = uri"https://api.spotify.com/v1"
 

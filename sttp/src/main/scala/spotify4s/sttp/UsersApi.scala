@@ -1,5 +1,7 @@
 package spotify4s.sttp
 
+import io.circe
+import io.circe.generic.extras.Configuration
 import io.circe.generic.extras.auto._
 import spotify4s.v1.model._
 import spotify4s.v1.request.{FollowArtistsUsersRequest, FollowPlaylistRequest, UnfollowArtistsUsersRequest}
@@ -9,13 +11,15 @@ import sttp.client3.circe._
 
 object UsersApi {
 
+  private implicit val jsonConfig: Configuration = Configuration.default.withSnakeCaseMemberNames
+
   private val baseUri = uri"https://api.spotify.com/v1"
 
   /**
    * Check If User Follows Artists or Users
    * Check to see if the current user is following one or more artists or other Spotify users.
    */
-  def checkCurrentUserFollows(`type`: String, ids: String)(client: SttpBackend[Identity, Any]) = {
+  def checkCurrentUserFollows(`type`: String, ids: String)(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject, circe.Error], List[Boolean]] = {
 
     val queryParams = Map.empty[String, String] + ("type" -> `type`.toString) + ("ids" -> ids.toString)
 
