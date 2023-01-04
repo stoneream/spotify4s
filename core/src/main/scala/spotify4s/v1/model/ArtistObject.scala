@@ -16,22 +16,7 @@ case class ArtistObject(
     /* The popularity of the artist. The value will be between 0 and 100, with 100 being the most popular. The artist's popularity is calculated from the popularity of all the artist's tracks.  */
     popularity: Option[Int] = None,
     /* The object type.  */
-    `type`: Option[ArtistObject.`Type`] = None,
+    `type`: Option[String] = None,
     /* The [Spotify URI](/documentation/web-api/#spotify-uris-and-ids) for the artist.  */
     uri: Option[String] = None
 )
-
-object ArtistObject {
-
-  sealed abstract class `Type`(val value: String)
-
-  object `Type` {
-    final case object Artist extends `Type`("artist")
-    final case object Unknown extends `Type`("unknown")
-
-    val values: Seq[Artist.type] = Seq(Artist)
-
-    def fromString(s: String): `Type` = values.find(p => p.value == s).getOrElse(Unknown)
-  }
-
-}

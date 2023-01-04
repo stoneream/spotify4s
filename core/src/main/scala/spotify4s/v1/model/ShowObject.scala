@@ -29,24 +29,9 @@ case class ShowObject(
     /* The publisher of the show.  */
     publisher: String,
     /* The object type.  */
-    `type`: ShowObject.`Type`,
+    `type`: String,
     /* The [Spotify URI](/documentation/web-api/#spotify-uris-and-ids) for the show.  */
     uri: String,
     /* The episodes of the show.  */
     episodes: PagingObject
 )
-
-object ShowObject {
-
-  sealed abstract class `Type`(val value: String)
-
-  object `Type` {
-    final case object Show extends `Type`("show")
-    final case object Unknown extends `Type`("unknown")
-
-    val values: Seq[Show.type] = Seq(Show)
-
-    def fromString(s: String): `Type` = values.find(p => p.value == s).getOrElse(Unknown)
-  }
-
-}

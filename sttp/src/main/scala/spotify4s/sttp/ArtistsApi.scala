@@ -1,6 +1,5 @@
 package spotify4s.sttp
 
-import io.circe.generic.extras.Configuration
 import io.circe.generic.extras.auto._
 import spotify4s.v1.model.{ArtistObject, ErrorObject, PagingObject}
 import spotify4s.v1.request.{FollowArtistsUsersRequest, UnfollowArtistsUsersRequest}
@@ -9,8 +8,6 @@ import sttp.client3._
 import sttp.client3.circe._
 
 object ArtistsApi {
-
-  private implicit val jsonConfig: Configuration = Configuration.default.withSnakeCaseMemberNames
 
   private val baseUri = uri"https://api.spotify.com/v1"
 

@@ -12,22 +12,7 @@ case class PublicUserObject(
     /* The user's profile image.  */
     images: Option[List[ImageObject]] = None,
     /* The object type.  */
-    `type`: Option[PublicUserObject.`Type`] = None,
+    `type`: Option[String] = None,
     /* The [Spotify URI](/documentation/web-api/#spotify-uris-and-ids) for this user.  */
     uri: Option[String] = None
 )
-
-object PublicUserObject {
-
-  sealed abstract class `Type`(val value: String)
-
-  object `Type` {
-    final case object User extends `Type`("user")
-    final case object Unknown extends `Type`("unknown")
-
-    val values: Seq[User.type] = Seq(User)
-
-    def fromString(s: String): `Type` = values.find(p => p.value == s).getOrElse(Unknown)
-  }
-
-}

@@ -30,7 +30,7 @@ case class AudiobookObject(
     /* The publisher of the audiobook.  */
     publisher: String,
     /* The object type.  */
-    `type`: AudiobookObject.`Type`,
+    `type`: String,
     /* The [Spotify URI](/documentation/web-api/#spotify-uris-and-ids) for the audiobook.  */
     uri: String,
     /* The number of chapters in this audiobook.  */
@@ -38,18 +38,3 @@ case class AudiobookObject(
     /* The chapters of the audiobook.  */
     chapters: PagingObject
 )
-
-object AudiobookObject {
-
-  sealed abstract class `Type`(val value: String)
-
-  object `Type` {
-    final case object Audiobook extends `Type`("audiobook")
-    final case object Unknown extends `Type`("unknown")
-
-    val values: Seq[Audiobook.type] = Seq(Audiobook)
-
-    def fromString(s: String): `Type` = values.find(p => p.value == s).getOrElse(Unknown)
-  }
-
-}

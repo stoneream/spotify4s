@@ -29,39 +29,11 @@ case class ChapterBase(
     /* The date the episode was first released, for example `\"1981-12-15\"`. Depending on the precision, it might be shown as `\"1981\"` or `\"1981-12\"`.  */
     releaseDate: String,
     /* The precision with which `release_date` value is known.  */
-    releaseDatePrecision: ChapterBase.ReleaseDatePrecision,
+    releaseDatePrecision: String,
     resumePoint: EpisodeBaseResumePoint,
     /* The object type.  */
-    `type`: ChapterBase.`Type`,
+    `type`: String,
     /* The [Spotify URI](/documentation/web-api/#spotify-uris-and-ids) for the episode.  */
     uri: String,
     restrictions: Option[EpisodeBaseRestrictions] = None
 )
-
-object ChapterBase {
-
-  sealed abstract class ReleaseDatePrecision(val value: String)
-
-  object ReleaseDatePrecision {
-    final case object Year extends ReleaseDatePrecision("year")
-    final case object Month extends ReleaseDatePrecision("month")
-    final case object Day extends ReleaseDatePrecision("day")
-    final case object Unknown extends ReleaseDatePrecision("unknown")
-
-    val values: Seq[ReleaseDatePrecision] = Seq(Year, Month, Day)
-
-    def fromString(s: String): ReleaseDatePrecision = values.find(p => p.value == s).getOrElse(Unknown)
-  }
-
-  sealed abstract class `Type`(val value: String)
-
-  object `Type` {
-    final case object Episode extends `Type`("episode")
-    final case object Unknown extends `Type`("unknown")
-
-    val values: Seq[Episode.type] = Seq(Episode)
-
-    def fromString(s: String): `Type` = values.find(p => p.value == s).getOrElse(Unknown)
-  }
-
-}
