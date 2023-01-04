@@ -38,7 +38,6 @@ inThisBuild(
 
 sonatypeCredentialHost := "s01.oss.sonatype.org"
 sonatypeRepository := "https://s01.oss.sonatype.org/service/local"
-publishTo := sonatypePublishToBundle.value
 
 lazy val publishSettings = Seq(
   publish / skip := false,
@@ -61,10 +60,12 @@ val librarySttp = Seq(
 
 // project
 
-lazy val root = (project in file(".")).settings(
-  name := "spotify4s",
-  publish / skip := true
-)
+lazy val root = (project in file("."))
+  .settings(
+    name := "spotify4s",
+    publish / skip := true
+  )
+  .aggregate(core, circe, sttp)
 
 lazy val core = (project in file("core")).settings(
   name := "core",
