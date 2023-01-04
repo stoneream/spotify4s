@@ -4,7 +4,16 @@ ThisBuild / organization := "com.github.stoneream"
 ThisBuild / scalafixScalaBinaryVersion := CrossVersion.binaryScalaVersion(scalaVersion.value)
 
 val circeVersion = "0.14.3"
+val libraryCirce = Seq(
+  "io.circe" %% "circe-generic" % circeVersion,
+  "io.circe" %% "circe-generic-extras" % circeVersion,
+  "io.circe" %% "circe-literal" % circeVersion
+)
 val sttpVersion = "3.8.6"
+val librarySttp = Seq(
+  "com.softwaremill.sttp.client3" %% "core" % sttpVersion,
+  "com.softwaremill.sttp.client3" %% "circe" % sttpVersion
+)
 
 ThisBuild / publishMavenStyle := true
 ThisBuild / publish / skip := true
@@ -23,18 +32,20 @@ lazy val core = (project in file("core")).settings(
   name := "spotify4s-core"
 )
 
+lazy val circe = (project in file("circe"))
+  .settings(
+    name := "spotify4s-circe",
+    libraryDependencies ++= libraryCirce
+  )
+  .dependsOn(core)
+
 lazy val sttp = (project in file("sttp"))
   .settings(
     name := "spotify4s-sttp",
-    libraryDependencies ++= Seq(
-      "com.softwaremill.sttp.client3" %% "core" % sttpVersion,
-      "com.softwaremill.sttp.client3" %% "circe" % sttpVersion,
-      "io.circe" %% "circe-generic" % circeVersion,
-      "io.circe" %% "circe-generic-extras" % circeVersion,
-      "io.circe" %% "circe-literal" % circeVersion
-    )
+    libraryDependencies ++= librarySttp ++ libraryCirce
   )
   .dependsOn(core)
+  .dependsOn(circe)
 
 /*
 
@@ -57,7 +68,7 @@ lazy val root = (project in file(".")).settings(
 ThisBuild / semanticdbEnabled := true
 ThisBuild / semanticdbVersion := scalafixSemanticdb.revision
 
-scalacOptions ++= List(
+ThisBuild / scalacOptions ++= List(
   "-Ywarn-unused",
   "-Yrangepos"
 )
