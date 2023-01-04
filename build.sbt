@@ -1,7 +1,7 @@
 // project setting
 
 ThisBuild / scalaVersion := "2.13.10"
-ThisBuild / version := "0.1.3-SNAPSHOT"
+ThisBuild / version := "0.1.3"
 ThisBuild / scalafixScalaBinaryVersion := CrossVersion.binaryScalaVersion(scalaVersion.value)
 
 // project info
