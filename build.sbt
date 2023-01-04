@@ -1,5 +1,5 @@
 ThisBuild / scalaVersion := "2.13.10"
-ThisBuild / version := "0.1.1-SNAPSHOT"
+ThisBuild / version := "0.1.2"
 ThisBuild / organization := "com.github.stoneream"
 ThisBuild / scalafixScalaBinaryVersion := CrossVersion.binaryScalaVersion(scalaVersion.value)
 
