@@ -4,7 +4,8 @@ case class PlaylistObjectTracks(
     /* A link to the Web API endpoint returning the full result of the request  */
     href: String,
     /* The requested content  */
-    items: List[Object],
+    // todo fix
+    // items: List[Object],
     /* The maximum number of items in the response (as set in the query or by default).  */
     limit: Int,
     /* URL to the next page of items. ( `null` if none)  */
