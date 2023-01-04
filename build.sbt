@@ -18,7 +18,7 @@ inThisBuild(
 
 inThisBuild(
   List(
-    organization := "com.github.stoneream",
+    organization := "io.github.stoneream",
     homepage := Some(url("https://github.com/stoneream/spotify4s")),
     licenses := List(
       "Apache License 2.0" -> url("https://github.com/stoneream/spotify4s/blob/main/LICENCE.md")
