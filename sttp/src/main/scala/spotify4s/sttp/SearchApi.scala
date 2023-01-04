@@ -10,6 +10,7 @@ import sttp.client3.circe._
 import sttp.model.Uri
 
 case class SearchApi(baseUri: Uri = uri"https://api.spotify.com/v1") {
+
   /**
    * Search for Item
    * Get Spotify catalog information about albums, artists, playlists, tracks, shows, episodes or audiobooks that match a keyword string.

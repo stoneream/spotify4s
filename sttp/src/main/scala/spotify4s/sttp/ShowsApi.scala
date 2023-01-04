@@ -10,6 +10,7 @@ import sttp.client3.circe._
 import sttp.model.Uri
 
 case class ShowsApi(baseUri: Uri = uri"https://api.spotify.com/v1") {
+
   /**
    * Check User's Saved Shows
    * Check if one or more shows is already saved in the current Spotify user's library.

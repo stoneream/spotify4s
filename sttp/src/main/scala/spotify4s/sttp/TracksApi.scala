@@ -11,6 +11,7 @@ import sttp.client3.circe._
 import sttp.model.Uri
 
 case class TracksApi(baseUri: Uri = uri"https://api.spotify.com/v1") {
+
   /**
    * Add Items to Playlist
    * Add one or more items to a user's playlist.

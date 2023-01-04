@@ -10,6 +10,7 @@ import sttp.client3.circe._
 import sttp.model.Uri
 
 case class AudiobooksApi(baseUri: Uri = uri"https://api.spotify.com/v1") {
+
   /**
    * Check User's Saved Audiobooks
    * Check if one or more audiobooks are already saved in the current Spotify user's library.

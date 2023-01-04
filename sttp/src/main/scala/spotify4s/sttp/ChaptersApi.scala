@@ -10,6 +10,7 @@ import sttp.client3.circe._
 import sttp.model.Uri
 
 case class ChaptersApi(baseUri: Uri = uri"https://api.spotify.com/v1") {
+
   /**
    * Get a Chapter
    * Get Spotify catalog information for a single chapter.<br /> **Note: Chapters are only available for the US, UK, Ireland, New Zealand and Australia markets.**

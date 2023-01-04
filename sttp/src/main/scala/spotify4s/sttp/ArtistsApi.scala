@@ -11,6 +11,7 @@ import sttp.client3.circe._
 import sttp.model.Uri
 
 case class ArtistsApi(baseUri: Uri = uri"https://api.spotify.com/v1") {
+
   /**
    * Check If User Follows Artists or Users
    * Check to see if the current user is following one or more artists or other Spotify users.

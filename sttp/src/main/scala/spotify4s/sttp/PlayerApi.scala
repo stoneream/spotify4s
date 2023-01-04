@@ -10,6 +10,7 @@ import sttp.client3.circe._
 import sttp.model.Uri
 
 case class PlayerApi(baseUri: Uri = uri"https://api.spotify.com/v1") {
+
   /**
    * Add Item to Playback Queue
    * Add an item to the end of the user's current playback queue.

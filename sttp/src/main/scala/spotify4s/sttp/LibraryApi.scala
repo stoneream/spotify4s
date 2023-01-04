@@ -11,6 +11,7 @@ import sttp.client3.circe._
 import sttp.model.Uri
 
 case class LibraryApi(baseUri: Uri = uri"https://api.spotify.com/v1") {
+
   /**
    * Change Playlist Details
    * Change a playlist's name and public/private state. (The user must, of course, own the playlist.)

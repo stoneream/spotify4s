@@ -10,6 +10,7 @@ import sttp.client3.circe._
 import sttp.model.Uri
 
 case class MarketsApi(baseUri: Uri = uri"https://api.spotify.com/v1") {
+
   /**
    * Get Available Markets
    * Get the list of markets where Spotify is available.

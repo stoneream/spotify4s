@@ -10,6 +10,7 @@ import sttp.client3.circe._
 import sttp.model.Uri
 
 case class GenresApi(baseUri: Uri = uri"https://api.spotify.com/v1") {
+
   /**
    * Get Available Genre Seeds
    * Retrieve a list of available genres seed parameter values for [recommendations](/documentation/web-api/reference/#/operations/get-recommendations).

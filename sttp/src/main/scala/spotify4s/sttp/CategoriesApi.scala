@@ -10,6 +10,7 @@ import sttp.client3.circe._
 import sttp.model.Uri
 
 case class CategoriesApi(baseUri: Uri = uri"https://api.spotify.com/v1") {
+
   /**
    * Get Category's Playlists
    * Get a list of Spotify playlists tagged with a particular category.
