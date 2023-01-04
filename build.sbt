@@ -69,13 +69,13 @@ lazy val root = (project in file("."))
   .aggregate(core, circe, sttp)
 
 lazy val core = (project in file("core")).settings(
-  name := "core",
+  name := "spotify4s-core",
   publishSettings
 )
 
 lazy val circe = (project in file("circe"))
   .settings(
-    name := "circe",
+    name := "spotify4s-circe",
     libraryDependencies ++= libraryCirce,
     publishSettings
   )
@@ -83,7 +83,7 @@ lazy val circe = (project in file("circe"))
 
 lazy val sttp = (project in file("sttp"))
   .settings(
-    name := "sttp",
+    name := "spotify4s-sttp",
     libraryDependencies ++= librarySttp ++ libraryCirce,
     publishSettings
   )
