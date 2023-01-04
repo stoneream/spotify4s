@@ -9,21 +9,20 @@ import sttp.client3._
 import sttp.client3.circe._
 import sttp.model.Uri
 
-object AudiobooksApi {
-
-  private val baseUri: Uri = uri"https://api.spotify.com/v1"
-
+case class AudiobooksApi(baseUri: Uri = uri"https://api.spotify.com/v1") {
   /**
    * Check User's Saved Audiobooks
    * Check if one or more audiobooks are already saved in the current Spotify user's library.
    */
-  def checkUsersSavedAudiobooks(ids: String)(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject,circe.Error],List[Boolean]] = {
+  def checkUsersSavedAudiobooks(
+      ids: String
+  )(accessToken: String)(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject, circe.Error], List[Boolean]] = {
 
     val queryParams = Map.empty[String, String] + ("ids" -> ids)
 
     val requestUrl = baseUri.addPath("/me/audiobooks/contains").addParams(queryParams)
 
-    basicRequest.get(requestUrl).response(asJsonEither[ErrorObject, List[Boolean]]).send(client).body
+    basicRequest.get(requestUrl).response(asJsonEither[ErrorObject, List[Boolean]]).auth.bearer(accessToken).send(client).body
   }
 
   /**
@@ -31,13 +30,15 @@ object AudiobooksApi {
    * Get Spotify catalog information for a single audiobook.
    * Note: Audiobooks are only available for the US, UK, Ireland, New Zealand and Australia markets.
    */
-  def getAnAudiobook(id: String, market: Option[String])(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject,circe.Error],AudiobookObject] = {
+  def getAnAudiobook(id: String, market: Option[String])(
+      accessToken: String
+  )(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject, circe.Error], AudiobookObject] = {
 
     val queryParams = Map.empty[String, String] ++ market.map("market" -> _)
 
     val requestUrl = baseUri.addPath("/audiobooks").addPath(s"/$id").addParams(queryParams)
 
-    basicRequest.get(requestUrl).response(asJsonEither[ErrorObject, AudiobookObject]).send(client).body
+    basicRequest.get(requestUrl).response(asJsonEither[ErrorObject, AudiobookObject]).auth.bearer(accessToken).send(client).body
   }
 
   /**
@@ -45,13 +46,15 @@ object AudiobooksApi {
    * Get Spotify catalog information about an audiobook's chapters.
    * Note: Audiobooks are only available for the US, UK, Ireland, New Zealand and Australia markets.
    */
-  def getAudiobookChapters(id: String, market: Option[String], limit: Option[Int], offset: Option[Int])(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject,circe.Error],PagingObject] = {
+  def getAudiobookChapters(id: String, market: Option[String], limit: Option[Int], offset: Option[Int])(
+      accessToken: String
+  )(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject, circe.Error], PagingObject] = {
 
     val queryParams = Map.empty[String, String] ++ market.map("market" -> _) ++ limit.map("limit" -> _.toString) ++ offset.map("offset" -> _.toString)
 
     val requestUrl = baseUri.addPath("/audiobooks/chapters").addPath(s"/$id").addParams(queryParams)
 
-    basicRequest.get(requestUrl).response(asJsonEither[ErrorObject, PagingObject]).send(client).body
+    basicRequest.get(requestUrl).response(asJsonEither[ErrorObject, PagingObject]).auth.bearer(accessToken).send(client).body
   }
 
   /**
@@ -59,52 +62,56 @@ object AudiobooksApi {
    * Get Spotify catalog information for several audiobooks identified by their Spotify IDs.
    * Note: Audiobooks are only available for the US, UK, Ireland, New Zealand and Australia markets.
    */
-  def getMultipleAudiobooks(ids: String, market: Option[String])(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject,circe.Error],GetMultipleAudiobooks200Response] = {
+  def getMultipleAudiobooks(ids: String, market: Option[String])(
+      accessToken: String
+  )(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject, circe.Error], GetMultipleAudiobooks200Response] = {
 
     val queryParams = Map.empty[String, String] + ("ids" -> ids) ++ market.map("market" -> _)
 
     val requestUrl = baseUri.addPath("/audiobooks").addParams(queryParams)
 
-    basicRequest.get(requestUrl).response(asJsonEither[ErrorObject, GetMultipleAudiobooks200Response]).send(client).body
+    basicRequest.get(requestUrl).response(asJsonEither[ErrorObject, GetMultipleAudiobooks200Response]).auth.bearer(accessToken).send(client).body
   }
 
   /**
    * Get User's Saved Audiobooks
    * Get a list of the audiobooks saved in the current Spotify user's 'Your Music' library.
    */
-  def getUsersSavedAudiobooks(limit: Option[Int], offset: Option[Int])(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject,circe.Error],PagingObject] = {
+  def getUsersSavedAudiobooks(limit: Option[Int], offset: Option[Int])(
+      accessToken: String
+  )(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject, circe.Error], PagingObject] = {
 
     val queryParams = Map.empty[String, String] ++ limit.map("limit" -> _.toString) ++ offset.map("offset" -> _.toString)
 
     val requestUrl = baseUri.addPath("/me/audiobooks").addParams(queryParams)
 
-    basicRequest.get(requestUrl).response(asJsonEither[ErrorObject, PagingObject]).send(client).body
+    basicRequest.get(requestUrl).response(asJsonEither[ErrorObject, PagingObject]).auth.bearer(accessToken).send(client).body
   }
 
   /**
    * Remove User's Saved Audiobooks
    * Remove one or more audiobooks from the Spotify user's library.
    */
-  def removeAudiobooksUser(ids: String)(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject,circe.Error],Unit] = {
+  def removeAudiobooksUser(ids: String)(accessToken: String)(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject, circe.Error], Unit] = {
 
     val queryParams = Map.empty[String, String] + ("ids" -> ids)
 
     val requestUrl = baseUri.addPath("/me/audiobooks").addParams(queryParams)
 
-    basicRequest.delete(requestUrl).response(asJsonEither[ErrorObject, Unit]).send(client).body
+    basicRequest.delete(requestUrl).response(asJsonEither[ErrorObject, Unit]).auth.bearer(accessToken).send(client).body
   }
 
   /**
    * Save Audiobooks for Current User
    * Save one or more audiobooks to the current Spotify user's library.
    */
-  def saveAudiobooksUser(ids: String)(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject,circe.Error],Unit] = {
+  def saveAudiobooksUser(ids: String)(accessToken: String)(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject, circe.Error], Unit] = {
 
     val queryParams = Map.empty[String, String] + ("ids" -> ids)
 
     val requestUrl = baseUri.addPath("/me/audiobooks").addParams(queryParams)
 
-    basicRequest.put(requestUrl).response(asJsonEither[ErrorObject, Unit]).send(client).body
+    basicRequest.put(requestUrl).response(asJsonEither[ErrorObject, Unit]).auth.bearer(accessToken).send(client).body
   }
 
 }

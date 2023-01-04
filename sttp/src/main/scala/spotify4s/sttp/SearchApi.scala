@@ -9,18 +9,15 @@ import sttp.client3._
 import sttp.client3.circe._
 import sttp.model.Uri
 
-object SearchApi {
-
-  private val baseUri: Uri = uri"https://api.spotify.com/v1"
-
+case class SearchApi(baseUri: Uri = uri"https://api.spotify.com/v1") {
   /**
    * Search for Item
    * Get Spotify catalog information about albums, artists, playlists, tracks, shows, episodes or audiobooks that match a keyword string.
    * **Note: Audiobooks are only available for the US, UK, Ireland, New Zealand and Australia markets.**
    */
   def search(q: String, `type`: List[String], market: Option[String], limit: Option[Int], offset: Option[Int], includeExternal: Option[String])(
-      client: SttpBackend[Identity, Any]
-  ): Either[ResponseException[ErrorObject,circe.Error],Search200Response] = {
+      accessToken: String
+  )(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject, circe.Error], Search200Response] = {
 
     val queryParams = Map.empty[String, String] + ("q" -> q) + ("type" -> `type`.toString) ++ market.map("market" -> _) ++ limit.map(
       "limit" -> _.toString
@@ -28,7 +25,7 @@ object SearchApi {
 
     val requestUrl = baseUri.addPath("/search").addParams(queryParams)
 
-    basicRequest.get(requestUrl).response(asJsonEither[ErrorObject, Search200Response]).send(client).body
+    basicRequest.get(requestUrl).response(asJsonEither[ErrorObject, Search200Response]).auth.bearer(accessToken).send(client).body
   }
 
 }
