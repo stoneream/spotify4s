@@ -1,23 +1,23 @@
 package spotify4s.sttp
 
-import io.circe.generic.extras.Configuration
+import io.circe
 import io.circe.generic.extras.auto._
+import spotify4s.v1.circe.CirceConfiguration.jsonConfig
 import spotify4s.v1.model.ErrorObject
 import spotify4s.v1.response.GetAvailableMarkets200Response
 import sttp.client3._
 import sttp.client3.circe._
+import sttp.model.Uri
 
 object MarketsApi {
 
-  private implicit val jsonConfig: Configuration = Configuration.default.withSnakeCaseMemberNames
-
-  private val baseUri = uri"https://api.spotify.com/v1"
+  private val baseUri: Uri = uri"https://api.spotify.com/v1"
 
   /**
    * Get Available Markets
    * Get the list of markets where Spotify is available.
    */
-  def getAvailableMarkets()(client: SttpBackend[Identity, Any]) = {
+  def getAvailableMarkets()(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject,circe.Error],GetAvailableMarkets200Response] = {
 
     val requestUrl = baseUri.addPath("/markets")
 

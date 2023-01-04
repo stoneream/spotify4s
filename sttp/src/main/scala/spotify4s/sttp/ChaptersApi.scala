@@ -1,23 +1,23 @@
 package spotify4s.sttp
 
-import io.circe.generic.extras.Configuration
+import io.circe
 import io.circe.generic.extras.auto._
+import spotify4s.v1.circe.CirceConfiguration.jsonConfig
 import spotify4s.v1.model.{ChapterObject, ErrorObject, PagingObject}
 import spotify4s.v1.response.GetSeveralChapters200Response
 import sttp.client3._
 import sttp.client3.circe._
+import sttp.model.Uri
 
 object ChaptersApi {
 
-  private implicit val jsonConfig: Configuration = Configuration.default.withSnakeCaseMemberNames
-
-  private val baseUri = uri"https://api.spotify.com/v1"
+  private val baseUri: Uri = uri"https://api.spotify.com/v1"
 
   /**
    * Get a Chapter
    * Get Spotify catalog information for a single chapter.<br /> **Note: Chapters are only available for the US, UK, Ireland, New Zealand and Australia markets.**
    */
-  def getAChapter(id: String, market: Option[String])(client: SttpBackend[Identity, Any]) = {
+  def getAChapter(id: String, market: Option[String])(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject, circe.Error], ChapterObject] = {
 
     val queryParams = Map.empty[String, String] ++ market.map("market" -> _.toString)
 
@@ -30,7 +30,7 @@ object ChaptersApi {
    * Get Audiobook Chapters
    * Get Spotify catalog information about an audiobook's chapters.<br /> **Note: Audiobooks are only available for the US, UK, Ireland, New Zealand and Australia markets.**
    */
-  def getAudiobookChapters(id: String, market: Option[String], limit: Option[Int], offset: Option[Int])(client: SttpBackend[Identity, Any]) = {
+  def getAudiobookChapters(id: String, market: Option[String], limit: Option[Int], offset: Option[Int])(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject, circe.Error], PagingObject] = {
 
     val queryParams = Map.empty[String, String] ++ market.map("market" -> _.toString) ++ limit.map("limit" -> _.toString) ++ offset.map("offset" -> _.toString)
 
@@ -43,7 +43,7 @@ object ChaptersApi {
    * Get Several Chapters
    * Get Spotify catalog information for several chapters identified by their Spotify IDs.<br /> **Note: Chapters are only available for the US, UK, Ireland, New Zealand and Australia markets.**
    */
-  def getSeveralChapters(ids: String, market: Option[String])(client: SttpBackend[Identity, Any]) = {
+  def getSeveralChapters(ids: String, market: Option[String])(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject, circe.Error], GetSeveralChapters200Response] = {
 
     val queryParams = Map.empty[String, String] + ("ids" -> ids.toString) ++ market.map("market" -> _.toString)
 

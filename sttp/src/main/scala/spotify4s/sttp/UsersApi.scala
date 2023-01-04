@@ -1,19 +1,18 @@
 package spotify4s.sttp
 
 import io.circe
-import io.circe.generic.extras.Configuration
 import io.circe.generic.extras.auto._
+import spotify4s.v1.circe.CirceConfiguration.jsonConfig
 import spotify4s.v1.model._
 import spotify4s.v1.request.{FollowArtistsUsersRequest, FollowPlaylistRequest, UnfollowArtistsUsersRequest}
 import spotify4s.v1.response.GetFollowed200Response
 import sttp.client3._
 import sttp.client3.circe._
+import sttp.model.Uri
 
 object UsersApi {
 
-  private implicit val jsonConfig: Configuration = Configuration.default.withSnakeCaseMemberNames
-
-  private val baseUri = uri"https://api.spotify.com/v1"
+  private val baseUri: Uri = uri"https://api.spotify.com/v1"
 
   /**
    * Check If User Follows Artists or Users
@@ -34,7 +33,7 @@ object UsersApi {
    * Check if Users Follow Playlist
    * Check to see if one or more Spotify users are following a specified playlist.
    */
-  def checkIfUserFollowsPlaylist(playlistId: String, ids: String)(client: SttpBackend[Identity, Any]) = {
+  def checkIfUserFollowsPlaylist(playlistId: String, ids: String)(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject,circe.Error],List[Boolean]] = {
 
     val queryParams = Map.empty[String, String] + ("ids" -> ids.toString)
 
@@ -47,7 +46,7 @@ object UsersApi {
    * Follow Artists or Users
    * Add the current user as a follower of one or more artists or other Spotify users.
    */
-  def followArtistsUsers(`type`: String, ids: String, requestBody: Option[FollowArtistsUsersRequest])(client: SttpBackend[Identity, Any]) = {
+  def followArtistsUsers(`type`: String, ids: String, requestBody: Option[FollowArtistsUsersRequest])(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject,circe.Error],Unit] = {
 
     val queryParams = Map.empty[String, String] + ("type" -> `type`.toString) + ("ids" -> ids.toString)
 
@@ -60,7 +59,7 @@ object UsersApi {
    * Follow Playlist
    * Add the current user as a follower of a playlist.
    */
-  def followPlaylist(playlistId: String, requestBody: Option[FollowPlaylistRequest])(client: SttpBackend[Identity, Any]) = {
+  def followPlaylist(playlistId: String, requestBody: Option[FollowPlaylistRequest])(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject,circe.Error],Unit] = {
 
     val requestUrl = baseUri.addPath("/playlists/followers").addPath(s"/${playlistId}")
 
@@ -71,7 +70,7 @@ object UsersApi {
    * Get Current User's Profile
    * Get detailed profile information about the current user (including the current user's username).
    */
-  def getCurrentUsersProfile()(client: SttpBackend[Identity, Any]) = {
+  def getCurrentUsersProfile()(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject,circe.Error],PrivateUserObject] = {
 
     val requestUrl = baseUri.addPath("/me")
 
@@ -82,7 +81,7 @@ object UsersApi {
    * Get Followed Artists
    * Get the current user's followed artists.
    */
-  def getFollowed(`type`: String, after: Option[String], limit: Option[Int])(client: SttpBackend[Identity, Any]) = {
+  def getFollowed(`type`: String, after: Option[String], limit: Option[Int])(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject,circe.Error],GetFollowed200Response] = {
 
     val queryParams = Map.empty[String, String] + ("type" -> `type`.toString) ++ after.map("after" -> _.toString) ++ limit.map("limit" -> _.toString)
 
@@ -95,7 +94,7 @@ object UsersApi {
    * Get User's Playlists
    * Get a list of the playlists owned or followed by a Spotify user.
    */
-  def getListUsersPlaylists(userId: String, limit: Option[Int], offset: Option[Int])(client: SttpBackend[Identity, Any]) = {
+  def getListUsersPlaylists(userId: String, limit: Option[Int], offset: Option[Int])(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject,circe.Error],PagingPlaylistObject] = {
 
     val queryParams = Map.empty[String, String] ++ limit.map("limit" -> _.toString) ++ offset.map("offset" -> _.toString)
 
@@ -108,7 +107,7 @@ object UsersApi {
    * Get User's Profile
    * Get public profile information about a Spotify user.
    */
-  def getUsersProfile(userId: String)(client: SttpBackend[Identity, Any]) = {
+  def getUsersProfile(userId: String)(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject,circe.Error],PublicUserObject] = {
 
     val requestUrl = baseUri.addPath("/users").addPath(s"/${userId}")
 
@@ -119,7 +118,7 @@ object UsersApi {
    * Get User's Top Items
    * Get the current user's top artists or tracks based on calculated affinity.
    */
-  def getUsersTopArtistsAndTracks(`type`: String, timeRange: Option[String], limit: Option[Int], offset: Option[Int])(client: SttpBackend[Identity, Any]) = {
+  def getUsersTopArtistsAndTracks(`type`: String, timeRange: Option[String], limit: Option[Int], offset: Option[Int])(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject,circe.Error],PagingObject] = {
 
     val queryParams =
       Map.empty[String, String] ++ timeRange.map("timeRange" -> _.toString) ++ limit.map("limit" -> _.toString) ++ offset.map("offset" -> _.toString)
@@ -133,7 +132,7 @@ object UsersApi {
    * Unfollow Artists or Users
    * Remove the current user as a follower of one or more artists or other Spotify users.
    */
-  def unfollowArtistsUsers(`type`: String, ids: String, requestBody: Option[UnfollowArtistsUsersRequest])(client: SttpBackend[Identity, Any]) = {
+  def unfollowArtistsUsers(`type`: String, ids: String, requestBody: Option[UnfollowArtistsUsersRequest])(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject,circe.Error],Unit] = {
 
     val queryParams = Map.empty[String, String] + ("type" -> `type`.toString) + ("ids" -> ids.toString)
 
@@ -146,7 +145,7 @@ object UsersApi {
    * Unfollow Playlist
    * Remove the current user as a follower of a playlist.
    */
-  def unfollowPlaylist(playlistId: String)(client: SttpBackend[Identity, Any]) = {
+  def unfollowPlaylist(playlistId: String)(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject,circe.Error],Unit] = {
 
     val requestUrl = baseUri.addPath("/playlists/followers").addPath(s"/${playlistId}")
 

@@ -1,18 +1,18 @@
 package spotify4s.sttp
 
-import io.circe.generic.extras.Configuration
+import io.circe
 import io.circe.generic.extras.auto._
+import spotify4s.v1.circe.CirceConfiguration.jsonConfig
 import spotify4s.v1.model._
 import spotify4s.v1.request.{AddTracksToPlaylistRequest, RemoveTracksPlaylistRequest, RemoveTracksUserRequest, SaveTracksUserRequest}
 import spotify4s.v1.response.{GetAnArtistsTopTracks200Response, GetSeveralAudioFeatures200Response, ReorderOrReplacePlaylistsTracks200Response}
 import sttp.client3._
 import sttp.client3.circe._
+import sttp.model.Uri
 
 object TracksApi {
 
-  private implicit val jsonConfig: Configuration = Configuration.default.withSnakeCaseMemberNames
-
-  private val baseUri = uri"https://api.spotify.com/v1"
+  private val baseUri: Uri = uri"https://api.spotify.com/v1"
 
   /**
    * Add Items to Playlist
@@ -20,7 +20,7 @@ object TracksApi {
    */
   def addTracksToPlaylist(playlistId: String, position: Option[Int], uris: Option[String], requestBody: Option[AddTracksToPlaylistRequest])(
       client: SttpBackend[Identity, Any]
-  ) = {
+  ): Either[ResponseException[ErrorObject,circe.Error],ReorderOrReplacePlaylistsTracks200Response] = {
 
     val queryParams = Map.empty[String, String] ++ position.map("position" -> _.toString) ++ uris.map("uris" -> _.toString)
 
@@ -33,7 +33,7 @@ object TracksApi {
    * Check User's Saved Tracks
    * Check if one or more tracks is already saved in the current Spotify user's 'Your Music' library.
    */
-  def checkUsersSavedTracks(ids: String)(client: SttpBackend[Identity, Any]) = {
+  def checkUsersSavedTracks(ids: String)(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject,circe.Error],List[Boolean]] = {
 
     val queryParams = Map.empty[String, String] + ("ids" -> ids.toString)
 
@@ -46,7 +46,7 @@ object TracksApi {
    * Get Album Tracks
    * Get Spotify catalog information about an album’s tracks. Optional parameters can be used to limit the number of tracks returned.
    */
-  def getAnAlbumsTracks(id: String, market: Option[String], limit: Option[Int], offset: Option[Int])(client: SttpBackend[Identity, Any]) = {
+  def getAnAlbumsTracks(id: String, market: Option[String], limit: Option[Int], offset: Option[Int])(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject,circe.Error],PagingObject] = {
 
     val queryParams = Map.empty[String, String] ++ market.map("market" -> _.toString) ++ limit.map("limit" -> _.toString) ++ offset.map("offset" -> _.toString)
 
@@ -59,7 +59,7 @@ object TracksApi {
    * Get Artist's Top Tracks
    * Get Spotify catalog information about an artist's top tracks by country.
    */
-  def getAnArtistsTopTracks(id: String, market: Option[String])(client: SttpBackend[Identity, Any]) = {
+  def getAnArtistsTopTracks(id: String, market: Option[String])(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject,circe.Error],GetAnArtistsTopTracks200Response] = {
 
     val queryParams = Map.empty[String, String] ++ market.map("market" -> _.toString)
 
@@ -72,7 +72,7 @@ object TracksApi {
    * Get Track's Audio Analysis
    * Get a low-level audio analysis for a track in the Spotify catalog. The audio analysis describes the track’s structure and musical content, including rhythm, pitch, and timbre.
    */
-  def getAudioAnalysis(id: String)(client: SttpBackend[Identity, Any]) = {
+  def getAudioAnalysis(id: String)(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject,circe.Error],AudioAnalysisObject] = {
 
     val requestUrl = baseUri.addPath("/audio-analysis").addPath(s"/${id}")
 
@@ -83,7 +83,7 @@ object TracksApi {
    * Get Track's Audio Features
    * Get audio feature information for a single track identified by its unique Spotify ID.
    */
-  def getAudioFeatures(id: String)(client: SttpBackend[Identity, Any]) = {
+  def getAudioFeatures(id: String)(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject,circe.Error],AudioFeaturesObject] = {
 
     val requestUrl = baseUri.addPath("/audio-features").addPath(s"/${id}")
 
@@ -101,7 +101,7 @@ object TracksApi {
       limit: Option[Int],
       offset: Option[Int],
       additionalTypes: Option[String]
-  )(client: SttpBackend[Identity, Any]) = {
+  )(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject,circe.Error],PagingObject] = {
 
     val queryParams =
       Map.empty[String, String] ++ market.map("market" -> _.toString) ++ fields.map("fields" -> _.toString) ++ limit.map("limit" -> _.toString) ++ offset.map(
@@ -165,7 +165,7 @@ object TracksApi {
       minValence: Option[BigDecimal],
       maxValence: Option[BigDecimal],
       targetValence: Option[BigDecimal]
-  )(client: SttpBackend[Identity, Any]) = {
+  )(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject,circe.Error],RecommendationsObject] = {
 
     val queryParams = Map.empty[String, String] ++ limit.map("limit" -> _.toString) ++ market.map(
       "market" -> _.toString
@@ -205,7 +205,7 @@ object TracksApi {
    * Get Tracks' Audio Features
    * Get audio features for multiple tracks based on their Spotify IDs.
    */
-  def getSeveralAudioFeatures(ids: String)(client: SttpBackend[Identity, Any]) = {
+  def getSeveralAudioFeatures(ids: String)(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject,circe.Error],GetSeveralAudioFeatures200Response] = {
 
     val queryParams = Map.empty[String, String] + ("ids" -> ids.toString)
 
@@ -218,7 +218,7 @@ object TracksApi {
    * Get Several Tracks
    * Get Spotify catalog information for multiple tracks based on their Spotify IDs.
    */
-  def getSeveralTracks(ids: String, market: Option[String])(client: SttpBackend[Identity, Any]) = {
+  def getSeveralTracks(ids: String, market: Option[String])(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject,circe.Error],GetAnArtistsTopTracks200Response] = {
 
     val queryParams = Map.empty[String, String] ++ market.map("market" -> _.toString) + ("ids" -> ids.toString)
 
@@ -231,7 +231,7 @@ object TracksApi {
    * Get Track
    * Get Spotify catalog information for a single track identified by its unique Spotify ID.
    */
-  def getTrack(id: String, market: Option[String])(client: SttpBackend[Identity, Any]) = {
+  def getTrack(id: String, market: Option[String])(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject,circe.Error],TrackObject] = {
 
     val queryParams = Map.empty[String, String] ++ market.map("market" -> _.toString)
 
@@ -244,7 +244,7 @@ object TracksApi {
    * Get User's Saved Tracks
    * Get a list of the songs saved in the current Spotify user's 'Your Music' library.
    */
-  def getUsersSavedTracks(market: Option[String], limit: Option[Int], offset: Option[Int])(client: SttpBackend[Identity, Any]) = {
+  def getUsersSavedTracks(market: Option[String], limit: Option[Int], offset: Option[Int])(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject,circe.Error],PagingObject] = {
 
     val queryParams = Map.empty[String, String] ++ market.map("market" -> _.toString) ++ limit.map("limit" -> _.toString) ++ offset.map("offset" -> _.toString)
 
@@ -257,7 +257,7 @@ object TracksApi {
    * Get User's Top Items
    * Get the current user's top artists or tracks based on calculated affinity.
    */
-  def getUsersTopArtistsAndTracks(`type`: String, timeRange: Option[String], limit: Option[Int], offset: Option[Int])(client: SttpBackend[Identity, Any]) = {
+  def getUsersTopArtistsAndTracks(`type`: String, timeRange: Option[String], limit: Option[Int], offset: Option[Int])(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject,circe.Error],PagingObject] = {
 
     val queryParams =
       Map.empty[String, String] ++ timeRange.map("timeRange" -> _.toString) ++ limit.map("limit" -> _.toString) ++ offset.map("offset" -> _.toString)
@@ -271,7 +271,7 @@ object TracksApi {
    * Remove Playlist Items
    * Remove one or more items from a user's playlist.
    */
-  def removeTracksPlaylist(playlistId: String, removeTracksPlaylistRequest: Option[RemoveTracksPlaylistRequest])(client: SttpBackend[Identity, Any]) = {
+  def removeTracksPlaylist(playlistId: String, removeTracksPlaylistRequest: Option[RemoveTracksPlaylistRequest])(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject,circe.Error],ReorderOrReplacePlaylistsTracks200Response] = {
 
     val requestUrl = baseUri.addPath("/playlists/tracks").addPath(s"/${playlistId}")
 
@@ -287,7 +287,7 @@ object TracksApi {
    * Remove User's Saved Tracks
    * Remove one or more tracks from the current user's 'Your Music' library.
    */
-  def removeTracksUser(ids: String, requestBody: Option[RemoveTracksUserRequest])(client: SttpBackend[Identity, Any]) = {
+  def removeTracksUser(ids: String, requestBody: Option[RemoveTracksUserRequest])(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject,circe.Error],Unit] = {
 
     val queryParams = Map.empty[String, String] + ("ids" -> ids.toString)
 
@@ -316,7 +316,7 @@ object TracksApi {
    * Save Tracks for Current User
    * Save one or more tracks to the current user's 'Your Music' library.
    */
-  def saveTracksUser(ids: String, requestBody: Option[SaveTracksUserRequest])(client: SttpBackend[Identity, Any]) = {
+  def saveTracksUser(ids: String, requestBody: Option[SaveTracksUserRequest])(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject,circe.Error],Unit] = {
 
     val queryParams = Map.empty[String, String] + ("ids" -> ids.toString)
 

@@ -1,24 +1,24 @@
 package spotify4s.sttp
 
-import io.circe.generic.extras.Configuration
+import io.circe
 import io.circe.generic.extras.auto._
+import spotify4s.v1.circe.CirceConfiguration.jsonConfig
 import spotify4s.v1.model.{ErrorObject, PagingObject, PagingPlaylistObject, PlaylistObject}
 import spotify4s.v1.request._
 import spotify4s.v1.response.GetFollowed200Response
 import sttp.client3._
 import sttp.client3.circe._
+import sttp.model.Uri
 
 object LibraryApi {
 
-  private implicit val jsonConfig: Configuration = Configuration.default.withSnakeCaseMemberNames
-
-  private val baseUri = uri"https://api.spotify.com/v1"
+  private val baseUri: Uri = uri"https://api.spotify.com/v1"
 
   /**
    * Change Playlist Details
    * Change a playlist's name and public/private state. (The user must, of course, own the playlist.)
    */
-  def changePlaylistDetails(playlistId: String, requestBody: Option[ChangePlaylistDetailsRequest])(client: SttpBackend[Identity, Any]) = {
+  def changePlaylistDetails(playlistId: String, requestBody: Option[ChangePlaylistDetailsRequest])(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject, circe.Error], Unit] = {
 
     val requestUrl = baseUri.addPath("/playlists").addPath(s"/${playlistId}")
 
@@ -29,7 +29,7 @@ object LibraryApi {
    * Check If User Follows Artists or Users
    * Check to see if the current user is following one or more artists or other Spotify users.
    */
-  def checkCurrentUserFollows(`type`: String, ids: String)(client: SttpBackend[Identity, Any]) = {
+  def checkCurrentUserFollows(`type`: String, ids: String)(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject, circe.Error], List[Boolean]] = {
 
     val queryParams = Map.empty[String, String] + ("type" -> `type`.toString) + ("ids" -> ids.toString)
 
@@ -42,7 +42,7 @@ object LibraryApi {
    * Check User's Saved Albums
    * Check if one or more albums is already saved in the current Spotify user's 'Your Music' library.
    */
-  def checkUsersSavedAlbums(ids: String)(client: SttpBackend[Identity, Any]) = {
+  def checkUsersSavedAlbums(ids: String)(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject, circe.Error], List[Boolean]] = {
 
     val queryParams = Map.empty[String, String] + ("ids" -> ids.toString)
 
@@ -55,7 +55,7 @@ object LibraryApi {
    * Check User's Saved Audiobooks
    * Check if one or more audiobooks are already saved in the current Spotify user's library.
    */
-  def checkUsersSavedAudiobooks(ids: String)(client: SttpBackend[Identity, Any]) = {
+  def checkUsersSavedAudiobooks(ids: String)(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject, circe.Error], List[Boolean]] = {
 
     val queryParams = Map.empty[String, String] + ("ids" -> ids.toString)
 
@@ -68,7 +68,7 @@ object LibraryApi {
    * Check User's Saved Episodes
    * Check if one or more episodes is already saved in the current Spotify user's 'Your Episodes' library.<br> This API endpoint is in __beta__ and could change without warning. Please share any feedback that you have, or issues that you discover, in our [developer community forum](https://community.spotify.com/t5/Spotify-for-Developers/bd-p/Spotify_Developer)..
    */
-  def checkUsersSavedEpisodes(ids: String)(client: SttpBackend[Identity, Any]) = {
+  def checkUsersSavedEpisodes(ids: String)(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject,circe.Error],List[Boolean]] = {
 
     val queryParams = Map.empty[String, String] + ("ids" -> ids.toString)
 
@@ -81,7 +81,7 @@ object LibraryApi {
    * Check User's Saved Shows
    * Check if one or more shows is already saved in the current Spotify user's library.
    */
-  def checkUsersSavedShows(ids: String)(client: SttpBackend[Identity, Any]) = {
+  def checkUsersSavedShows(ids: String)(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject,circe.Error],List[Boolean]] = {
 
     val queryParams = Map.empty[String, String] + ("ids" -> ids.toString)
 
@@ -94,7 +94,7 @@ object LibraryApi {
    * Check User's Saved Tracks
    * Check if one or more tracks is already saved in the current Spotify user's 'Your Music' library.
    */
-  def checkUsersSavedTracks(ids: String)(client: SttpBackend[Identity, Any]) = {
+  def checkUsersSavedTracks(ids: String)(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject,circe.Error],List[Boolean]] = {
 
     val queryParams = Map.empty[String, String] + ("ids" -> ids.toString)
 
@@ -107,7 +107,7 @@ object LibraryApi {
    * Create Playlist
    * Create a playlist for a Spotify user. (The playlist will be empty until you [add tracks](/documentation/web-api/reference/#/operations/add-tracks-to-playlist).)
    */
-  def createPlaylist(userId: String, requestBody: Option[CreatePlaylistRequest])(client: SttpBackend[Identity, Any]) = {
+  def createPlaylist(userId: String, requestBody: Option[CreatePlaylistRequest])(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject,circe.Error],PlaylistObject] = {
 
     val requestUrl = baseUri.addPath("/users/playlists").addPath(s"/${userId}")
 
@@ -118,7 +118,7 @@ object LibraryApi {
    * Follow Artists or Users
    * Add the current user as a follower of one or more artists or other Spotify users.
    */
-  def followArtistsUsers(`type`: String, ids: String, requestBody: Option[FollowArtistsUsersRequest])(client: SttpBackend[Identity, Any]) = {
+  def followArtistsUsers(`type`: String, ids: String, requestBody: Option[FollowArtistsUsersRequest])(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject,circe.Error],Unit] = {
 
     val queryParams = Map.empty[String, String] + ("type" -> `type`.toString) + ("ids" -> ids.toString)
 
@@ -131,7 +131,7 @@ object LibraryApi {
    * Get Current User's Playlists
    * Get a list of the playlists owned or followed by the current Spotify user.
    */
-  def getAListOfCurrentUsersPlaylists(limit: Option[Int], offset: Option[Int])(client: SttpBackend[Identity, Any]) = {
+  def getAListOfCurrentUsersPlaylists(limit: Option[Int], offset: Option[Int])(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject,circe.Error],PagingPlaylistObject] = {
 
     val queryParams = Map.empty[String, String] ++ limit.map("limit" -> _.toString) ++ offset.map("offset" -> _.toString)
 
@@ -144,7 +144,7 @@ object LibraryApi {
    * Get Followed Artists
    * Get the current user's followed artists.
    */
-  def getFollowed(`type`: String, after: Option[String], limit: Option[Int])(client: SttpBackend[Identity, Any]) = {
+  def getFollowed(`type`: String, after: Option[String], limit: Option[Int])(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject,circe.Error],GetFollowed200Response] = {
 
     val queryParams = Map.empty[String, String] + ("type" -> `type`.toString) ++ after.map("after" -> _.toString) ++ limit.map("limit" -> _.toString)
 
@@ -157,7 +157,7 @@ object LibraryApi {
    * Get User's Saved Albums
    * Get a list of the albums saved in the current Spotify user's 'Your Music' library.
    */
-  def getUsersSavedAlbums(limit: Option[Int], offset: Option[Int], market: Option[String])(client: SttpBackend[Identity, Any]) = {
+  def getUsersSavedAlbums(limit: Option[Int], offset: Option[Int], market: Option[String])(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject,circe.Error],PagingObject] = {
 
     val queryParams = Map.empty[String, String] ++ limit.map("limit" -> _.toString) ++ offset.map("offset" -> _.toString) ++ market.map("market" -> _.toString)
 
@@ -170,7 +170,7 @@ object LibraryApi {
    * Get User's Saved Audiobooks
    * Get a list of the audiobooks saved in the current Spotify user's 'Your Music' library.
    */
-  def getUsersSavedAudiobooks(limit: Option[Int], offset: Option[Int])(client: SttpBackend[Identity, Any]) = {
+  def getUsersSavedAudiobooks(limit: Option[Int], offset: Option[Int])(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject,circe.Error],PagingObject] = {
 
     val queryParams = Map.empty[String, String] ++ limit.map("limit" -> _.toString) ++ offset.map("offset" -> _.toString)
 
@@ -185,7 +185,7 @@ object LibraryApi {
    * This API endpoint is in __beta__ and could change without warning.
    * Please share any feedback that you have, or issues that you discover, in our [developer community forum](https://community.spotify.com/t5/Spotify-for-Developers/bd-p/Spotify_Developer).
    */
-  def getUsersSavedEpisodes(market: Option[String], limit: Option[Int], offset: Option[Int])(client: SttpBackend[Identity, Any]) = {
+  def getUsersSavedEpisodes(market: Option[String], limit: Option[Int], offset: Option[Int])(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject,circe.Error],PagingObject] = {
 
     val queryParams = Map.empty[String, String] ++ market.map("market" -> _.toString) ++ limit.map("limit" -> _.toString) ++ offset.map("offset" -> _.toString)
 
@@ -198,7 +198,7 @@ object LibraryApi {
    * Get User's Saved Shows
    * Get a list of shows saved in the current Spotify user's library. Optional parameters can be used to limit the number of shows returned.
    */
-  def getUsersSavedShows(limit: Option[Int], offset: Option[Int])(client: SttpBackend[Identity, Any]) = {
+  def getUsersSavedShows(limit: Option[Int], offset: Option[Int])(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject,circe.Error],PagingObject] = {
 
     val queryParams = Map.empty[String, String] ++ limit.map("limit" -> _.toString) ++ offset.map("offset" -> _.toString)
 
@@ -211,7 +211,7 @@ object LibraryApi {
    * Get User's Saved Tracks
    * Get a list of the songs saved in the current Spotify user's 'Your Music' library.
    */
-  def getUsersSavedTracks(market: Option[String], limit: Option[Int], offset: Option[Int])(client: SttpBackend[Identity, Any]) = {
+  def getUsersSavedTracks(market: Option[String], limit: Option[Int], offset: Option[Int])(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject,circe.Error],PagingObject] = {
 
     val queryParams = Map.empty[String, String] ++ market.map("market" -> _.toString) ++ limit.map("limit" -> _.toString) ++ offset.map("offset" -> _.toString)
 
@@ -224,7 +224,7 @@ object LibraryApi {
    * Get User's Top Items
    * Get the current user's top artists or tracks based on calculated affinity.
    */
-  def getUsersTopArtistsAndTracks(`type`: String, timeRange: Option[String], limit: Option[Int], offset: Option[Int])(client: SttpBackend[Identity, Any]) = {
+  def getUsersTopArtistsAndTracks(`type`: String, timeRange: Option[String], limit: Option[Int], offset: Option[Int])(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject,circe.Error],PagingObject] = {
 
     val queryParams =
       Map.empty[String, String] ++ timeRange.map("timeRange" -> _.toString) ++ limit.map("limit" -> _.toString) ++ offset.map("offset" -> _.toString)
@@ -238,7 +238,7 @@ object LibraryApi {
    * Remove Users' Saved Albums
    * Remove one or more albums from the current user's 'Your Music' library.
    */
-  def removeAlbumsUser(ids: String, requestBody: Option[RemoveAlbumsUserRequest])(client: SttpBackend[Identity, Any]) = {
+  def removeAlbumsUser(ids: String, requestBody: Option[RemoveAlbumsUserRequest])(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject,circe.Error],Unit] = {
 
     val queryParams = Map.empty[String, String] + ("ids" -> ids.toString)
 
@@ -251,7 +251,7 @@ object LibraryApi {
    * Remove User's Saved Audiobooks
    * Remove one or more audiobooks from the Spotify user's library.
    */
-  def removeAudiobooksUser(ids: String)(client: SttpBackend[Identity, Any]) = {
+  def removeAudiobooksUser(ids: String)(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject,circe.Error],Unit] = {
 
     val queryParams = Map.empty[String, String] + ("ids" -> ids.toString)
 
@@ -264,7 +264,7 @@ object LibraryApi {
    * Remove User's Saved Episodes
    * Remove one or more episodes from the current user's library.<br> This API endpoint is in __beta__ and could change without warning. Please share any feedback that you have, or issues that you discover, in our [developer community forum](https://community.spotify.com/t5/Spotify-for-Developers/bd-p/Spotify_Developer).
    */
-  def removeEpisodesUser(ids: String, requestBody: Option[RemoveEpisodesUserRequest])(client: SttpBackend[Identity, Any]) = {
+  def removeEpisodesUser(ids: String, requestBody: Option[RemoveEpisodesUserRequest])(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject,circe.Error],Unit] = {
 
     val queryParams = Map.empty[String, String] + ("ids" -> ids.toString)
 
@@ -277,7 +277,7 @@ object LibraryApi {
    * Remove User's Saved Shows
    * Delete one or more shows from current Spotify user's library.
    */
-  def removeShowsUser(ids: String, market: Option[String])(client: SttpBackend[Identity, Any]) = {
+  def removeShowsUser(ids: String, market: Option[String])(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject,circe.Error],Unit] = {
 
     val queryParams = Map.empty[String, String] + ("ids" -> ids.toString) ++ market.map("market" -> _.toString)
 
@@ -290,7 +290,7 @@ object LibraryApi {
    * Remove User's Saved Tracks
    * Remove one or more tracks from the current user's 'Your Music' library.
    */
-  def removeTracksUser(ids: String, requestBody: Option[RemoveTracksUserRequest])(client: SttpBackend[Identity, Any]) = {
+  def removeTracksUser(ids: String, requestBody: Option[RemoveTracksUserRequest])(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject,circe.Error],Unit] = {
 
     val queryParams = Map.empty[String, String] + ("ids" -> ids.toString)
 
@@ -303,7 +303,7 @@ object LibraryApi {
    * Save Albums for Current User
    * Save one or more albums to the current user's 'Your Music' library.
    */
-  def saveAlbumsUser(ids: String, requestBody: Option[RemoveAlbumsUserRequest])(client: SttpBackend[Identity, Any]) = {
+  def saveAlbumsUser(ids: String, requestBody: Option[RemoveAlbumsUserRequest])(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject,circe.Error],Unit] = {
 
     val queryParams = Map.empty[String, String] + ("ids" -> ids.toString)
 
@@ -316,7 +316,7 @@ object LibraryApi {
    * Save Audiobooks for Current User
    * Save one or more audiobooks to the current Spotify user's library.
    */
-  def saveAudiobooksUser(ids: String)(client: SttpBackend[Identity, Any]) = {
+  def saveAudiobooksUser(ids: String)(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject,circe.Error],Unit] = {
 
     val queryParams = Map.empty[String, String] + ("ids" -> ids.toString)
 
@@ -330,7 +330,7 @@ object LibraryApi {
    * Save one or more episodes to the current user's library.
    * This API endpoint is in __beta__ and could change without warning. Please share any feedback that you have, or issues that you discover, in our [developer community forum](https://community.spotify.com/t5/Spotify-for-Developers/bd-p/Spotify_Developer).
    */
-  def saveEpisodesUser(ids: String, requestBody: Option[SaveEpisodesUserRequest])(client: SttpBackend[Identity, Any]) = {
+  def saveEpisodesUser(ids: String, requestBody: Option[SaveEpisodesUserRequest])(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject,circe.Error],Unit] = {
 
     val queryParams = Map.empty[String, String] + ("ids" -> ids.toString)
 
@@ -343,7 +343,7 @@ object LibraryApi {
    * Save Shows for Current User
    * Save one or more shows to current Spotify user's library.
    */
-  def saveShowsUser(ids: String)(client: SttpBackend[Identity, Any]) = {
+  def saveShowsUser(ids: String)(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject,circe.Error],Unit] = {
 
     val queryParams = Map.empty[String, String] + ("ids" -> ids.toString)
 
@@ -356,7 +356,7 @@ object LibraryApi {
    * Save Tracks for Current User
    * Save one or more tracks to the current user's 'Your Music' library.
    */
-  def saveTracksUser(ids: String, requestBody: Option[SaveTracksUserRequest])(client: SttpBackend[Identity, Any]) = {
+  def saveTracksUser(ids: String, requestBody: Option[SaveTracksUserRequest])(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject,circe.Error],Unit] = {
 
     val queryParams = Map.empty[String, String] + ("ids" -> ids.toString)
 
@@ -369,7 +369,7 @@ object LibraryApi {
    * Unfollow Artists or Users
    * Remove the current user as a follower of one or more artists or other Spotify users.
    */
-  def unfollowArtistsUsers(`type`: String, ids: String, requestBody: Option[UnfollowArtistsUsersRequest])(client: SttpBackend[Identity, Any]) = {
+  def unfollowArtistsUsers(`type`: String, ids: String, requestBody: Option[UnfollowArtistsUsersRequest])(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject,circe.Error],Unit] = {
 
     val queryParams = Map.empty[String, String] + ("type" -> `type`.toString) + ("ids" -> ids.toString)
 

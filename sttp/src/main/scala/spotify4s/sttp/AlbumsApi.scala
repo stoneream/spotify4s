@@ -3,16 +3,16 @@ package spotify4s.sttp
 import io.circe
 import io.circe.generic.extras.auto._
 import spotify4s.v1.circe.CirceConfiguration.jsonConfig
-import spotify4s.v1.circe.Derivation._
 import spotify4s.v1.model.{AlbumObject, ErrorObject, PagingObject}
 import spotify4s.v1.request.{RemoveAlbumsUserRequest, SaveAlbumsUserRequest}
 import spotify4s.v1.response.{GetMultipleAlbums200Response, GetNewReleases200Response}
 import sttp.client3._
 import sttp.client3.circe._
+import sttp.model.Uri
 
 object AlbumsApi {
 
-  private val baseUri = uri"https://api.spotify.com/v1"
+  private val baseUri: Uri = uri"https://api.spotify.com/v1"
 
   /**
    * Check User's Saved Albums
@@ -20,7 +20,7 @@ object AlbumsApi {
    */
   def checkUsersSavedAlbums(ids: String)(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject, circe.Error], List[Boolean]] = {
 
-    val queryParams = Map.empty[String, String] + ("ids" -> ids.toString)
+    val queryParams = Map.empty[String, String] + ("ids" -> ids)
 
     val requestUrl = baseUri.addPath("/me/albums/contains").addParams(queryParams)
 
@@ -32,9 +32,9 @@ object AlbumsApi {
    * Get Spotify catalog information for a single album.
    */
   def getAnAlbum(id: String, market: Option[String])(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject, circe.Error], AlbumObject] = {
-    val queryParams = Map.empty[String, String] ++ market.map("market" -> _.toString)
+    val queryParams = Map.empty[String, String] ++ market.map("market" -> _)
 
-    val requestUrl = baseUri.addPath("/albums").addPath(s"/${id}").addParams(queryParams)
+    val requestUrl = baseUri.addPath("/albums").addPath(s"/$id").addParams(queryParams)
 
     basicRequest.get(requestUrl).response(asJsonEither[ErrorObject, AlbumObject]).send(client).body
   }
@@ -47,9 +47,9 @@ object AlbumsApi {
       client: SttpBackend[Identity, Any]
   ): Either[ResponseException[ErrorObject, circe.Error], PagingObject] = {
 
-    val queryParams = Map.empty[String, String] ++ market.map("market" -> _.toString) ++ limit.map("limit" -> _.toString) ++ offset.map("offset" -> _.toString)
+    val queryParams = Map.empty[String, String] ++ market.map("market" -> _) ++ limit.map("limit" -> _.toString) ++ offset.map("offset" -> _.toString)
 
-    val requestUrl = baseUri.addPath("/albums/tracks").addPath(s"/${id}").addParams(queryParams)
+    val requestUrl = baseUri.addPath("/albums/tracks").addPath(s"/$id").addParams(queryParams)
 
     basicRequest.get(requestUrl).response(asJsonEither[ErrorObject, PagingObject]).send(client).body
   }
@@ -62,11 +62,11 @@ object AlbumsApi {
       client: SttpBackend[Identity, Any]
   ): Either[ResponseException[ErrorObject, circe.Error], PagingObject] = {
 
-    val queryParams = Map.empty[String, String] ++ includeGroups.map("includeGroups" -> _.toString) ++ market.map("market" -> _.toString) ++ limit.map(
+    val queryParams = Map.empty[String, String] ++ includeGroups.map("includeGroups" -> _) ++ market.map("market" -> _) ++ limit.map(
       "limit" -> _.toString
     ) ++ offset.map("offset" -> _.toString)
 
-    val requestUrl = baseUri.addPath("/artists/albums").addPath(s"/${id}").addParams(queryParams)
+    val requestUrl = baseUri.addPath("/artists/albums").addPath(s"/$id").addParams(queryParams)
 
     basicRequest.get(requestUrl).response(asJsonEither[ErrorObject, PagingObject]).send(client).body
   }
@@ -79,7 +79,7 @@ object AlbumsApi {
       client: SttpBackend[Identity, Any]
   ): Either[ResponseException[ErrorObject, circe.Error], GetMultipleAlbums200Response] = {
 
-    val queryParams = Map.empty[String, String] + ("ids" -> ids.toString) ++ market.map("market" -> _.toString)
+    val queryParams = Map.empty[String, String] + ("ids" -> ids) ++ market.map("market" -> _)
 
     val requestUrl = baseUri.addPath("/albums").addParams(queryParams)
 
@@ -95,7 +95,7 @@ object AlbumsApi {
   ): Either[ResponseException[ErrorObject, circe.Error], GetNewReleases200Response] = {
 
     val queryParams =
-      Map.empty[String, String] ++ country.map("country" -> _.toString) ++ limit.map("limit" -> _.toString) ++ offset.map("offset" -> _.toString)
+      Map.empty[String, String] ++ country.map("country" -> _) ++ limit.map("limit" -> _.toString) ++ offset.map("offset" -> _.toString)
 
     val requestUrl = baseUri.addPath("/browse/new-releases").addParams(queryParams)
 
@@ -110,7 +110,7 @@ object AlbumsApi {
       client: SttpBackend[Identity, Any]
   ): Either[ResponseException[ErrorObject, circe.Error], PagingObject] = {
 
-    val queryParams = Map.empty[String, String] ++ limit.map("limit" -> _.toString) ++ offset.map("offset" -> _.toString) ++ market.map("market" -> _.toString)
+    val queryParams = Map.empty[String, String] ++ limit.map("limit" -> _.toString) ++ offset.map("offset" -> _.toString) ++ market.map("market" -> _)
 
     val requestUrl = baseUri.addPath("/me/albums").addParams(queryParams)
 
@@ -125,7 +125,7 @@ object AlbumsApi {
       client: SttpBackend[Identity, Any]
   ): Either[ResponseException[ErrorObject, circe.Error], Unit] = {
 
-    val queryParams = Map.empty[String, String] + ("ids" -> ids.toString)
+    val queryParams = Map.empty[String, String] + ("ids" -> ids)
 
     val requestUrl = baseUri.addPath("/me/albums").addParams(queryParams)
 
@@ -140,7 +140,7 @@ object AlbumsApi {
       client: SttpBackend[Identity, Any]
   ): Either[ResponseException[ErrorObject, circe.Error], Unit] = {
 
-    val queryParams = Map.empty[String, String] + ("ids" -> ids.toString)
+    val queryParams = Map.empty[String, String] + ("ids" -> ids)
 
     val requestUrl = baseUri.addPath("/me/albums").addParams(queryParams)
 

@@ -1,23 +1,23 @@
 package spotify4s.sttp
 
-import io.circe.generic.extras.Configuration
+import io.circe
 import io.circe.generic.extras.auto._
+import spotify4s.v1.circe.CirceConfiguration.jsonConfig
 import spotify4s.v1.model.{CurrentlyPlayingContextObject, CursorPagingObject, ErrorObject, QueueObject}
 import spotify4s.v1.response.GetAUsersAvailableDevices200Response
 import sttp.client3._
 import sttp.client3.circe._
+import sttp.model.Uri
 
 object PlayerApi {
 
-  private implicit val jsonConfig: Configuration = Configuration.default.withSnakeCaseMemberNames
-
-  private val baseUri = uri"https://api.spotify.com/v1"
+  private val baseUri: Uri = uri"https://api.spotify.com/v1"
 
   /**
    * Add Item to Playback Queue
    * Add an item to the end of the user's current playback queue.
    */
-  def addToQueue(uri: String, deviceId: Option[String])(client: SttpBackend[Identity, Any]) = {
+  def addToQueue(uri: String, deviceId: Option[String])(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject,circe.Error],Unit] = {
 
     val queryParams = Map.empty[String, String] + ("uri" -> uri.toString) ++ deviceId.map("deviceId" -> _.toString)
 
@@ -30,7 +30,7 @@ object PlayerApi {
    * Get Available Devices
    * Get information about a user’s available devices.
    */
-  def getAUsersAvailableDevices()(client: SttpBackend[Identity, Any]) = {
+  def getAUsersAvailableDevices()(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject,circe.Error],GetAUsersAvailableDevices200Response] = {
 
     val requestUrl = baseUri.addPath("/me/player/devices")
 
@@ -41,7 +41,7 @@ object PlayerApi {
    * Get Playback State
    * Get information about the user’s current playback state, including track or episode, progress, and active device.
    */
-  def getInformationAboutTheUsersCurrentPlayback(market: Option[String], additionalTypes: Option[String])(client: SttpBackend[Identity, Any]) = {
+  def getInformationAboutTheUsersCurrentPlayback(market: Option[String], additionalTypes: Option[String])(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject,circe.Error],CurrentlyPlayingContextObject] = {
 
     val queryParams = Map.empty[String, String] ++ market.map("market" -> _.toString) ++ additionalTypes.map("additionalTypes" -> _.toString)
 
@@ -54,7 +54,7 @@ object PlayerApi {
    * Get the User's Queue
    * Get the list of objects that make up the user's queue.
    */
-  def getQueue()(client: SttpBackend[Identity, Any]) = {
+  def getQueue()(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject,circe.Error],QueueObject] = {
 
     val requestUrl = baseUri.addPath("/me/player/queue")
 
@@ -65,7 +65,7 @@ object PlayerApi {
    * Get Recently Played Tracks
    * Get tracks from the current user's recently played tracks. _**Note**: Currently doesn't support podcast episodes._
    */
-  def getRecentlyPlayed(limit: Option[Int], after: Option[Int], before: Option[Int])(client: SttpBackend[Identity, Any]) = {
+  def getRecentlyPlayed(limit: Option[Int], after: Option[Int], before: Option[Int])(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject,circe.Error],CursorPagingObject] = {
 
     val queryParams = Map.empty[String, String] ++ limit.map("limit" -> _.toString) ++ after.map("after" -> _.toString) ++ before.map("before" -> _.toString)
 
@@ -78,7 +78,7 @@ object PlayerApi {
    * Get Currently Playing Track
    * Get the object currently being played on the user's Spotify account.
    */
-  def getTheUsersCurrentlyPlayingTrack(market: Option[String], additionalTypes: Option[String])(client: SttpBackend[Identity, Any]) = {
+  def getTheUsersCurrentlyPlayingTrack(market: Option[String], additionalTypes: Option[String])(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject,circe.Error],CurrentlyPlayingContextObject] = {
 
     val queryParams = Map.empty[String, String] ++ market.map("market" -> _.toString) ++ additionalTypes.map("additionalTypes" -> _.toString)
 
@@ -91,7 +91,7 @@ object PlayerApi {
    * Pause Playback
    * Pause playback on the user's account.
    */
-  def pauseAUsersPlayback(deviceId: Option[String])(client: SttpBackend[Identity, Any]) = {
+  def pauseAUsersPlayback(deviceId: Option[String])(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject,circe.Error],Unit] = {
 
     val queryParams = Map.empty[String, String] ++ deviceId.map("deviceId" -> _.toString)
 
@@ -104,7 +104,7 @@ object PlayerApi {
    * Seek To Position
    * Seeks to the given position in the user’s currently playing track.
    */
-  def seekToPositionInCurrentlyPlayingTrack(positionMs: Int, deviceId: Option[String])(client: SttpBackend[Identity, Any]) = {
+  def seekToPositionInCurrentlyPlayingTrack(positionMs: Int, deviceId: Option[String])(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject,circe.Error],Unit] = {
 
     val queryParams = Map.empty[String, String] + ("positionMs" -> positionMs.toString) ++ deviceId.map("deviceId" -> _.toString)
 
@@ -117,7 +117,7 @@ object PlayerApi {
    * Set Repeat Mode
    * Set the repeat mode for the user's playback. Options are repeat-track, repeat-context, and off.
    */
-  def setRepeatModeOnUsersPlayback(state: String, deviceId: Option[String])(client: SttpBackend[Identity, Any]) = {
+  def setRepeatModeOnUsersPlayback(state: String, deviceId: Option[String])(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject,circe.Error],Unit] = {
 
     val queryParams = Map.empty[String, String] + ("state" -> state.toString) ++ deviceId.map("deviceId" -> _.toString)
 
@@ -130,7 +130,7 @@ object PlayerApi {
    * Set Playback Volume
    * Set the volume for the user’s current playback device.
    */
-  def setVolumeForUsersPlayback(volumePercent: Int, deviceId: Option[String])(client: SttpBackend[Identity, Any]) = {
+  def setVolumeForUsersPlayback(volumePercent: Int, deviceId: Option[String])(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject,circe.Error],Unit] = {
 
     val queryParams = Map.empty[String, String] + ("volumePercent" -> volumePercent.toString) ++ deviceId.map("deviceId" -> _.toString)
 
@@ -143,7 +143,7 @@ object PlayerApi {
    * Skip To Next
    * Skips to next track in the user’s queue.
    */
-  def skipUsersPlaybackToNextTrack(deviceId: Option[String])(client: SttpBackend[Identity, Any]) = {
+  def skipUsersPlaybackToNextTrack(deviceId: Option[String])(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject,circe.Error],Unit] = {
 
     val queryParams = Map.empty[String, String] ++ deviceId.map("deviceId" -> _.toString)
 
@@ -156,7 +156,7 @@ object PlayerApi {
    * Skip To Previous
    * Skips to previous track in the user’s queue.
    */
-  def skipUsersPlaybackToPreviousTrack(deviceId: Option[String])(client: SttpBackend[Identity, Any]) = {
+  def skipUsersPlaybackToPreviousTrack(deviceId: Option[String])(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject,circe.Error],Unit] = {
 
     val queryParams = Map.empty[String, String] ++ deviceId.map("deviceId" -> _.toString)
 
@@ -184,7 +184,7 @@ object PlayerApi {
    * Toggle Playback Shuffle
    * Toggle shuffle on or off for user’s playback.
    */
-  def toggleShuffleForUsersPlayback(state: Boolean, deviceId: Option[String])(client: SttpBackend[Identity, Any]) = {
+  def toggleShuffleForUsersPlayback(state: Boolean, deviceId: Option[String])(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject,circe.Error],Unit] = {
 
     val queryParams = Map.empty[String, String] + ("state" -> state.toString) ++ deviceId.map("deviceId" -> _.toString)
 

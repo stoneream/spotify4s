@@ -1,17 +1,17 @@
 package spotify4s.sttp
 
-import io.circe.generic.extras.Configuration
+import io.circe
 import io.circe.generic.extras.auto._
+import spotify4s.v1.circe.CirceConfiguration.jsonConfig
 import spotify4s.v1.model.ErrorObject
 import spotify4s.v1.response.Search200Response
 import sttp.client3._
 import sttp.client3.circe._
+import sttp.model.Uri
 
 object SearchApi {
 
-  private implicit val jsonConfig: Configuration = Configuration.default.withSnakeCaseMemberNames
-
-  private val baseUri = uri"https://api.spotify.com/v1"
+  private val baseUri: Uri = uri"https://api.spotify.com/v1"
 
   /**
    * Search for Item
@@ -20,7 +20,7 @@ object SearchApi {
    */
   def search(`q`: String, `type`: List[String], market: Option[String], limit: Option[Int], offset: Option[Int], includeExternal: Option[String])(
       client: SttpBackend[Identity, Any]
-  ) = {
+  ): Either[ResponseException[ErrorObject,circe.Error],Search200Response] = {
 
     val queryParams = Map.empty[String, String] + ("q" -> `q`.toString) + ("type" -> `type`.toString) ++ market.map("market" -> _.toString) ++ limit.map(
       "limit" -> _.toString
