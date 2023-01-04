@@ -41,8 +41,7 @@ sonatypeRepository := "https://s01.oss.sonatype.org/service/local"
 
 lazy val publishSettings = Seq(
   publish / skip := false,
-  Test / publishArtifact := false,
-  crossPaths := false
+  Test / publishArtifact := false
 )
 
 // library dependencies
