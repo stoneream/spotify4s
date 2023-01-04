@@ -1,7 +1,7 @@
 // project setting
 
 ThisBuild / scalaVersion := "2.13.10"
-ThisBuild / version := "0.1.2"
+ThisBuild / version := "0.1.3"
 ThisBuild / scalafixScalaBinaryVersion := CrossVersion.binaryScalaVersion(scalaVersion.value)
 
 // project info
@@ -23,6 +23,7 @@ ThisBuild / developers := List(
 ThisBuild / publishMavenStyle := true
 ThisBuild / publish / skip := true
 ThisBuild / versionScheme := Some("early-semver")
+ThisBuild / sonatypeCredentialHost := "s01.oss.sonatype.org"
 
 lazy val publishSetting = Seq(
   publish / skip := false,
