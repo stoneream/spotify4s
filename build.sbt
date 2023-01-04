@@ -1,37 +1,52 @@
-// project setting
+// scala setting
 
-ThisBuild / scalaVersion := "2.13.10"
-ThisBuild / scalafixScalaBinaryVersion := CrossVersion.binaryScalaVersion(scalaVersion.value)
+scalaVersion := "2.13.10"
+inThisBuild(
+  List(
+    scalacOptions ++= List(
+      "-Ywarn-unused",
+      "-Yrangepos"
+    ),
+    semanticdbEnabled := true,
+    semanticdbVersion := scalafixSemanticdb.revision,
+    scalafixScalaBinaryVersion := CrossVersion.binaryScalaVersion(scalaVersion.value),
+    scalafmtOnCompile := true
+  )
+)
 
 // project info
 
-ThisBuild / organization := "com.github.stoneream"
-ThisBuild / homepage := Some(url("https://github.com/stoneream/spotify4s"))
-ThisBuild / licenses := List("Apache License 2.0" -> url("https://github.com/stoneream/spotify4s/blob/main/LICENCE.md"))
-ThisBuild / developers := List(
-  Developer(
-    "stoneream",
-    "Ishikawa Ryuto",
-    "ishikawa-r@protonmail.com",
-    url("https://github.com/stoneream")
+inThisBuild(
+  List(
+    organization := "com.github.stoneream",
+    homepage := Some(url("https://github.com/stoneream/spotify4s")),
+    licenses := List(
+      "Apache License 2.0" -> url("https://github.com/stoneream/spotify4s/blob/main/LICENCE.md")
+    ),
+    developers := List(
+      Developer(
+        "stoneream",
+        "Ishikawa Ryuto",
+        "ishikawa-r@protonmail.com",
+        url("https://github.com/stoneream")
+      )
+    )
   )
 )
-sonatypeProfileName := "io.github.stoneream"
 
-// publish
+// publish settings
 
-ThisBuild / publish / skip := true
-ThisBuild / versionScheme := Some("early-semver")
-ThisBuild / sonatypeCredentialHost := "s01.oss.sonatype.org"
-ThisBuild / sonatypeRepository := "https://s01.oss.sonatype.org/service/local"
-
-lazy val publishSetting = Seq(
+lazy val publishSettings = Seq(
   publish / skip := false,
   Test / publishArtifact := false,
   Compile / packageBin / publishArtifact := false,
   Compile / packageDoc / publishArtifact := false,
   Compile / packageSrc / publishArtifact := false,
-  crossPaths := false
+  crossPaths := false,
+  publish / skip := true,
+  versionScheme := Some("early-semver"),
+  sonatypeCredentialHost := "s01.oss.sonatype.org",
+  sonatypeRepository := "https://s01.oss.sonatype.org/service/local"
 )
 
 // library dependencies
@@ -57,14 +72,14 @@ lazy val root = (project in file(".")).settings(
 
 lazy val core = (project in file("core")).settings(
   name := "core",
-  publishSetting
+  publishSettings
 )
 
 lazy val circe = (project in file("circe"))
   .settings(
     name := "circe",
     libraryDependencies ++= libraryCirce,
-    publishSetting
+    publishSettings
   )
   .dependsOn(core)
 
@@ -72,19 +87,7 @@ lazy val sttp = (project in file("sttp"))
   .settings(
     name := "sttp",
     libraryDependencies ++= librarySttp ++ libraryCirce,
-    publishSetting
+    publishSettings
   )
   .dependsOn(core)
   .dependsOn(circe)
-
-// compile, format
-
-ThisBuild / semanticdbEnabled := true
-ThisBuild / semanticdbVersion := scalafixSemanticdb.revision
-
-ThisBuild / scalacOptions ++= List(
-  "-Ywarn-unused",
-  "-Yrangepos"
-)
-
-scalafmtOnCompile := true
