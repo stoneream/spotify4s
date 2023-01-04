@@ -1,8 +1,8 @@
 // scala setting
 
-scalaVersion := "2.13.10"
 inThisBuild(
   List(
+    scalaVersion := "2.13.10",
     scalacOptions ++= List(
       "-Ywarn-unused",
       "-Yrangepos"
