@@ -1,7 +1,39 @@
+// project setting
+
 ThisBuild / scalaVersion := "2.13.10"
 ThisBuild / version := "0.1.2"
-ThisBuild / organization := "com.github.stoneream"
 ThisBuild / scalafixScalaBinaryVersion := CrossVersion.binaryScalaVersion(scalaVersion.value)
+
+// project info
+
+ThisBuild / organization := "com.github.stoneream"
+ThisBuild / homepage := Some(url("https://github.com/stoneream/spotify4s"))
+ThisBuild / licenses := List("Apache License 2.0" -> url("https://github.com/stoneream/spotify4s/blob/main/LICENCE.md"))
+ThisBuild / developers := List(
+  Developer(
+    "stoneream",
+    "Ishikawa Ryuto",
+    "ishikawa-r@protonmail.com",
+    url("https://github.com/stoneream")
+  )
+)
+
+// publish
+
+ThisBuild / publishMavenStyle := true
+ThisBuild / publish / skip := true
+ThisBuild / versionScheme := Some("early-semver")
+
+lazy val publishSetting = Seq(
+  publish / skip := false,
+  Test / publishArtifact := false,
+  Compile / packageBin / publishArtifact := false,
+  Compile / packageDoc / publishArtifact := false,
+  Compile / packageSrc / publishArtifact := false,
+  crossPaths := false
+)
+
+// library dependencies
 
 val circeVersion = "0.14.3"
 val libraryCirce = Seq(
@@ -15,27 +47,7 @@ val librarySttp = Seq(
   "com.softwaremill.sttp.client3" %% "circe" % sttpVersion
 )
 
-ThisBuild / publishMavenStyle := true
-ThisBuild / publish / skip := true
-ThisBuild / versionScheme := Some("early-semver")
-ThisBuild / publishTo := Some(
-  "GitHub Package Registry" at "https://maven.pkg.github.com/stoneream/spotify4s"
-)
-ThisBuild / credentials += Credentials(
-  "GitHub Package Registry",
-  "maven.pkg.github.com",
-  "stoneream",
-  sys.env.getOrElse("GITHUB_TOKEN", "")
-)
-
-lazy val publishSetting = Seq(
-  publish / skip := false,
-  Test / publishArtifact := false,
-  Compile / packageBin / publishArtifact := false,
-  Compile / packageDoc / publishArtifact := false,
-  Compile / packageSrc / publishArtifact := false,
-  crossPaths := false
-)
+// project
 
 lazy val core = (project in file("core")).settings(
   name := "spotify4s-core",
@@ -58,6 +70,8 @@ lazy val sttp = (project in file("sttp"))
   )
   .dependsOn(core)
   .dependsOn(circe)
+
+// compile, format
 
 ThisBuild / semanticdbEnabled := true
 ThisBuild / semanticdbVersion := scalafixSemanticdb.revision

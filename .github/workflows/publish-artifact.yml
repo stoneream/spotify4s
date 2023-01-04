@@ -10,12 +10,12 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-      - name: Setup JDK
-        uses: actions/setup-java@v3
+      - uses: olafurpg/setup-scala@v13
         with:
-          java-version: "11"
-          distribution: "zulu"
-          cache: sbt
-      - name: Publish
-        shell: bash
-        run: sbt +publish
+          java-version: zulu@1.11
+      - run: sbt ci-release
+        env:
+          PGP_PASSPHRASE: ${{ secrets.PGP_PASSPHRASE }}
+          PGP_SECRET: ${{ secrets.PGP_SECRET }}
+          SONATYPE_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
+          SONATYPE_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
