@@ -51,14 +51,19 @@ val librarySttp = Seq(
 
 // project
 
+lazy val root = (project in file(".")).settings(
+  name := "spotify4s",
+  publish / skip := true
+)
+
 lazy val core = (project in file("core")).settings(
-  name := "spotify4s-core",
+  name := "core",
   publishSetting
 )
 
 lazy val circe = (project in file("circe"))
   .settings(
-    name := "spotify4s-circe",
+    name := "circe",
     libraryDependencies ++= libraryCirce,
     publishSetting
   )
@@ -66,7 +71,7 @@ lazy val circe = (project in file("circe"))
 
 lazy val sttp = (project in file("sttp"))
   .settings(
-    name := "spotify4s-sttp",
+    name := "sttp",
     libraryDependencies ++= librarySttp ++ libraryCirce,
     publishSetting
   )
