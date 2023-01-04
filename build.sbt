@@ -20,7 +20,6 @@ ThisBuild / developers := List(
 
 // publish
 
-ThisBuild / publishMavenStyle := true
 ThisBuild / publish / skip := true
 ThisBuild / versionScheme := Some("early-semver")
 ThisBuild / sonatypeCredentialHost := "s01.oss.sonatype.org"
@@ -31,7 +30,8 @@ lazy val publishSetting = Seq(
   Compile / packageBin / publishArtifact := false,
   Compile / packageDoc / publishArtifact := false,
   Compile / packageSrc / publishArtifact := false,
-  crossPaths := false
+  crossPaths := false,
+  publishMavenStyle := true
 )
 
 // library dependencies
