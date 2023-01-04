@@ -1,5 +1,5 @@
 ThisBuild / scalaVersion := "2.13.10"
-ThisBuild / version := "0.1.0-SNAPSHOT"
+ThisBuild / version := "0.1.1-SNAPSHOT"
 ThisBuild / organization := "com.github.stoneream"
 ThisBuild / scalafixScalaBinaryVersion := CrossVersion.binaryScalaVersion(scalaVersion.value)
 
@@ -28,34 +28,7 @@ ThisBuild / credentials += Credentials(
   sys.env.getOrElse("GITHUB_TOKEN", "")
 )
 
-lazy val core = (project in file("core")).settings(
-  name := "spotify4s-core"
-)
-
-lazy val circe = (project in file("circe"))
-  .settings(
-    name := "spotify4s-circe",
-    libraryDependencies ++= libraryCirce
-  )
-  .dependsOn(core)
-
-lazy val sttp = (project in file("sttp"))
-  .settings(
-    name := "spotify4s-sttp",
-    libraryDependencies ++= librarySttp ++ libraryCirce
-  )
-  .dependsOn(core)
-  .dependsOn(circe)
-
-/*
-
-lazy val root = (project in file(".")).settings(
-  name := "spotify4s",
-  libraryDependencies ++= Seq(
-    "com.typesafe.play" %% "play-ahc-ws-standalone" % playWSVersion % "provided",
-    "com.typesafe.play" %% "play-ws-standalone-json" % playWSVersion % "provided",
-    "org.scalatest" %% "scalatest" % "3.2.14"
-  ),
+lazy val publishSetting = Seq(
   publish / skip := false,
   Test / publishArtifact := false,
   Compile / packageBin / publishArtifact := false,
@@ -63,7 +36,28 @@ lazy val root = (project in file(".")).settings(
   Compile / packageSrc / publishArtifact := false,
   crossPaths := false
 )
- */
+
+lazy val core = (project in file("core")).settings(
+  name := "spotify4s-core",
+  publishSetting
+)
+
+lazy val circe = (project in file("circe"))
+  .settings(
+    name := "spotify4s-circe",
+    libraryDependencies ++= libraryCirce,
+    publishSetting
+  )
+  .dependsOn(core)
+
+lazy val sttp = (project in file("sttp"))
+  .settings(
+    name := "spotify4s-sttp",
+    libraryDependencies ++= librarySttp ++ libraryCirce,
+    publishSetting
+  )
+  .dependsOn(core)
+  .dependsOn(circe)
 
 ThisBuild / semanticdbEnabled := true
 ThisBuild / semanticdbVersion := scalafixSemanticdb.revision
