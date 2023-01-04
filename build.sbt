@@ -23,6 +23,7 @@ ThisBuild / developers := List(
 ThisBuild / publish / skip := true
 ThisBuild / versionScheme := Some("early-semver")
 ThisBuild / sonatypeCredentialHost := "s01.oss.sonatype.org"
+ThisBuild / sonatypeRepository := "https://s01.oss.sonatype.org/service/local"
 
 lazy val publishSetting = Seq(
   publish / skip := false,
