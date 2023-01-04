@@ -8,16 +8,22 @@ case class PlaylistTrackObjectAddedBy(
     /* The [Spotify user ID](/documentation/web-api/#spotify-uris-and-ids) for this user.  */
     id: Option[String] = None,
     /* The object type.  */
-    `type`: Option[PlaylistTrackObjectAddedByEnums.`Type`] = None,
+    `type`: Option[PlaylistTrackObjectAddedBy.`Type`] = None,
     /* The [Spotify URI](/documentation/web-api/#spotify-uris-and-ids) for this user.  */
     uri: Option[String] = None
 )
 
-object PlaylistTrackObjectAddedByEnums {
+object PlaylistTrackObjectAddedBy {
 
-  type `Type` = `Type`.Value
-  object `Type` extends Enumeration {
-    val User = Value("user")
+  sealed abstract class `Type`(val value: String)
+
+  object `Type` {
+    final case object User extends `Type`("user")
+    final case object Unknown extends `Type`("unknown")
+
+    val values: Seq[User.type] = Seq(User)
+
+    def fromString(s: String): `Type` = values.find(p => p.value == s).getOrElse(Unknown)
   }
 
 }

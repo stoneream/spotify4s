@@ -9,16 +9,22 @@ case class SimplifiedArtistObject(
     /* The name of the artist.  */
     name: Option[String] = None,
     /* The object type.  */
-    `type`: Option[SimplifiedArtistObjectEnums.`Type`] = None,
+    `type`: Option[SimplifiedArtistObject.`Type`] = None,
     /* The [Spotify URI](/documentation/web-api/#spotify-uris-and-ids) for the artist.  */
     uri: Option[String] = None
 )
 
-object SimplifiedArtistObjectEnums {
+object SimplifiedArtistObject {
 
-  type `Type` = `Type`.Value
-  object `Type` extends Enumeration {
-    val Artist = Value("artist")
+  sealed abstract class `Type`(val value: String)
+
+  object `Type` {
+    final case object Artist extends `Type`("artist")
+    final case object Unknown extends `Type`("unknown")
+
+    val values: Seq[Artist.type] = Seq(Artist)
+
+    def fromString(s: String): `Type` = values.find(p => p.value == s).getOrElse(Unknown)
   }
 
 }

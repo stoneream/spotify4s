@@ -31,7 +31,7 @@ case class QueueObjectQueueInner(
     /* The number of the track. If an album has several discs, the track number is the number on the specified disc.  */
     trackNumber: Option[Int] = None,
     /* The object type.  */
-    `type`: QueueObjectQueueInnerEnums.`Type`,
+    `type`: QueueObjectQueueInner.`Type`,
     /* The [Spotify URI](/documentation/web-api/#spotify-uris-and-ids) for the episode.  */
     uri: String,
     /* Whether or not the track is from a local file.  */
@@ -53,23 +53,35 @@ case class QueueObjectQueueInner(
     /* The date the episode was first released, for example `\"1981-12-15\"`. Depending on the precision, it might be shown as `\"1981\"` or `\"1981-12\"`.  */
     releaseDate: String,
     /* The precision with which `release_date` value is known.  */
-    releaseDatePrecision: QueueObjectQueueInnerEnums.ReleaseDatePrecision,
+    releaseDatePrecision: QueueObjectQueueInner.ReleaseDatePrecision,
     resumePoint: EpisodeBaseResumePoint,
     show: SimplifiedShowObject
 )
 
-object QueueObjectQueueInnerEnums {
+object QueueObjectQueueInner {
 
-  type `Type` = `Type`.Value
-  type ReleaseDatePrecision = ReleaseDatePrecision.Value
-  object `Type` extends Enumeration {
-    val Episode = Value("episode")
+  sealed abstract class `Type`(val value: String)
+
+  object `Type` {
+    final case object Episode extends `Type`("episode")
+    final case object Unknown extends `Type`("unknown")
+
+    val values: Seq[Episode.type] = Seq(Episode)
+
+    def fromString(s: String): `Type` = values.find(p => p.value == s).getOrElse(Unknown)
   }
 
-  object ReleaseDatePrecision extends Enumeration {
-    val Year = Value("year")
-    val Month = Value("month")
-    val Day = Value("day")
+  sealed abstract class ReleaseDatePrecision(val value: String)
+
+  object ReleaseDatePrecision {
+    final case object Year extends ReleaseDatePrecision("year")
+    final case object Month extends ReleaseDatePrecision("month")
+    final case object Day extends ReleaseDatePrecision("day")
+    final case object Unknown extends ReleaseDatePrecision("unknown")
+
+    val values: Seq[ReleaseDatePrecision] = Seq(Year, Month, Day)
+
+    def fromString(s: String): ReleaseDatePrecision = values.find(p => p.value == s).getOrElse(Unknown)
   }
 
 }

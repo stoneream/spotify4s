@@ -29,18 +29,24 @@ case class ShowObject(
     /* The publisher of the show.  */
     publisher: String,
     /* The object type.  */
-    `type`: ShowObjectEnums.`Type`,
+    `type`: ShowObject.`Type`,
     /* The [Spotify URI](/documentation/web-api/#spotify-uris-and-ids) for the show.  */
     uri: String,
     /* The episodes of the show.  */
     episodes: PagingObject
 )
 
-object ShowObjectEnums {
+object ShowObject {
 
-  type `Type` = `Type`.Value
-  object `Type` extends Enumeration {
-    val Show = Value("show")
+  sealed abstract class `Type`(val value: String)
+
+  object `Type` {
+    final case object Show extends `Type`("show")
+    final case object Unknown extends `Type`("unknown")
+
+    val values: Seq[Show.type] = Seq(Show)
+
+    def fromString(s: String): `Type` = values.find(p => p.value == s).getOrElse(Unknown)
   }
 
 }

@@ -30,18 +30,24 @@ case class SimplifiedAudiobookObject(
     /* The publisher of the audiobook.  */
     publisher: String,
     /* The object type.  */
-    `type`: SimplifiedAudiobookObjectEnums.`Type`,
+    `type`: SimplifiedAudiobookObject.`Type`,
     /* The [Spotify URI](/documentation/web-api/#spotify-uris-and-ids) for the audiobook.  */
     uri: String,
     /* The number of chapters in this audiobook.  */
     totalChapters: Int
 )
 
-object SimplifiedAudiobookObjectEnums {
+object SimplifiedAudiobookObject {
 
-  type `Type` = `Type`.Value
-  object `Type` extends Enumeration {
-    val Audiobook = Value("audiobook")
+  sealed abstract class `Type`(val value: String)
+
+  object `Type` {
+    final case object Audiobook extends `Type`("audiobook")
+    final case object Unknown extends `Type`("unknown")
+
+    val values: Seq[Audiobook.type] = Seq(Audiobook)
+
+    def fromString(s: String): `Type` = values.find(p => p.value == s).getOrElse(Unknown)
   }
 
 }

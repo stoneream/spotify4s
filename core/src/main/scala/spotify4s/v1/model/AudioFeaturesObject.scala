@@ -32,18 +32,24 @@ case class AudioFeaturesObject(
     /* A link to the Web API endpoint providing full details of the track.  */
     trackHref: Option[String] = None,
     /* The object type.  */
-    `type`: Option[AudioFeaturesObjectEnums.`Type`] = None,
+    `type`: Option[AudioFeaturesObject.`Type`] = None,
     /* The Spotify URI for the track.  */
     uri: Option[String] = None,
     /* A measure from 0.0 to 1.0 describing the musical positiveness conveyed by a track. Tracks with high valence sound more positive (e.g. happy, cheerful, euphoric), while tracks with low valence sound more negative (e.g. sad, depressed, angry).  */
     valence: Option[Float] = None
 )
 
-object AudioFeaturesObjectEnums {
+object AudioFeaturesObject {
 
-  type `Type` = `Type`.Value
-  object `Type` extends Enumeration {
-    val AudioFeatures = Value("audio_features")
+  sealed abstract class `Type`(val value: String)
+
+  object `Type` {
+    final case object AudioFeatures extends `Type`("audio_features")
+    final case object Unknown extends `Type`("unknown")
+
+    val values: Seq[AudioFeatures.type] = Seq(AudioFeatures)
+
+    def fromString(s: String): `Type` = values.find(p => p.value == s).getOrElse(Unknown)
   }
 
 }
