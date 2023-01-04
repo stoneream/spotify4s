@@ -2,8 +2,6 @@ name: Publish Artifact
 
 on:
   workflow_dispatch:
-env:
-  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 jobs:
   publish:
     runs-on: ubuntu-latest
