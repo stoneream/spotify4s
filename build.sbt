@@ -36,17 +36,14 @@ inThisBuild(
 
 // publish settings
 
+sonatypeCredentialHost := "s01.oss.sonatype.org"
+sonatypeRepository := "https://s01.oss.sonatype.org/service/local"
+
 lazy val publishSettings = Seq(
   publish / skip := false,
   Test / publishArtifact := false,
-  Compile / packageBin / publishArtifact := false,
-  Compile / packageDoc / publishArtifact := false,
-  Compile / packageSrc / publishArtifact := false,
   crossPaths := false,
-  publish / skip := true,
-  versionScheme := Some("early-semver"),
-  sonatypeCredentialHost := "s01.oss.sonatype.org",
-  sonatypeRepository := "https://s01.oss.sonatype.org/service/local"
+  publish / skip := true
 )
 
 // library dependencies
