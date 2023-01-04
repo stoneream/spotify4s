@@ -16,6 +16,7 @@ ThisBuild / developers := List(
     url("https://github.com/stoneream")
   )
 )
+sonatypeProfileName := "io.github.stoneream"
 
 // publish
 
