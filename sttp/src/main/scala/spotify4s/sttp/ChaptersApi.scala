@@ -19,9 +19,9 @@ object ChaptersApi {
    */
   def getAChapter(id: String, market: Option[String])(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject, circe.Error], ChapterObject] = {
 
-    val queryParams = Map.empty[String, String] ++ market.map("market" -> _.toString)
+    val queryParams = Map.empty[String, String] ++ market.map("market" -> _)
 
-    val requestUrl = baseUri.addPath("/chapters").addPath(s"/${id}").addParams(queryParams)
+    val requestUrl = baseUri.addPath("/chapters").addPath(s"/$id").addParams(queryParams)
 
     basicRequest.get(requestUrl).response(asJsonEither[ErrorObject, ChapterObject]).send(client).body
   }
@@ -32,9 +32,9 @@ object ChaptersApi {
    */
   def getAudiobookChapters(id: String, market: Option[String], limit: Option[Int], offset: Option[Int])(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject, circe.Error], PagingObject] = {
 
-    val queryParams = Map.empty[String, String] ++ market.map("market" -> _.toString) ++ limit.map("limit" -> _.toString) ++ offset.map("offset" -> _.toString)
+    val queryParams = Map.empty[String, String] ++ market.map("market" -> _) ++ limit.map("limit" -> _.toString) ++ offset.map("offset" -> _.toString)
 
-    val requestUrl = baseUri.addPath("/audiobooks/chapters").addPath(s"/${id}").addParams(queryParams)
+    val requestUrl = baseUri.addPath("/audiobooks/chapters").addPath(s"/$id").addParams(queryParams)
 
     basicRequest.get(requestUrl).response(asJsonEither[ErrorObject, PagingObject]).send(client).body
   }
@@ -45,7 +45,7 @@ object ChaptersApi {
    */
   def getSeveralChapters(ids: String, market: Option[String])(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject, circe.Error], GetSeveralChapters200Response] = {
 
-    val queryParams = Map.empty[String, String] + ("ids" -> ids.toString) ++ market.map("market" -> _.toString)
+    val queryParams = Map.empty[String, String] + ("ids" -> ids) ++ market.map("market" -> _)
 
     val requestUrl = baseUri.addPath("/chapters").addParams(queryParams)
 

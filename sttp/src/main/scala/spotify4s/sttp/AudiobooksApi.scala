@@ -19,7 +19,7 @@ object AudiobooksApi {
    */
   def checkUsersSavedAudiobooks(ids: String)(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject,circe.Error],List[Boolean]] = {
 
-    val queryParams = Map.empty[String, String] + ("ids" -> ids.toString)
+    val queryParams = Map.empty[String, String] + ("ids" -> ids)
 
     val requestUrl = baseUri.addPath("/me/audiobooks/contains").addParams(queryParams)
 
@@ -33,9 +33,9 @@ object AudiobooksApi {
    */
   def getAnAudiobook(id: String, market: Option[String])(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject,circe.Error],AudiobookObject] = {
 
-    val queryParams = Map.empty[String, String] ++ market.map("market" -> _.toString)
+    val queryParams = Map.empty[String, String] ++ market.map("market" -> _)
 
-    val requestUrl = baseUri.addPath("/audiobooks").addPath(s"/${id}").addParams(queryParams)
+    val requestUrl = baseUri.addPath("/audiobooks").addPath(s"/$id").addParams(queryParams)
 
     basicRequest.get(requestUrl).response(asJsonEither[ErrorObject, AudiobookObject]).send(client).body
   }
@@ -47,9 +47,9 @@ object AudiobooksApi {
    */
   def getAudiobookChapters(id: String, market: Option[String], limit: Option[Int], offset: Option[Int])(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject,circe.Error],PagingObject] = {
 
-    val queryParams = Map.empty[String, String] ++ market.map("market" -> _.toString) ++ limit.map("limit" -> _.toString) ++ offset.map("offset" -> _.toString)
+    val queryParams = Map.empty[String, String] ++ market.map("market" -> _) ++ limit.map("limit" -> _.toString) ++ offset.map("offset" -> _.toString)
 
-    val requestUrl = baseUri.addPath("/audiobooks/chapters").addPath(s"/${id}").addParams(queryParams)
+    val requestUrl = baseUri.addPath("/audiobooks/chapters").addPath(s"/$id").addParams(queryParams)
 
     basicRequest.get(requestUrl).response(asJsonEither[ErrorObject, PagingObject]).send(client).body
   }
@@ -61,7 +61,7 @@ object AudiobooksApi {
    */
   def getMultipleAudiobooks(ids: String, market: Option[String])(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject,circe.Error],GetMultipleAudiobooks200Response] = {
 
-    val queryParams = Map.empty[String, String] + ("ids" -> ids.toString) ++ market.map("market" -> _.toString)
+    val queryParams = Map.empty[String, String] + ("ids" -> ids) ++ market.map("market" -> _)
 
     val requestUrl = baseUri.addPath("/audiobooks").addParams(queryParams)
 
@@ -87,7 +87,7 @@ object AudiobooksApi {
    */
   def removeAudiobooksUser(ids: String)(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject,circe.Error],Unit] = {
 
-    val queryParams = Map.empty[String, String] + ("ids" -> ids.toString)
+    val queryParams = Map.empty[String, String] + ("ids" -> ids)
 
     val requestUrl = baseUri.addPath("/me/audiobooks").addParams(queryParams)
 
@@ -100,7 +100,7 @@ object AudiobooksApi {
    */
   def saveAudiobooksUser(ids: String)(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject,circe.Error],Unit] = {
 
-    val queryParams = Map.empty[String, String] + ("ids" -> ids.toString)
+    val queryParams = Map.empty[String, String] + ("ids" -> ids)
 
     val requestUrl = baseUri.addPath("/me/audiobooks").addParams(queryParams)
 

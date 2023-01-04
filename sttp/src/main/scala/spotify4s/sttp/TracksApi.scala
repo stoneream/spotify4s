@@ -22,9 +22,9 @@ object TracksApi {
       client: SttpBackend[Identity, Any]
   ): Either[ResponseException[ErrorObject,circe.Error],ReorderOrReplacePlaylistsTracks200Response] = {
 
-    val queryParams = Map.empty[String, String] ++ position.map("position" -> _.toString) ++ uris.map("uris" -> _.toString)
+    val queryParams = Map.empty[String, String] ++ position.map("position" -> _.toString) ++ uris.map("uris" -> _)
 
-    val requestUrl = baseUri.addPath("/playlists/tracks").addPath(s"/${playlistId}").addParams(queryParams)
+    val requestUrl = baseUri.addPath("/playlists/tracks").addPath(s"/$playlistId").addParams(queryParams)
 
     basicRequest.post(requestUrl).body(requestBody).response(asJsonEither[ErrorObject, ReorderOrReplacePlaylistsTracks200Response]).send(client).body
   }
@@ -35,7 +35,7 @@ object TracksApi {
    */
   def checkUsersSavedTracks(ids: String)(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject,circe.Error],List[Boolean]] = {
 
-    val queryParams = Map.empty[String, String] + ("ids" -> ids.toString)
+    val queryParams = Map.empty[String, String] + ("ids" -> ids)
 
     val requestUrl = baseUri.addPath("/me/tracks/contains").addParams(queryParams)
 
@@ -48,9 +48,9 @@ object TracksApi {
    */
   def getAnAlbumsTracks(id: String, market: Option[String], limit: Option[Int], offset: Option[Int])(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject,circe.Error],PagingObject] = {
 
-    val queryParams = Map.empty[String, String] ++ market.map("market" -> _.toString) ++ limit.map("limit" -> _.toString) ++ offset.map("offset" -> _.toString)
+    val queryParams = Map.empty[String, String] ++ market.map("market" -> _) ++ limit.map("limit" -> _.toString) ++ offset.map("offset" -> _.toString)
 
-    val requestUrl = baseUri.addPath("/albums/tracks").addPath(s"/${id}").addParams(queryParams)
+    val requestUrl = baseUri.addPath("/albums/tracks").addPath(s"/$id").addParams(queryParams)
 
     basicRequest.get(requestUrl).response(asJsonEither[ErrorObject, PagingObject]).send(client).body
   }
@@ -61,9 +61,9 @@ object TracksApi {
    */
   def getAnArtistsTopTracks(id: String, market: Option[String])(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject,circe.Error],GetAnArtistsTopTracks200Response] = {
 
-    val queryParams = Map.empty[String, String] ++ market.map("market" -> _.toString)
+    val queryParams = Map.empty[String, String] ++ market.map("market" -> _)
 
-    val requestUrl = baseUri.addPath("/artists/top-tracks").addPath(s"/${id}").addParams(queryParams)
+    val requestUrl = baseUri.addPath("/artists/top-tracks").addPath(s"/$id").addParams(queryParams)
 
     basicRequest.get(requestUrl).response(asJsonEither[ErrorObject, GetAnArtistsTopTracks200Response]).send(client).body
   }
@@ -74,7 +74,7 @@ object TracksApi {
    */
   def getAudioAnalysis(id: String)(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject,circe.Error],AudioAnalysisObject] = {
 
-    val requestUrl = baseUri.addPath("/audio-analysis").addPath(s"/${id}")
+    val requestUrl = baseUri.addPath("/audio-analysis").addPath(s"/$id")
 
     basicRequest.get(requestUrl).response(asJsonEither[ErrorObject, AudioAnalysisObject]).send(client).body
   }
@@ -85,7 +85,7 @@ object TracksApi {
    */
   def getAudioFeatures(id: String)(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject,circe.Error],AudioFeaturesObject] = {
 
-    val requestUrl = baseUri.addPath("/audio-features").addPath(s"/${id}")
+    val requestUrl = baseUri.addPath("/audio-features").addPath(s"/$id")
 
     basicRequest.get(requestUrl).response(asJsonEither[ErrorObject, AudioFeaturesObject]).send(client).body
   }
@@ -104,11 +104,11 @@ object TracksApi {
   )(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject,circe.Error],PagingObject] = {
 
     val queryParams =
-      Map.empty[String, String] ++ market.map("market" -> _.toString) ++ fields.map("fields" -> _.toString) ++ limit.map("limit" -> _.toString) ++ offset.map(
+      Map.empty[String, String] ++ market.map("market" -> _) ++ fields.map("fields" -> _) ++ limit.map("limit" -> _.toString) ++ offset.map(
         "offset" -> _.toString
-      ) ++ additionalTypes.map("additionalTypes" -> _.toString)
+      ) ++ additionalTypes.map("additionalTypes" -> _)
 
-    val requestUrl = baseUri.addPath("/playlists/tracks").addPath(s"/${playlistId}").addParams(queryParams)
+    val requestUrl = baseUri.addPath("/playlists/tracks").addPath(s"/$playlistId").addParams(queryParams)
 
     basicRequest.get(requestUrl).response(asJsonEither[ErrorObject, PagingObject]).send(client).body
   }
@@ -168,8 +168,8 @@ object TracksApi {
   )(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject,circe.Error],RecommendationsObject] = {
 
     val queryParams = Map.empty[String, String] ++ limit.map("limit" -> _.toString) ++ market.map(
-      "market" -> _.toString
-    ) + ("seedArtists" -> seedArtists.toString) + ("seedGenres" -> seedGenres.toString) + ("seedTracks" -> seedTracks.toString) ++ minAcousticness.map(
+      "market" -> _
+    ) + ("seedArtists" -> seedArtists) + ("seedGenres" -> seedGenres) + ("seedTracks" -> seedTracks) ++ minAcousticness.map(
       "minAcousticness" -> _.toString
     ) ++ maxAcousticness.map("maxAcousticness" -> _.toString) ++ targetAcousticness.map("targetAcousticness" -> _.toString) ++ minDanceability.map(
       "minDanceability" -> _.toString
@@ -207,7 +207,7 @@ object TracksApi {
    */
   def getSeveralAudioFeatures(ids: String)(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject,circe.Error],GetSeveralAudioFeatures200Response] = {
 
-    val queryParams = Map.empty[String, String] + ("ids" -> ids.toString)
+    val queryParams = Map.empty[String, String] + ("ids" -> ids)
 
     val requestUrl = baseUri.addPath("/audio-features").addParams(queryParams)
 
@@ -220,7 +220,7 @@ object TracksApi {
    */
   def getSeveralTracks(ids: String, market: Option[String])(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject,circe.Error],GetAnArtistsTopTracks200Response] = {
 
-    val queryParams = Map.empty[String, String] ++ market.map("market" -> _.toString) + ("ids" -> ids.toString)
+    val queryParams = Map.empty[String, String] ++ market.map("market" -> _) + ("ids" -> ids)
 
     val requestUrl = baseUri.addPath("/tracks").addParams(queryParams)
 
@@ -233,9 +233,9 @@ object TracksApi {
    */
   def getTrack(id: String, market: Option[String])(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject,circe.Error],TrackObject] = {
 
-    val queryParams = Map.empty[String, String] ++ market.map("market" -> _.toString)
+    val queryParams = Map.empty[String, String] ++ market.map("market" -> _)
 
-    val requestUrl = baseUri.addPath("/tracks").addPath(s"/${id}").addParams(queryParams)
+    val requestUrl = baseUri.addPath("/tracks").addPath(s"/$id").addParams(queryParams)
 
     basicRequest.get(requestUrl).response(asJsonEither[ErrorObject, TrackObject]).send(client).body
   }
@@ -246,7 +246,7 @@ object TracksApi {
    */
   def getUsersSavedTracks(market: Option[String], limit: Option[Int], offset: Option[Int])(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject,circe.Error],PagingObject] = {
 
-    val queryParams = Map.empty[String, String] ++ market.map("market" -> _.toString) ++ limit.map("limit" -> _.toString) ++ offset.map("offset" -> _.toString)
+    val queryParams = Map.empty[String, String] ++ market.map("market" -> _) ++ limit.map("limit" -> _.toString) ++ offset.map("offset" -> _.toString)
 
     val requestUrl = baseUri.addPath("/me/tracks").addParams(queryParams)
 
@@ -260,7 +260,7 @@ object TracksApi {
   def getUsersTopArtistsAndTracks(`type`: String, timeRange: Option[String], limit: Option[Int], offset: Option[Int])(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject,circe.Error],PagingObject] = {
 
     val queryParams =
-      Map.empty[String, String] ++ timeRange.map("timeRange" -> _.toString) ++ limit.map("limit" -> _.toString) ++ offset.map("offset" -> _.toString)
+      Map.empty[String, String] ++ timeRange.map("timeRange" -> _) ++ limit.map("limit" -> _.toString) ++ offset.map("offset" -> _.toString)
 
     val requestUrl = baseUri.addPath("/me/top").addPath(s"/${`type`}").addParams(queryParams)
 
@@ -273,7 +273,7 @@ object TracksApi {
    */
   def removeTracksPlaylist(playlistId: String, removeTracksPlaylistRequest: Option[RemoveTracksPlaylistRequest])(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject,circe.Error],ReorderOrReplacePlaylistsTracks200Response] = {
 
-    val requestUrl = baseUri.addPath("/playlists/tracks").addPath(s"/${playlistId}")
+    val requestUrl = baseUri.addPath("/playlists/tracks").addPath(s"/$playlistId")
 
     basicRequest
       .delete(requestUrl)
@@ -289,7 +289,7 @@ object TracksApi {
    */
   def removeTracksUser(ids: String, requestBody: Option[RemoveTracksUserRequest])(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject,circe.Error],Unit] = {
 
-    val queryParams = Map.empty[String, String] + ("ids" -> ids.toString)
+    val queryParams = Map.empty[String, String] + ("ids" -> ids)
 
     val requestUrl = baseUri.addPath("/me/tracks").addParams(queryParams)
 
@@ -318,7 +318,7 @@ object TracksApi {
    */
   def saveTracksUser(ids: String, requestBody: Option[SaveTracksUserRequest])(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject,circe.Error],Unit] = {
 
-    val queryParams = Map.empty[String, String] + ("ids" -> ids.toString)
+    val queryParams = Map.empty[String, String] + ("ids" -> ids)
 
     val requestUrl = baseUri.addPath("/me/tracks").addParams(queryParams)
 

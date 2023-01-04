@@ -22,7 +22,7 @@ object EpisodesApi {
    */
   def checkUsersSavedEpisodes(ids: String)(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject, circe.Error], List[Boolean]] = {
 
-    val queryParams = Map.empty[String, String] + ("ids" -> ids.toString)
+    val queryParams = Map.empty[String, String] + ("ids" -> ids)
 
     val requestUrl = baseUri.addPath("/me/episodes/contains").addParams(queryParams)
 
@@ -36,9 +36,9 @@ object EpisodesApi {
    */
   def getAShowsEpisodes(id: String, market: Option[String], limit: Option[Int], offset: Option[Int])(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject, circe.Error], PagingObject] = {
 
-    val queryParams = Map.empty[String, String] ++ market.map("market" -> _.toString) ++ limit.map("limit" -> _.toString) ++ offset.map("offset" -> _.toString)
+    val queryParams = Map.empty[String, String] ++ market.map("market" -> _) ++ limit.map("limit" -> _.toString) ++ offset.map("offset" -> _.toString)
 
-    val requestUrl = baseUri.addPath("/shows/episodes").addPath(s"/${id}").addParams(queryParams)
+    val requestUrl = baseUri.addPath("/shows/episodes").addPath(s"/$id").addParams(queryParams)
 
     basicRequest.get(requestUrl).response(asJsonEither[ErrorObject, PagingObject]).send(client).body
   }
@@ -49,9 +49,9 @@ object EpisodesApi {
    */
   def getAnEpisode(id: String, market: Option[String])(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject, circe.Error], EpisodeObject] = {
 
-    val queryParams = Map.empty[String, String] ++ market.map("market" -> _.toString)
+    val queryParams = Map.empty[String, String] ++ market.map("market" -> _)
 
-    val requestUrl = baseUri.addPath("/episodes").addPath(s"/${id}").addParams(queryParams)
+    val requestUrl = baseUri.addPath("/episodes").addPath(s"/$id").addParams(queryParams)
 
     basicRequest.get(requestUrl).response(asJsonEither[ErrorObject, EpisodeObject]).send(client).body
   }
@@ -62,7 +62,7 @@ object EpisodesApi {
    */
   def getMultipleEpisodes(ids: String, market: Option[String])(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject, circe.Error], GetMultipleEpisodes200Response] = {
 
-    val queryParams = Map.empty[String, String] + ("ids" -> ids.toString) ++ market.map("market" -> _.toString)
+    val queryParams = Map.empty[String, String] + ("ids" -> ids) ++ market.map("market" -> _)
 
     val requestUrl = baseUri.addPath("/episodes").addParams(queryParams)
 
@@ -77,7 +77,7 @@ object EpisodesApi {
    */
   def getUsersSavedEpisodes(market: Option[String], limit: Option[Int], offset: Option[Int])(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject, circe.Error], PagingObject] = {
 
-    val queryParams = Map.empty[String, String] ++ market.map("market" -> _.toString) ++ limit.map("limit" -> _.toString) ++ offset.map("offset" -> _.toString)
+    val queryParams = Map.empty[String, String] ++ market.map("market" -> _) ++ limit.map("limit" -> _.toString) ++ offset.map("offset" -> _.toString)
 
     val requestUrl = baseUri.addPath("/me/episodes").addParams(queryParams)
 
@@ -92,7 +92,7 @@ object EpisodesApi {
    */
   def removeEpisodesUser(ids: String, requestBody: Option[RemoveEpisodesUserRequest])(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject, circe.Error], Unit] = {
 
-    val queryParams = Map.empty[String, String] + ("ids" -> ids.toString)
+    val queryParams = Map.empty[String, String] + ("ids" -> ids)
 
     val requestUrl = baseUri.addPath("/me/episodes").addParams(queryParams)
 
@@ -107,7 +107,7 @@ object EpisodesApi {
    */
   def saveEpisodesUser(ids: String, requestBody: Option[SaveEpisodesUserRequest])(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject, circe.Error], Unit] = {
 
-    val queryParams = Map.empty[String, String] + ("ids" -> ids.toString)
+    val queryParams = Map.empty[String, String] + ("ids" -> ids)
 
     val requestUrl = baseUri.addPath("/me/episodes").addParams(queryParams)
 

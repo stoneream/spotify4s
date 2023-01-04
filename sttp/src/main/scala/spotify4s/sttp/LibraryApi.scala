@@ -20,7 +20,7 @@ object LibraryApi {
    */
   def changePlaylistDetails(playlistId: String, requestBody: Option[ChangePlaylistDetailsRequest])(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject, circe.Error], Unit] = {
 
-    val requestUrl = baseUri.addPath("/playlists").addPath(s"/${playlistId}")
+    val requestUrl = baseUri.addPath("/playlists").addPath(s"/$playlistId")
 
     basicRequest.put(requestUrl).body(requestBody).response(asJsonEither[ErrorObject, Unit]).send(client).body
   }
@@ -31,7 +31,7 @@ object LibraryApi {
    */
   def checkCurrentUserFollows(`type`: String, ids: String)(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject, circe.Error], List[Boolean]] = {
 
-    val queryParams = Map.empty[String, String] + ("type" -> `type`.toString) + ("ids" -> ids.toString)
+    val queryParams = Map.empty[String, String] + ("type" -> `type`) + ("ids" -> ids)
 
     val requestUrl = baseUri.addPath("/me/following/contains").addParams(queryParams)
 
@@ -44,7 +44,7 @@ object LibraryApi {
    */
   def checkUsersSavedAlbums(ids: String)(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject, circe.Error], List[Boolean]] = {
 
-    val queryParams = Map.empty[String, String] + ("ids" -> ids.toString)
+    val queryParams = Map.empty[String, String] + ("ids" -> ids)
 
     val requestUrl = baseUri.addPath("/me/albums/contains").addParams(queryParams)
 
@@ -57,7 +57,7 @@ object LibraryApi {
    */
   def checkUsersSavedAudiobooks(ids: String)(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject, circe.Error], List[Boolean]] = {
 
-    val queryParams = Map.empty[String, String] + ("ids" -> ids.toString)
+    val queryParams = Map.empty[String, String] + ("ids" -> ids)
 
     val requestUrl = baseUri.addPath("/me/audiobooks/contains").addParams(queryParams)
 
@@ -70,7 +70,7 @@ object LibraryApi {
    */
   def checkUsersSavedEpisodes(ids: String)(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject,circe.Error],List[Boolean]] = {
 
-    val queryParams = Map.empty[String, String] + ("ids" -> ids.toString)
+    val queryParams = Map.empty[String, String] + ("ids" -> ids)
 
     val requestUrl = baseUri.addPath("/me/episodes/contains").addParams(queryParams)
 
@@ -83,7 +83,7 @@ object LibraryApi {
    */
   def checkUsersSavedShows(ids: String)(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject,circe.Error],List[Boolean]] = {
 
-    val queryParams = Map.empty[String, String] + ("ids" -> ids.toString)
+    val queryParams = Map.empty[String, String] + ("ids" -> ids)
 
     val requestUrl = baseUri.addPath("/me/shows/contains").addParams(queryParams)
 
@@ -96,7 +96,7 @@ object LibraryApi {
    */
   def checkUsersSavedTracks(ids: String)(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject,circe.Error],List[Boolean]] = {
 
-    val queryParams = Map.empty[String, String] + ("ids" -> ids.toString)
+    val queryParams = Map.empty[String, String] + ("ids" -> ids)
 
     val requestUrl = baseUri.addPath("/me/tracks/contains").addParams(queryParams)
 
@@ -109,7 +109,7 @@ object LibraryApi {
    */
   def createPlaylist(userId: String, requestBody: Option[CreatePlaylistRequest])(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject,circe.Error],PlaylistObject] = {
 
-    val requestUrl = baseUri.addPath("/users/playlists").addPath(s"/${userId}")
+    val requestUrl = baseUri.addPath("/users/playlists").addPath(s"/$userId")
 
     basicRequest.post(requestUrl).body(requestBody).response(asJsonEither[ErrorObject, PlaylistObject]).send(client).body
   }
@@ -120,7 +120,7 @@ object LibraryApi {
    */
   def followArtistsUsers(`type`: String, ids: String, requestBody: Option[FollowArtistsUsersRequest])(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject,circe.Error],Unit] = {
 
-    val queryParams = Map.empty[String, String] + ("type" -> `type`.toString) + ("ids" -> ids.toString)
+    val queryParams = Map.empty[String, String] + ("type" -> `type`) + ("ids" -> ids)
 
     val requestUrl = baseUri.addPath("/me/following").addParams(queryParams)
 
@@ -146,7 +146,7 @@ object LibraryApi {
    */
   def getFollowed(`type`: String, after: Option[String], limit: Option[Int])(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject,circe.Error],GetFollowed200Response] = {
 
-    val queryParams = Map.empty[String, String] + ("type" -> `type`.toString) ++ after.map("after" -> _.toString) ++ limit.map("limit" -> _.toString)
+    val queryParams = Map.empty[String, String] + ("type" -> `type`) ++ after.map("after" -> _) ++ limit.map("limit" -> _.toString)
 
     val requestUrl = baseUri.addPath("/me/following").addParams(queryParams)
 
@@ -159,7 +159,7 @@ object LibraryApi {
    */
   def getUsersSavedAlbums(limit: Option[Int], offset: Option[Int], market: Option[String])(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject,circe.Error],PagingObject] = {
 
-    val queryParams = Map.empty[String, String] ++ limit.map("limit" -> _.toString) ++ offset.map("offset" -> _.toString) ++ market.map("market" -> _.toString)
+    val queryParams = Map.empty[String, String] ++ limit.map("limit" -> _.toString) ++ offset.map("offset" -> _.toString) ++ market.map("market" -> _)
 
     val requestUrl = baseUri.addPath("/me/albums").addParams(queryParams)
 
@@ -187,7 +187,7 @@ object LibraryApi {
    */
   def getUsersSavedEpisodes(market: Option[String], limit: Option[Int], offset: Option[Int])(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject,circe.Error],PagingObject] = {
 
-    val queryParams = Map.empty[String, String] ++ market.map("market" -> _.toString) ++ limit.map("limit" -> _.toString) ++ offset.map("offset" -> _.toString)
+    val queryParams = Map.empty[String, String] ++ market.map("market" -> _) ++ limit.map("limit" -> _.toString) ++ offset.map("offset" -> _.toString)
 
     val requestUrl = baseUri.addPath("/me/episodes").addParams(queryParams)
 
@@ -213,7 +213,7 @@ object LibraryApi {
    */
   def getUsersSavedTracks(market: Option[String], limit: Option[Int], offset: Option[Int])(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject,circe.Error],PagingObject] = {
 
-    val queryParams = Map.empty[String, String] ++ market.map("market" -> _.toString) ++ limit.map("limit" -> _.toString) ++ offset.map("offset" -> _.toString)
+    val queryParams = Map.empty[String, String] ++ market.map("market" -> _) ++ limit.map("limit" -> _.toString) ++ offset.map("offset" -> _.toString)
 
     val requestUrl = baseUri.addPath("/me/tracks").addParams(queryParams)
 
@@ -227,7 +227,7 @@ object LibraryApi {
   def getUsersTopArtistsAndTracks(`type`: String, timeRange: Option[String], limit: Option[Int], offset: Option[Int])(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject,circe.Error],PagingObject] = {
 
     val queryParams =
-      Map.empty[String, String] ++ timeRange.map("timeRange" -> _.toString) ++ limit.map("limit" -> _.toString) ++ offset.map("offset" -> _.toString)
+      Map.empty[String, String] ++ timeRange.map("timeRange" -> _) ++ limit.map("limit" -> _.toString) ++ offset.map("offset" -> _.toString)
 
     val requestUrl = baseUri.addPath("/me/top").addPath(s"/${`type`}").addParams(queryParams)
 
@@ -240,7 +240,7 @@ object LibraryApi {
    */
   def removeAlbumsUser(ids: String, requestBody: Option[RemoveAlbumsUserRequest])(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject,circe.Error],Unit] = {
 
-    val queryParams = Map.empty[String, String] + ("ids" -> ids.toString)
+    val queryParams = Map.empty[String, String] + ("ids" -> ids)
 
     val requestUrl = baseUri.addPath("/me/albums").addParams(queryParams)
 
@@ -253,7 +253,7 @@ object LibraryApi {
    */
   def removeAudiobooksUser(ids: String)(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject,circe.Error],Unit] = {
 
-    val queryParams = Map.empty[String, String] + ("ids" -> ids.toString)
+    val queryParams = Map.empty[String, String] + ("ids" -> ids)
 
     val requestUrl = baseUri.addPath("/me/audiobooks").addParams(queryParams)
 
@@ -266,7 +266,7 @@ object LibraryApi {
    */
   def removeEpisodesUser(ids: String, requestBody: Option[RemoveEpisodesUserRequest])(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject,circe.Error],Unit] = {
 
-    val queryParams = Map.empty[String, String] + ("ids" -> ids.toString)
+    val queryParams = Map.empty[String, String] + ("ids" -> ids)
 
     val requestUrl = baseUri.addPath("/me/episodes").addParams(queryParams)
 
@@ -279,7 +279,7 @@ object LibraryApi {
    */
   def removeShowsUser(ids: String, market: Option[String])(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject,circe.Error],Unit] = {
 
-    val queryParams = Map.empty[String, String] + ("ids" -> ids.toString) ++ market.map("market" -> _.toString)
+    val queryParams = Map.empty[String, String] + ("ids" -> ids) ++ market.map("market" -> _)
 
     val requestUrl = baseUri.addPath("/me/shows").addParams(queryParams)
 
@@ -292,7 +292,7 @@ object LibraryApi {
    */
   def removeTracksUser(ids: String, requestBody: Option[RemoveTracksUserRequest])(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject,circe.Error],Unit] = {
 
-    val queryParams = Map.empty[String, String] + ("ids" -> ids.toString)
+    val queryParams = Map.empty[String, String] + ("ids" -> ids)
 
     val requestUrl = baseUri.addPath("/me/tracks").addParams(queryParams)
 
@@ -305,7 +305,7 @@ object LibraryApi {
    */
   def saveAlbumsUser(ids: String, requestBody: Option[RemoveAlbumsUserRequest])(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject,circe.Error],Unit] = {
 
-    val queryParams = Map.empty[String, String] + ("ids" -> ids.toString)
+    val queryParams = Map.empty[String, String] + ("ids" -> ids)
 
     val requestUrl = baseUri.addPath("/me/albums").addParams(queryParams)
 
@@ -318,7 +318,7 @@ object LibraryApi {
    */
   def saveAudiobooksUser(ids: String)(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject,circe.Error],Unit] = {
 
-    val queryParams = Map.empty[String, String] + ("ids" -> ids.toString)
+    val queryParams = Map.empty[String, String] + ("ids" -> ids)
 
     val requestUrl = baseUri.addPath("/me/audiobooks").addParams(queryParams)
 
@@ -332,7 +332,7 @@ object LibraryApi {
    */
   def saveEpisodesUser(ids: String, requestBody: Option[SaveEpisodesUserRequest])(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject,circe.Error],Unit] = {
 
-    val queryParams = Map.empty[String, String] + ("ids" -> ids.toString)
+    val queryParams = Map.empty[String, String] + ("ids" -> ids)
 
     val requestUrl = baseUri.addPath("/me/episodes").addParams(queryParams)
 
@@ -345,7 +345,7 @@ object LibraryApi {
    */
   def saveShowsUser(ids: String)(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject,circe.Error],Unit] = {
 
-    val queryParams = Map.empty[String, String] + ("ids" -> ids.toString)
+    val queryParams = Map.empty[String, String] + ("ids" -> ids)
 
     val requestUrl = baseUri.addPath("/me/shows").addParams(queryParams)
 
@@ -358,7 +358,7 @@ object LibraryApi {
    */
   def saveTracksUser(ids: String, requestBody: Option[SaveTracksUserRequest])(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject,circe.Error],Unit] = {
 
-    val queryParams = Map.empty[String, String] + ("ids" -> ids.toString)
+    val queryParams = Map.empty[String, String] + ("ids" -> ids)
 
     val requestUrl = baseUri.addPath("/me/tracks").addParams(queryParams)
 
@@ -371,7 +371,7 @@ object LibraryApi {
    */
   def unfollowArtistsUsers(`type`: String, ids: String, requestBody: Option[UnfollowArtistsUsersRequest])(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject,circe.Error],Unit] = {
 
-    val queryParams = Map.empty[String, String] + ("type" -> `type`.toString) + ("ids" -> ids.toString)
+    val queryParams = Map.empty[String, String] + ("type" -> `type`) + ("ids" -> ids)
 
     val requestUrl = baseUri.addPath("/me/following").addParams(queryParams)
 

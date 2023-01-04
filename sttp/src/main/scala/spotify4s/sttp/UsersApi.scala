@@ -22,7 +22,7 @@ object UsersApi {
       client: SttpBackend[Identity, Any]
   ): Either[ResponseException[ErrorObject, circe.Error], List[Boolean]] = {
 
-    val queryParams = Map.empty[String, String] + ("type" -> `type`.toString) + ("ids" -> ids.toString)
+    val queryParams = Map.empty[String, String] + ("type" -> `type`) + ("ids" -> ids)
 
     val requestUrl = baseUri.addPath("/me/following/contains").addParams(queryParams)
 
@@ -35,9 +35,9 @@ object UsersApi {
    */
   def checkIfUserFollowsPlaylist(playlistId: String, ids: String)(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject,circe.Error],List[Boolean]] = {
 
-    val queryParams = Map.empty[String, String] + ("ids" -> ids.toString)
+    val queryParams = Map.empty[String, String] + ("ids" -> ids)
 
-    val requestUrl = baseUri.addPath("/playlists/followers/contains").addPath(s"/${playlistId}").addParams(queryParams)
+    val requestUrl = baseUri.addPath("/playlists/followers/contains").addPath(s"/$playlistId").addParams(queryParams)
 
     basicRequest.get(requestUrl).response(asJsonEither[ErrorObject, List[Boolean]]).send(client).body
   }
@@ -48,7 +48,7 @@ object UsersApi {
    */
   def followArtistsUsers(`type`: String, ids: String, requestBody: Option[FollowArtistsUsersRequest])(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject,circe.Error],Unit] = {
 
-    val queryParams = Map.empty[String, String] + ("type" -> `type`.toString) + ("ids" -> ids.toString)
+    val queryParams = Map.empty[String, String] + ("type" -> `type`) + ("ids" -> ids)
 
     val requestUrl = baseUri.addPath("/me/following").addParams(queryParams)
 
@@ -61,7 +61,7 @@ object UsersApi {
    */
   def followPlaylist(playlistId: String, requestBody: Option[FollowPlaylistRequest])(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject,circe.Error],Unit] = {
 
-    val requestUrl = baseUri.addPath("/playlists/followers").addPath(s"/${playlistId}")
+    val requestUrl = baseUri.addPath("/playlists/followers").addPath(s"/$playlistId")
 
     basicRequest.put(requestUrl).body(requestBody).response(asJsonEither[ErrorObject, Unit]).send(client).body
   }
@@ -83,7 +83,7 @@ object UsersApi {
    */
   def getFollowed(`type`: String, after: Option[String], limit: Option[Int])(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject,circe.Error],GetFollowed200Response] = {
 
-    val queryParams = Map.empty[String, String] + ("type" -> `type`.toString) ++ after.map("after" -> _.toString) ++ limit.map("limit" -> _.toString)
+    val queryParams = Map.empty[String, String] + ("type" -> `type`) ++ after.map("after" -> _) ++ limit.map("limit" -> _.toString)
 
     val requestUrl = baseUri.addPath("/me/following").addParams(queryParams)
 
@@ -98,7 +98,7 @@ object UsersApi {
 
     val queryParams = Map.empty[String, String] ++ limit.map("limit" -> _.toString) ++ offset.map("offset" -> _.toString)
 
-    val requestUrl = baseUri.addPath("/users/playlists").addPath(s"/${userId}").addParams(queryParams)
+    val requestUrl = baseUri.addPath("/users/playlists").addPath(s"/$userId").addParams(queryParams)
 
     basicRequest.get(requestUrl).response(asJsonEither[ErrorObject, PagingPlaylistObject]).send(client).body
   }
@@ -109,7 +109,7 @@ object UsersApi {
    */
   def getUsersProfile(userId: String)(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject,circe.Error],PublicUserObject] = {
 
-    val requestUrl = baseUri.addPath("/users").addPath(s"/${userId}")
+    val requestUrl = baseUri.addPath("/users").addPath(s"/$userId")
 
     basicRequest.get(requestUrl).response(asJsonEither[ErrorObject, PublicUserObject]).send(client).body
   }
@@ -121,7 +121,7 @@ object UsersApi {
   def getUsersTopArtistsAndTracks(`type`: String, timeRange: Option[String], limit: Option[Int], offset: Option[Int])(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject,circe.Error],PagingObject] = {
 
     val queryParams =
-      Map.empty[String, String] ++ timeRange.map("timeRange" -> _.toString) ++ limit.map("limit" -> _.toString) ++ offset.map("offset" -> _.toString)
+      Map.empty[String, String] ++ timeRange.map("timeRange" -> _) ++ limit.map("limit" -> _.toString) ++ offset.map("offset" -> _.toString)
 
     val requestUrl = baseUri.addPath("/me/top").addPath(s"/${`type`}").addParams(queryParams)
 
@@ -134,7 +134,7 @@ object UsersApi {
    */
   def unfollowArtistsUsers(`type`: String, ids: String, requestBody: Option[UnfollowArtistsUsersRequest])(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject,circe.Error],Unit] = {
 
-    val queryParams = Map.empty[String, String] + ("type" -> `type`.toString) + ("ids" -> ids.toString)
+    val queryParams = Map.empty[String, String] + ("type" -> `type`) + ("ids" -> ids)
 
     val requestUrl = baseUri.addPath("/me/following").addParams(queryParams)
 
@@ -147,7 +147,7 @@ object UsersApi {
    */
   def unfollowPlaylist(playlistId: String)(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject,circe.Error],Unit] = {
 
-    val requestUrl = baseUri.addPath("/playlists/followers").addPath(s"/${playlistId}")
+    val requestUrl = baseUri.addPath("/playlists/followers").addPath(s"/$playlistId")
 
     basicRequest.delete(requestUrl).response(asJsonEither[ErrorObject, Unit]).send(client).body
   }

@@ -19,7 +19,7 @@ object PlayerApi {
    */
   def addToQueue(uri: String, deviceId: Option[String])(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject,circe.Error],Unit] = {
 
-    val queryParams = Map.empty[String, String] + ("uri" -> uri.toString) ++ deviceId.map("deviceId" -> _.toString)
+    val queryParams = Map.empty[String, String] + ("uri" -> uri) ++ deviceId.map("deviceId" -> _)
 
     val requestUrl = baseUri.addPath("/me/player/queue").addParams(queryParams)
 
@@ -43,7 +43,7 @@ object PlayerApi {
    */
   def getInformationAboutTheUsersCurrentPlayback(market: Option[String], additionalTypes: Option[String])(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject,circe.Error],CurrentlyPlayingContextObject] = {
 
-    val queryParams = Map.empty[String, String] ++ market.map("market" -> _.toString) ++ additionalTypes.map("additionalTypes" -> _.toString)
+    val queryParams = Map.empty[String, String] ++ market.map("market" -> _) ++ additionalTypes.map("additionalTypes" -> _)
 
     val requestUrl = baseUri.addPath("/me/player").addParams(queryParams)
 
@@ -80,7 +80,7 @@ object PlayerApi {
    */
   def getTheUsersCurrentlyPlayingTrack(market: Option[String], additionalTypes: Option[String])(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject,circe.Error],CurrentlyPlayingContextObject] = {
 
-    val queryParams = Map.empty[String, String] ++ market.map("market" -> _.toString) ++ additionalTypes.map("additionalTypes" -> _.toString)
+    val queryParams = Map.empty[String, String] ++ market.map("market" -> _) ++ additionalTypes.map("additionalTypes" -> _)
 
     val requestUrl = baseUri.addPath("/me/player/currently-playing").addParams(queryParams)
 
@@ -93,7 +93,7 @@ object PlayerApi {
    */
   def pauseAUsersPlayback(deviceId: Option[String])(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject,circe.Error],Unit] = {
 
-    val queryParams = Map.empty[String, String] ++ deviceId.map("deviceId" -> _.toString)
+    val queryParams = Map.empty[String, String] ++ deviceId.map("deviceId" -> _)
 
     val requestUrl = baseUri.addPath("/me/player/pause").addParams(queryParams)
 
@@ -106,7 +106,7 @@ object PlayerApi {
    */
   def seekToPositionInCurrentlyPlayingTrack(positionMs: Int, deviceId: Option[String])(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject,circe.Error],Unit] = {
 
-    val queryParams = Map.empty[String, String] + ("positionMs" -> positionMs.toString) ++ deviceId.map("deviceId" -> _.toString)
+    val queryParams = Map.empty[String, String] + ("positionMs" -> positionMs.toString) ++ deviceId.map("deviceId" -> _)
 
     val requestUrl = baseUri.addPath("/me/player/seek").addParams(queryParams)
 
@@ -119,7 +119,7 @@ object PlayerApi {
    */
   def setRepeatModeOnUsersPlayback(state: String, deviceId: Option[String])(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject,circe.Error],Unit] = {
 
-    val queryParams = Map.empty[String, String] + ("state" -> state.toString) ++ deviceId.map("deviceId" -> _.toString)
+    val queryParams = Map.empty[String, String] + ("state" -> state) ++ deviceId.map("deviceId" -> _)
 
     val requestUrl = baseUri.addPath("/me/player/repeat").addParams(queryParams)
 
@@ -132,7 +132,7 @@ object PlayerApi {
    */
   def setVolumeForUsersPlayback(volumePercent: Int, deviceId: Option[String])(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject,circe.Error],Unit] = {
 
-    val queryParams = Map.empty[String, String] + ("volumePercent" -> volumePercent.toString) ++ deviceId.map("deviceId" -> _.toString)
+    val queryParams = Map.empty[String, String] + ("volumePercent" -> volumePercent.toString) ++ deviceId.map("deviceId" -> _)
 
     val requestUrl = baseUri.addPath("/me/player/volume").addParams(queryParams)
 
@@ -145,7 +145,7 @@ object PlayerApi {
    */
   def skipUsersPlaybackToNextTrack(deviceId: Option[String])(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject,circe.Error],Unit] = {
 
-    val queryParams = Map.empty[String, String] ++ deviceId.map("deviceId" -> _.toString)
+    val queryParams = Map.empty[String, String] ++ deviceId.map("deviceId" -> _)
 
     val requestUrl = baseUri.addPath("/me/player/next").addParams(queryParams)
 
@@ -158,7 +158,7 @@ object PlayerApi {
    */
   def skipUsersPlaybackToPreviousTrack(deviceId: Option[String])(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject,circe.Error],Unit] = {
 
-    val queryParams = Map.empty[String, String] ++ deviceId.map("deviceId" -> _.toString)
+    val queryParams = Map.empty[String, String] ++ deviceId.map("deviceId" -> _)
 
     val requestUrl = baseUri.addPath("/me/player/previous").addParams(queryParams)
 
@@ -186,7 +186,7 @@ object PlayerApi {
    */
   def toggleShuffleForUsersPlayback(state: Boolean, deviceId: Option[String])(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject,circe.Error],Unit] = {
 
-    val queryParams = Map.empty[String, String] + ("state" -> state.toString) ++ deviceId.map("deviceId" -> _.toString)
+    val queryParams = Map.empty[String, String] + ("state" -> state.toString) ++ deviceId.map("deviceId" -> _)
 
     val requestUrl = baseUri.addPath("/me/player/shuffle").addParams(queryParams)
 

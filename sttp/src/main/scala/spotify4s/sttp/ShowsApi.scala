@@ -18,7 +18,7 @@ object ShowsApi {
    */
   def checkUsersSavedShows(ids: String)(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject,circe.Error],List[Boolean]] = {
 
-    val queryParams = Map.empty[String, String] + ("ids" -> ids.toString)
+    val queryParams = Map.empty[String, String] + ("ids" -> ids)
 
     val requestUrl = baseUri.addPath("/me/shows/contains").addParams(queryParams)
 
@@ -31,9 +31,9 @@ object ShowsApi {
    */
   def getAShow(id: String, market: Option[String])(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject,circe.Error],ShowObject] = {
 
-    val queryParams = Map.empty[String, String] ++ market.map("market" -> _.toString)
+    val queryParams = Map.empty[String, String] ++ market.map("market" -> _)
 
-    val requestUrl = baseUri.addPath("/shows").addPath(s"/${id}").addParams(queryParams)
+    val requestUrl = baseUri.addPath("/shows").addPath(s"/$id").addParams(queryParams)
 
     basicRequest.get(requestUrl).response(asJsonEither[ErrorObject, ShowObject]).send(client).body
   }
@@ -44,9 +44,9 @@ object ShowsApi {
    */
   def getAShowsEpisodes(id: String, market: Option[String], limit: Option[Int], offset: Option[Int])(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject,circe.Error],PagingObject] = {
 
-    val queryParams = Map.empty[String, String] ++ market.map("market" -> _.toString) ++ limit.map("limit" -> _.toString) ++ offset.map("offset" -> _.toString)
+    val queryParams = Map.empty[String, String] ++ market.map("market" -> _) ++ limit.map("limit" -> _.toString) ++ offset.map("offset" -> _.toString)
 
-    val requestUrl = baseUri.addPath("/shows/episodes").addPath(s"/${id}").addParams(queryParams)
+    val requestUrl = baseUri.addPath("/shows/episodes").addPath(s"/$id").addParams(queryParams)
 
     basicRequest.get(requestUrl).response(asJsonEither[ErrorObject, PagingObject]).send(client).body
   }
@@ -57,7 +57,7 @@ object ShowsApi {
    */
   def getMultipleShows(ids: String, market: Option[String])(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject,circe.Error],GetMultipleShows200Response] = {
 
-    val queryParams = Map.empty[String, String] ++ market.map("market" -> _.toString) + ("ids" -> ids.toString)
+    val queryParams = Map.empty[String, String] ++ market.map("market" -> _) + ("ids" -> ids)
 
     val requestUrl = baseUri.addPath("/shows").addParams(queryParams)
 
@@ -83,7 +83,7 @@ object ShowsApi {
    */
   def removeShowsUser(ids: String, market: Option[String])(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject,circe.Error],Unit] = {
 
-    val queryParams = Map.empty[String, String] + ("ids" -> ids.toString) ++ market.map("market" -> _.toString)
+    val queryParams = Map.empty[String, String] + ("ids" -> ids) ++ market.map("market" -> _)
 
     val requestUrl = baseUri.addPath("/me/shows").addParams(queryParams)
 
@@ -96,7 +96,7 @@ object ShowsApi {
    */
   def saveShowsUser(ids: String)(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject,circe.Error],Unit] = {
 
-    val queryParams = Map.empty[String, String] + ("ids" -> ids.toString)
+    val queryParams = Map.empty[String, String] + ("ids" -> ids)
 
     val requestUrl = baseUri.addPath("/me/shows").addParams(queryParams)
 
