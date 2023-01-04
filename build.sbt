@@ -1,7 +1,6 @@
 // project setting
 
 ThisBuild / scalaVersion := "2.13.10"
-ThisBuild / version := "0.1.3"
 ThisBuild / scalafixScalaBinaryVersion := CrossVersion.binaryScalaVersion(scalaVersion.value)
 
 // project info
@@ -31,8 +30,7 @@ lazy val publishSetting = Seq(
   Compile / packageBin / publishArtifact := false,
   Compile / packageDoc / publishArtifact := false,
   Compile / packageSrc / publishArtifact := false,
-  crossPaths := false,
-  publishMavenStyle := true
+  crossPaths := false
 )
 
 // library dependencies
