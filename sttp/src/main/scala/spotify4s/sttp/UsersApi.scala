@@ -46,7 +46,7 @@ case class UsersApi(baseUri: Uri = uri"https://api.spotify.com/v1") {
    * Follow Artists or Users
    * Add the current user as a follower of one or more artists or other Spotify users.
    */
-  def followArtistsUsers(`type`: String, ids: String, requestBody: Option[FollowArtistsUsersRequest])(
+  def followArtistsUsers(`type`: String, ids: String, requestBody: Option[FollowArtistsUsersRequest] = None)(
       accessToken: String
   )(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject, circe.Error], Unit] = {
 
@@ -61,7 +61,7 @@ case class UsersApi(baseUri: Uri = uri"https://api.spotify.com/v1") {
    * Follow Playlist
    * Add the current user as a follower of a playlist.
    */
-  def followPlaylist(playlistId: String, requestBody: Option[FollowPlaylistRequest])(
+  def followPlaylist(playlistId: String, requestBody: Option[FollowPlaylistRequest] = None)(
       accessToken: String
   )(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject, circe.Error], Unit] = {
 
@@ -87,7 +87,7 @@ case class UsersApi(baseUri: Uri = uri"https://api.spotify.com/v1") {
    * Get Followed Artists
    * Get the current user's followed artists.
    */
-  def getFollowed(`type`: String, after: Option[String], limit: Option[Int])(
+  def getFollowed(`type`: String, after: Option[String] = None, limit: Option[Int] = None)(
       accessToken: String
   )(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject, circe.Error], GetFollowed200Response] = {
 
@@ -102,7 +102,7 @@ case class UsersApi(baseUri: Uri = uri"https://api.spotify.com/v1") {
    * Get User's Playlists
    * Get a list of the playlists owned or followed by a Spotify user.
    */
-  def getListUsersPlaylists(userId: String, limit: Option[Int], offset: Option[Int])(
+  def getListUsersPlaylists(userId: String, limit: Option[Int] = None, offset: Option[Int] = None)(
       accessToken: String
   )(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject, circe.Error], PagingPlaylistObject] = {
 
@@ -130,7 +130,7 @@ case class UsersApi(baseUri: Uri = uri"https://api.spotify.com/v1") {
    * Get User's Top Items
    * Get the current user's top artists or tracks based on calculated affinity.
    */
-  def getUsersTopArtistsAndTracks(`type`: String, timeRange: Option[String], limit: Option[Int], offset: Option[Int])(
+  def getUsersTopArtistsAndTracks(`type`: String, timeRange: Option[String] = None, limit: Option[Int] = None, offset: Option[Int] = None)(
       accessToken: String
   )(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject, circe.Error], PagingObject] = {
 
@@ -146,7 +146,7 @@ case class UsersApi(baseUri: Uri = uri"https://api.spotify.com/v1") {
    * Unfollow Artists or Users
    * Remove the current user as a follower of one or more artists or other Spotify users.
    */
-  def unfollowArtistsUsers(`type`: String, ids: String, requestBody: Option[UnfollowArtistsUsersRequest])(
+  def unfollowArtistsUsers(`type`: String, ids: String, requestBody: Option[UnfollowArtistsUsersRequest] = None)(
       accessToken: String
   )(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject, circe.Error], Unit] = {
 

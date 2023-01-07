@@ -15,7 +15,7 @@ case class CategoriesApi(baseUri: Uri = uri"https://api.spotify.com/v1") {
    * Get Category's Playlists
    * Get a list of Spotify playlists tagged with a particular category.
    */
-  def getACategoriesPlaylists(categoryId: String, country: Option[String], limit: Option[Int], offset: Option[Int])(
+  def getACategoriesPlaylists(categoryId: String, country: Option[String] = None, limit: Option[Int] = None, offset: Option[Int] = None)(
       accessToken: String
   )(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject, circe.Error], PagingPlaylistObject] = {
 
@@ -31,7 +31,7 @@ case class CategoriesApi(baseUri: Uri = uri"https://api.spotify.com/v1") {
    * Get Single Browse Category
    * Get a single category used to tag items in Spotify (on, for example, the Spotify player’s “Browse” tab).
    */
-  def getACategory(categoryId: String, country: Option[String], locale: Option[String])(
+  def getACategory(categoryId: String, country: Option[String] = None, locale: Option[String] = None)(
       accessToken: String
   )(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject, circe.Error], CategoryObject] = {
 
@@ -46,7 +46,7 @@ case class CategoriesApi(baseUri: Uri = uri"https://api.spotify.com/v1") {
    * Get Several Browse Categories
    * Get a list of categories used to tag items in Spotify (on, for example, the Spotify player’s “Browse” tab).
    */
-  def getCategories(country: Option[String], locale: Option[String], limit: Option[Int], offset: Option[Int])(
+  def getCategories(country: Option[String] = None, locale: Option[String] = None, limit: Option[Int] = None, offset: Option[Int] = None)(
       accessToken: String
   )(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject, circe.Error], GetCategories200Response] = {
 

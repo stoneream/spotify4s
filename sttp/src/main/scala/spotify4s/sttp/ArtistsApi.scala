@@ -31,7 +31,7 @@ case class ArtistsApi(baseUri: Uri = uri"https://api.spotify.com/v1") {
    * Follow Artists or Users
    * Add the current user as a follower of one or more artists or other Spotify users.
    */
-  def followArtistsUsers(`type`: String, ids: String, requestBody: Option[FollowArtistsUsersRequest])(
+  def followArtistsUsers(`type`: String, ids: String, requestBody: Option[FollowArtistsUsersRequest] = None)(
       accessToken: String
   )(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject, circe.Error], Unit] = {
 
@@ -57,7 +57,13 @@ case class ArtistsApi(baseUri: Uri = uri"https://api.spotify.com/v1") {
    * Get Artist's Albums
    * Get Spotify catalog information about an artist's albums.
    */
-  def getAnArtistsAlbums(id: String, includeGroups: Option[String], market: Option[String], limit: Option[Int], offset: Option[Int])(accessToken: String)(
+  def getAnArtistsAlbums(
+      id: String,
+      includeGroups: Option[String] = None,
+      market: Option[String] = None,
+      limit: Option[Int] = None,
+      offset: Option[Int] = None
+  )(accessToken: String)(
       client: SttpBackend[Identity, Any]
   ): Either[ResponseException[ErrorObject, circe.Error], PagingObject] = {
 
@@ -87,7 +93,7 @@ case class ArtistsApi(baseUri: Uri = uri"https://api.spotify.com/v1") {
    * Get Artist's Top Tracks
    * Get Spotify catalog information about an artist's top tracks by country.
    */
-  def getAnArtistsTopTracks(id: String, market: Option[String])(
+  def getAnArtistsTopTracks(id: String, market: Option[String] = None)(
       accessToken: String
   )(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject, circe.Error], GetAnArtistsTopTracks200Response] = {
 
@@ -102,7 +108,7 @@ case class ArtistsApi(baseUri: Uri = uri"https://api.spotify.com/v1") {
    * Get Followed Artists
    * Get the current user's followed artists.
    */
-  def getFollowed(`type`: String, after: Option[String], limit: Option[Int])(
+  def getFollowed(`type`: String, after: Option[String] = None, limit: Option[Int] = None)(
       accessToken: String
   )(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject, circe.Error], GetFollowed200Response] = {
 
@@ -132,7 +138,7 @@ case class ArtistsApi(baseUri: Uri = uri"https://api.spotify.com/v1") {
    * Unfollow Artists or Users
    * Remove the current user as a follower of one or more artists or other Spotify users.
    */
-  def unfollowArtistsUsers(`type`: String, ids: String, requestBody: Option[UnfollowArtistsUsersRequest])(
+  def unfollowArtistsUsers(`type`: String, ids: String, requestBody: Option[UnfollowArtistsUsersRequest] = None)(
       accessToken: String
   )(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject, circe.Error], Unit] = {
 

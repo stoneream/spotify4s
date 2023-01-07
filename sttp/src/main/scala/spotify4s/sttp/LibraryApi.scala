@@ -16,7 +16,7 @@ case class LibraryApi(baseUri: Uri = uri"https://api.spotify.com/v1") {
    * Change Playlist Details
    * Change a playlist's name and public/private state. (The user must, of course, own the playlist.)
    */
-  def changePlaylistDetails(playlistId: String, requestBody: Option[ChangePlaylistDetailsRequest])(
+  def changePlaylistDetails(playlistId: String, requestBody: Option[ChangePlaylistDetailsRequest] = None)(
       accessToken: String
   )(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject, circe.Error], Unit] = {
 
@@ -119,7 +119,7 @@ case class LibraryApi(baseUri: Uri = uri"https://api.spotify.com/v1") {
    * Create Playlist
    * Create a playlist for a Spotify user. (The playlist will be empty until you [add tracks](/documentation/web-api/reference/#/operations/add-tracks-to-playlist).)
    */
-  def createPlaylist(userId: String, requestBody: Option[CreatePlaylistRequest])(
+  def createPlaylist(userId: String, requestBody: Option[CreatePlaylistRequest] = None)(
       accessToken: String
   )(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject, circe.Error], PlaylistObject] = {
 
@@ -132,7 +132,7 @@ case class LibraryApi(baseUri: Uri = uri"https://api.spotify.com/v1") {
    * Follow Artists or Users
    * Add the current user as a follower of one or more artists or other Spotify users.
    */
-  def followArtistsUsers(`type`: String, ids: String, requestBody: Option[FollowArtistsUsersRequest])(
+  def followArtistsUsers(`type`: String, ids: String, requestBody: Option[FollowArtistsUsersRequest] = None)(
       accessToken: String
   )(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject, circe.Error], Unit] = {
 
@@ -147,7 +147,7 @@ case class LibraryApi(baseUri: Uri = uri"https://api.spotify.com/v1") {
    * Get Current User's Playlists
    * Get a list of the playlists owned or followed by the current Spotify user.
    */
-  def getAListOfCurrentUsersPlaylists(limit: Option[Int], offset: Option[Int])(
+  def getAListOfCurrentUsersPlaylists(limit: Option[Int] = None, offset: Option[Int] = None)(
       accessToken: String
   )(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject, circe.Error], PagingPlaylistObject] = {
 
@@ -162,7 +162,7 @@ case class LibraryApi(baseUri: Uri = uri"https://api.spotify.com/v1") {
    * Get Followed Artists
    * Get the current user's followed artists.
    */
-  def getFollowed(`type`: String, after: Option[String], limit: Option[Int])(
+  def getFollowed(`type`: String, after: Option[String] = None, limit: Option[Int] = None)(
       accessToken: String
   )(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject, circe.Error], GetFollowed200Response] = {
 
@@ -177,7 +177,7 @@ case class LibraryApi(baseUri: Uri = uri"https://api.spotify.com/v1") {
    * Get User's Saved Albums
    * Get a list of the albums saved in the current Spotify user's 'Your Music' library.
    */
-  def getUsersSavedAlbums(limit: Option[Int], offset: Option[Int], market: Option[String])(
+  def getUsersSavedAlbums(limit: Option[Int] = None, offset: Option[Int] = None, market: Option[String] = None)(
       accessToken: String
   )(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject, circe.Error], PagingObject] = {
 
@@ -192,7 +192,7 @@ case class LibraryApi(baseUri: Uri = uri"https://api.spotify.com/v1") {
    * Get User's Saved Audiobooks
    * Get a list of the audiobooks saved in the current Spotify user's 'Your Music' library.
    */
-  def getUsersSavedAudiobooks(limit: Option[Int], offset: Option[Int])(
+  def getUsersSavedAudiobooks(limit: Option[Int] = None, offset: Option[Int] = None)(
       accessToken: String
   )(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject, circe.Error], PagingObject] = {
 
@@ -209,7 +209,7 @@ case class LibraryApi(baseUri: Uri = uri"https://api.spotify.com/v1") {
    * This API endpoint is in __beta__ and could change without warning.
    * Please share any feedback that you have, or issues that you discover, in our [developer community forum](https://community.spotify.com/t5/Spotify-for-Developers/bd-p/Spotify_Developer).
    */
-  def getUsersSavedEpisodes(market: Option[String], limit: Option[Int], offset: Option[Int])(
+  def getUsersSavedEpisodes(market: Option[String] = None, limit: Option[Int] = None, offset: Option[Int] = None)(
       accessToken: String
   )(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject, circe.Error], PagingObject] = {
 
@@ -224,7 +224,7 @@ case class LibraryApi(baseUri: Uri = uri"https://api.spotify.com/v1") {
    * Get User's Saved Shows
    * Get a list of shows saved in the current Spotify user's library. Optional parameters can be used to limit the number of shows returned.
    */
-  def getUsersSavedShows(limit: Option[Int], offset: Option[Int])(
+  def getUsersSavedShows(limit: Option[Int] = None, offset: Option[Int] = None)(
       accessToken: String
   )(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject, circe.Error], PagingObject] = {
 
@@ -239,7 +239,7 @@ case class LibraryApi(baseUri: Uri = uri"https://api.spotify.com/v1") {
    * Get User's Saved Tracks
    * Get a list of the songs saved in the current Spotify user's 'Your Music' library.
    */
-  def getUsersSavedTracks(market: Option[String], limit: Option[Int], offset: Option[Int])(
+  def getUsersSavedTracks(market: Option[String] = None, limit: Option[Int] = None, offset: Option[Int] = None)(
       accessToken: String
   )(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject, circe.Error], PagingObject] = {
 
@@ -254,7 +254,7 @@ case class LibraryApi(baseUri: Uri = uri"https://api.spotify.com/v1") {
    * Get User's Top Items
    * Get the current user's top artists or tracks based on calculated affinity.
    */
-  def getUsersTopArtistsAndTracks(`type`: String, timeRange: Option[String], limit: Option[Int], offset: Option[Int])(
+  def getUsersTopArtistsAndTracks(`type`: String, timeRange: Option[String] = None, limit: Option[Int] = None, offset: Option[Int] = None)(
       accessToken: String
   )(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject, circe.Error], PagingObject] = {
 
@@ -270,7 +270,7 @@ case class LibraryApi(baseUri: Uri = uri"https://api.spotify.com/v1") {
    * Remove Users' Saved Albums
    * Remove one or more albums from the current user's 'Your Music' library.
    */
-  def removeAlbumsUser(ids: String, requestBody: Option[RemoveAlbumsUserRequest])(
+  def removeAlbumsUser(ids: String, requestBody: Option[RemoveAlbumsUserRequest] = None)(
       accessToken: String
   )(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject, circe.Error], Unit] = {
 
@@ -298,7 +298,7 @@ case class LibraryApi(baseUri: Uri = uri"https://api.spotify.com/v1") {
    * Remove User's Saved Episodes
    * Remove one or more episodes from the current user's library.<br> This API endpoint is in __beta__ and could change without warning. Please share any feedback that you have, or issues that you discover, in our [developer community forum](https://community.spotify.com/t5/Spotify-for-Developers/bd-p/Spotify_Developer).
    */
-  def removeEpisodesUser(ids: String, requestBody: Option[RemoveEpisodesUserRequest])(
+  def removeEpisodesUser(ids: String, requestBody: Option[RemoveEpisodesUserRequest] = None)(
       accessToken: String
   )(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject, circe.Error], Unit] = {
 
@@ -313,7 +313,7 @@ case class LibraryApi(baseUri: Uri = uri"https://api.spotify.com/v1") {
    * Remove User's Saved Shows
    * Delete one or more shows from current Spotify user's library.
    */
-  def removeShowsUser(ids: String, market: Option[String])(
+  def removeShowsUser(ids: String, market: Option[String] = None)(
       accessToken: String
   )(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject, circe.Error], Unit] = {
 
@@ -328,7 +328,7 @@ case class LibraryApi(baseUri: Uri = uri"https://api.spotify.com/v1") {
    * Remove User's Saved Tracks
    * Remove one or more tracks from the current user's 'Your Music' library.
    */
-  def removeTracksUser(ids: String, requestBody: Option[RemoveTracksUserRequest])(
+  def removeTracksUser(ids: String, requestBody: Option[RemoveTracksUserRequest] = None)(
       accessToken: String
   )(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject, circe.Error], Unit] = {
 
@@ -343,7 +343,7 @@ case class LibraryApi(baseUri: Uri = uri"https://api.spotify.com/v1") {
    * Save Albums for Current User
    * Save one or more albums to the current user's 'Your Music' library.
    */
-  def saveAlbumsUser(ids: String, requestBody: Option[RemoveAlbumsUserRequest])(
+  def saveAlbumsUser(ids: String, requestBody: Option[RemoveAlbumsUserRequest] = None)(
       accessToken: String
   )(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject, circe.Error], Unit] = {
 
@@ -372,7 +372,7 @@ case class LibraryApi(baseUri: Uri = uri"https://api.spotify.com/v1") {
    * Save one or more episodes to the current user's library.
    * This API endpoint is in __beta__ and could change without warning. Please share any feedback that you have, or issues that you discover, in our [developer community forum](https://community.spotify.com/t5/Spotify-for-Developers/bd-p/Spotify_Developer).
    */
-  def saveEpisodesUser(ids: String, requestBody: Option[SaveEpisodesUserRequest])(
+  def saveEpisodesUser(ids: String, requestBody: Option[SaveEpisodesUserRequest] = None)(
       accessToken: String
   )(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject, circe.Error], Unit] = {
 
@@ -400,7 +400,7 @@ case class LibraryApi(baseUri: Uri = uri"https://api.spotify.com/v1") {
    * Save Tracks for Current User
    * Save one or more tracks to the current user's 'Your Music' library.
    */
-  def saveTracksUser(ids: String, requestBody: Option[SaveTracksUserRequest])(
+  def saveTracksUser(ids: String, requestBody: Option[SaveTracksUserRequest] = None)(
       accessToken: String
   )(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject, circe.Error], Unit] = {
 
@@ -415,7 +415,7 @@ case class LibraryApi(baseUri: Uri = uri"https://api.spotify.com/v1") {
    * Unfollow Artists or Users
    * Remove the current user as a follower of one or more artists or other Spotify users.
    */
-  def unfollowArtistsUsers(`type`: String, ids: String, requestBody: Option[UnfollowArtistsUsersRequest])(
+  def unfollowArtistsUsers(`type`: String, ids: String, requestBody: Option[UnfollowArtistsUsersRequest] = None)(
       accessToken: String
   )(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject, circe.Error], Unit] = {
 

@@ -31,7 +31,7 @@ case class AlbumsApi(baseUri: Uri = uri"https://api.spotify.com/v1") {
    * Get Album
    * Get Spotify catalog information for a single album.
    */
-  def getAnAlbum(id: String, market: Option[String])(
+  def getAnAlbum(id: String, market: Option[String] = None)(
       accessToken: String
   )(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject, circe.Error], AlbumObject] = {
     val queryParams = Map.empty[String, String] ++ market.map("market" -> _)
@@ -45,7 +45,9 @@ case class AlbumsApi(baseUri: Uri = uri"https://api.spotify.com/v1") {
    * Get Album Tracks
    * Get Spotify catalog information about an album’s tracks. Optional parameters can be used to limit the number of tracks returned.
    */
-  def getAnAlbumsTracks(id: String, market: Option[String], limit: Option[Int], offset: Option[Int])(accessToken: String)(
+  def getAnAlbumsTracks(id: String, market: Option[String] = None, limit: Option[Int] = None, offset: Option[Int] = None)(
+      accessToken: String
+  )(
       client: SttpBackend[Identity, Any]
   ): Either[ResponseException[ErrorObject, circe.Error], PagingObject] = {
 
@@ -60,7 +62,13 @@ case class AlbumsApi(baseUri: Uri = uri"https://api.spotify.com/v1") {
    * Get Artist's Albums
    * Get Spotify catalog information about an artist's albums.
    */
-  def getAnArtistsAlbums(id: String, includeGroups: Option[String], market: Option[String], limit: Option[Int], offset: Option[Int])(accessToken: String)(
+  def getAnArtistsAlbums(
+      id: String,
+      includeGroups: Option[String] = None,
+      market: Option[String] = None,
+      limit: Option[Int] = None,
+      offset: Option[Int] = None
+  )(accessToken: String)(
       client: SttpBackend[Identity, Any]
   ): Either[ResponseException[ErrorObject, circe.Error], PagingObject] = {
 
@@ -77,7 +85,7 @@ case class AlbumsApi(baseUri: Uri = uri"https://api.spotify.com/v1") {
    * Get Several Albums
    * Get Spotify catalog information for multiple albums identified by their Spotify IDs.
    */
-  def getMultipleAlbums(ids: String, market: Option[String])(accessToken: String)(
+  def getMultipleAlbums(ids: String, market: Option[String] = None)(accessToken: String)(
       client: SttpBackend[Identity, Any]
   ): Either[ResponseException[ErrorObject, circe.Error], GetMultipleAlbums200Response] = {
 
@@ -92,7 +100,7 @@ case class AlbumsApi(baseUri: Uri = uri"https://api.spotify.com/v1") {
    * Get New Releases
    * Get a list of new album releases featured in Spotify (shown, for example, on a Spotify player’s “Browse” tab).
    */
-  def getNewReleases(country: Option[String], limit: Option[Int], offset: Option[Int])(accessToken: String)(
+  def getNewReleases(country: Option[String] = None, limit: Option[Int] = None, offset: Option[Int] = None)(accessToken: String)(
       client: SttpBackend[Identity, Any]
   ): Either[ResponseException[ErrorObject, circe.Error], GetNewReleases200Response] = {
 
@@ -108,7 +116,7 @@ case class AlbumsApi(baseUri: Uri = uri"https://api.spotify.com/v1") {
    * Get User's Saved Albums
    * Get a list of the albums saved in the current Spotify user's 'Your Music' library.
    */
-  def getUsersSavedAlbums(limit: Option[Int], offset: Option[Int], market: Option[String])(accessToken: String)(
+  def getUsersSavedAlbums(limit: Option[Int] = None, offset: Option[Int] = None, market: Option[String] = None)(accessToken: String)(
       client: SttpBackend[Identity, Any]
   ): Either[ResponseException[ErrorObject, circe.Error], PagingObject] = {
 
@@ -123,7 +131,7 @@ case class AlbumsApi(baseUri: Uri = uri"https://api.spotify.com/v1") {
    * Remove Users' Saved Albums
    * Remove one or more albums from the current user's 'Your Music' library.
    */
-  def removeAlbumsUser(ids: String, requestBody: Option[RemoveAlbumsUserRequest])(accessToken: String)(
+  def removeAlbumsUser(ids: String, requestBody: Option[RemoveAlbumsUserRequest] = None)(accessToken: String)(
       client: SttpBackend[Identity, Any]
   ): Either[ResponseException[ErrorObject, circe.Error], Unit] = {
 
@@ -138,7 +146,7 @@ case class AlbumsApi(baseUri: Uri = uri"https://api.spotify.com/v1") {
    * Save Albums for Current User
    * Save one or more albums to the current user's 'Your Music' library.
    */
-  def saveAlbumsUser(ids: String, requestBody: Option[SaveAlbumsUserRequest])(accessToken: String)(
+  def saveAlbumsUser(ids: String, requestBody: Option[SaveAlbumsUserRequest] = None)(accessToken: String)(
       client: SttpBackend[Identity, Any]
   ): Either[ResponseException[ErrorObject, circe.Error], Unit] = {
 

@@ -16,7 +16,14 @@ case class SearchApi(baseUri: Uri = uri"https://api.spotify.com/v1") {
    * Get Spotify catalog information about albums, artists, playlists, tracks, shows, episodes or audiobooks that match a keyword string.
    * **Note: Audiobooks are only available for the US, UK, Ireland, New Zealand and Australia markets.**
    */
-  def search(q: String, `type`: List[String], market: Option[String], limit: Option[Int], offset: Option[Int], includeExternal: Option[String])(
+  def search(
+      q: String,
+      `type`: List[String],
+      market: Option[String] = None,
+      limit: Option[Int] = None,
+      offset: Option[Int] = None,
+      includeExternal: Option[String] = None
+  )(
       accessToken: String
   )(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject, circe.Error], Search200Response] = {
 

@@ -15,7 +15,7 @@ case class PlayerApi(baseUri: Uri = uri"https://api.spotify.com/v1") {
    * Add Item to Playback Queue
    * Add an item to the end of the user's current playback queue.
    */
-  def addToQueue(uri: String, deviceId: Option[String])(
+  def addToQueue(uri: String, deviceId: Option[String] = None)(
       accessToken: String
   )(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject, circe.Error], Unit] = {
 
@@ -43,7 +43,7 @@ case class PlayerApi(baseUri: Uri = uri"https://api.spotify.com/v1") {
    * Get Playback State
    * Get information about the user’s current playback state, including track or episode, progress, and active device.
    */
-  def getInformationAboutTheUsersCurrentPlayback(market: Option[String], additionalTypes: Option[String])(
+  def getInformationAboutTheUsersCurrentPlayback(market: Option[String] = None, additionalTypes: Option[String] = None)(
       accessToken: String
   )(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject, circe.Error], CurrentlyPlayingContextObject] = {
 
@@ -69,7 +69,7 @@ case class PlayerApi(baseUri: Uri = uri"https://api.spotify.com/v1") {
    * Get Recently Played Tracks
    * Get tracks from the current user's recently played tracks. _**Note**: Currently doesn't support podcast episodes._
    */
-  def getRecentlyPlayed(limit: Option[Int], after: Option[Int], before: Option[Int])(
+  def getRecentlyPlayed(limit: Option[Int] = None, after: Option[Int] = None, before: Option[Int] = None)(
       accessToken: String
   )(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject, circe.Error], CursorPagingObject] = {
 
@@ -84,7 +84,7 @@ case class PlayerApi(baseUri: Uri = uri"https://api.spotify.com/v1") {
    * Get Currently Playing Track
    * Get the object currently being played on the user's Spotify account.
    */
-  def getTheUsersCurrentlyPlayingTrack(market: Option[String], additionalTypes: Option[String])(
+  def getTheUsersCurrentlyPlayingTrack(market: Option[String] = None, additionalTypes: Option[String] = None)(
       accessToken: String
   )(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject, circe.Error], CurrentlyPlayingContextObject] = {
 
@@ -100,7 +100,7 @@ case class PlayerApi(baseUri: Uri = uri"https://api.spotify.com/v1") {
    * Pause playback on the user's account.
    */
   def pauseAUsersPlayback(
-      deviceId: Option[String]
+      deviceId: Option[String] = None
   )(accessToken: String)(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject, circe.Error], Unit] = {
 
     val queryParams = Map.empty[String, String] ++ deviceId.map("deviceId" -> _)
@@ -114,7 +114,7 @@ case class PlayerApi(baseUri: Uri = uri"https://api.spotify.com/v1") {
    * Seek To Position
    * Seeks to the given position in the user’s currently playing track.
    */
-  def seekToPositionInCurrentlyPlayingTrack(positionMs: Int, deviceId: Option[String])(
+  def seekToPositionInCurrentlyPlayingTrack(positionMs: Int, deviceId: Option[String] = None)(
       accessToken: String
   )(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject, circe.Error], Unit] = {
 
@@ -129,7 +129,7 @@ case class PlayerApi(baseUri: Uri = uri"https://api.spotify.com/v1") {
    * Set Repeat Mode
    * Set the repeat mode for the user's playback. Options are repeat-track, repeat-context, and off.
    */
-  def setRepeatModeOnUsersPlayback(state: String, deviceId: Option[String])(
+  def setRepeatModeOnUsersPlayback(state: String, deviceId: Option[String] = None)(
       accessToken: String
   )(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject, circe.Error], Unit] = {
 
@@ -144,7 +144,7 @@ case class PlayerApi(baseUri: Uri = uri"https://api.spotify.com/v1") {
    * Set Playback Volume
    * Set the volume for the user’s current playback device.
    */
-  def setVolumeForUsersPlayback(volumePercent: Int, deviceId: Option[String])(
+  def setVolumeForUsersPlayback(volumePercent: Int, deviceId: Option[String] = None)(
       accessToken: String
   )(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject, circe.Error], Unit] = {
 
@@ -160,7 +160,7 @@ case class PlayerApi(baseUri: Uri = uri"https://api.spotify.com/v1") {
    * Skips to next track in the user’s queue.
    */
   def skipUsersPlaybackToNextTrack(
-      deviceId: Option[String]
+      deviceId: Option[String] = None
   )(accessToken: String)(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject, circe.Error], Unit] = {
 
     val queryParams = Map.empty[String, String] ++ deviceId.map("deviceId" -> _)
@@ -175,7 +175,7 @@ case class PlayerApi(baseUri: Uri = uri"https://api.spotify.com/v1") {
    * Skips to previous track in the user’s queue.
    */
   def skipUsersPlaybackToPreviousTrack(
-      deviceId: Option[String]
+      deviceId: Option[String] = None
   )(accessToken: String)(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject, circe.Error], Unit] = {
 
     val queryParams = Map.empty[String, String] ++ deviceId.map("deviceId" -> _)
@@ -190,7 +190,7 @@ case class PlayerApi(baseUri: Uri = uri"https://api.spotify.com/v1") {
    * Start a new context or resume current playback on the user's active device.
    * todo fix
    *
-   *    def startAUsersPlayback(deviceId: Option[String], requestBody: Option[Map[String, oas_any_type_not_mapped]])(accessToken: String)(client: SttpBackend[Identity, Any]) = {
+   *    def startAUsersPlayback(deviceId: Option[String] = None, requestBody: Option[Map[String, oas_any_type_not_mapped]])(accessToken: String)(client: SttpBackend[Identity, Any]) = {
    *
    *        val queryParams = Map.empty[String, String] ++ deviceId.map("deviceId" -> _.toString)
    *
@@ -204,7 +204,7 @@ case class PlayerApi(baseUri: Uri = uri"https://api.spotify.com/v1") {
    * Toggle Playback Shuffle
    * Toggle shuffle on or off for user’s playback.
    */
-  def toggleShuffleForUsersPlayback(state: Boolean, deviceId: Option[String])(
+  def toggleShuffleForUsersPlayback(state: Boolean, deviceId: Option[String] = None)(
       accessToken: String
   )(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject, circe.Error], Unit] = {
 

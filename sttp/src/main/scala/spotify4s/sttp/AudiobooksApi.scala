@@ -31,7 +31,7 @@ case class AudiobooksApi(baseUri: Uri = uri"https://api.spotify.com/v1") {
    * Get Spotify catalog information for a single audiobook.
    * Note: Audiobooks are only available for the US, UK, Ireland, New Zealand and Australia markets.
    */
-  def getAnAudiobook(id: String, market: Option[String])(
+  def getAnAudiobook(id: String, market: Option[String] = None)(
       accessToken: String
   )(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject, circe.Error], AudiobookObject] = {
 
@@ -47,7 +47,7 @@ case class AudiobooksApi(baseUri: Uri = uri"https://api.spotify.com/v1") {
    * Get Spotify catalog information about an audiobook's chapters.
    * Note: Audiobooks are only available for the US, UK, Ireland, New Zealand and Australia markets.
    */
-  def getAudiobookChapters(id: String, market: Option[String], limit: Option[Int], offset: Option[Int])(
+  def getAudiobookChapters(id: String, market: Option[String] = None, limit: Option[Int] = None, offset: Option[Int] = None)(
       accessToken: String
   )(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject, circe.Error], PagingObject] = {
 
@@ -63,7 +63,7 @@ case class AudiobooksApi(baseUri: Uri = uri"https://api.spotify.com/v1") {
    * Get Spotify catalog information for several audiobooks identified by their Spotify IDs.
    * Note: Audiobooks are only available for the US, UK, Ireland, New Zealand and Australia markets.
    */
-  def getMultipleAudiobooks(ids: String, market: Option[String])(
+  def getMultipleAudiobooks(ids: String, market: Option[String] = None)(
       accessToken: String
   )(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject, circe.Error], GetMultipleAudiobooks200Response] = {
 
@@ -78,7 +78,7 @@ case class AudiobooksApi(baseUri: Uri = uri"https://api.spotify.com/v1") {
    * Get User's Saved Audiobooks
    * Get a list of the audiobooks saved in the current Spotify user's 'Your Music' library.
    */
-  def getUsersSavedAudiobooks(limit: Option[Int], offset: Option[Int])(
+  def getUsersSavedAudiobooks(limit: Option[Int] = None, offset: Option[Int] = None)(
       accessToken: String
   )(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject, circe.Error], PagingObject] = {
 

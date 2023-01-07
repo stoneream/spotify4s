@@ -34,7 +34,7 @@ case class EpisodesApi(baseUri: Uri = uri"https://api.spotify.com/v1") {
    * Get Spotify catalog information about an show’s episodes.
    * Optional parameters can be used to limit the number of episodes returned.
    */
-  def getAShowsEpisodes(id: String, market: Option[String], limit: Option[Int], offset: Option[Int])(
+  def getAShowsEpisodes(id: String, market: Option[String] = None, limit: Option[Int] = None, offset: Option[Int] = None)(
       accessToken: String
   )(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject, circe.Error], PagingObject] = {
 
@@ -49,7 +49,7 @@ case class EpisodesApi(baseUri: Uri = uri"https://api.spotify.com/v1") {
    * Get Episode
    * Get Spotify catalog information for a single episode identified by its unique Spotify ID.
    */
-  def getAnEpisode(id: String, market: Option[String])(
+  def getAnEpisode(id: String, market: Option[String] = None)(
       accessToken: String
   )(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject, circe.Error], EpisodeObject] = {
 
@@ -64,7 +64,7 @@ case class EpisodesApi(baseUri: Uri = uri"https://api.spotify.com/v1") {
    * Get Several Episodes
    * Get Spotify catalog information for several episodes based on their Spotify IDs.
    */
-  def getMultipleEpisodes(ids: String, market: Option[String])(
+  def getMultipleEpisodes(ids: String, market: Option[String] = None)(
       accessToken: String
   )(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject, circe.Error], GetMultipleEpisodes200Response] = {
 
@@ -81,7 +81,7 @@ case class EpisodesApi(baseUri: Uri = uri"https://api.spotify.com/v1") {
    * This API endpoint is in __beta__ and could change without warning.
    * Please share any feedback that you have, or issues that you discover, in our [developer community forum](https://community.spotify.com/t5/Spotify-for-Developers/bd-p/Spotify_Developer).
    */
-  def getUsersSavedEpisodes(market: Option[String], limit: Option[Int], offset: Option[Int])(
+  def getUsersSavedEpisodes(market: Option[String] = None, limit: Option[Int] = None, offset: Option[Int] = None)(
       accessToken: String
   )(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject, circe.Error], PagingObject] = {
 
@@ -98,7 +98,7 @@ case class EpisodesApi(baseUri: Uri = uri"https://api.spotify.com/v1") {
    * This API endpoint is in __beta__ and could change without warning.
    * Please share any feedback that you have, or issues that you discover, in our [developer community forum](https://community.spotify.com/t5/Spotify-for-Developers/bd-p/Spotify_Developer).
    */
-  def removeEpisodesUser(ids: String, requestBody: Option[RemoveEpisodesUserRequest])(
+  def removeEpisodesUser(ids: String, requestBody: Option[RemoveEpisodesUserRequest] = None)(
       accessToken: String
   )(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject, circe.Error], Unit] = {
 
@@ -115,7 +115,7 @@ case class EpisodesApi(baseUri: Uri = uri"https://api.spotify.com/v1") {
    * This API endpoint is in __beta__ and could change without warning.
    * Please share any feedback that you have, or issues that you discover, in our [developer community forum](https://community.spotify.com/t5/Spotify-for-Developers/bd-p/Spotify_Developer).
    */
-  def saveEpisodesUser(ids: String, requestBody: Option[SaveEpisodesUserRequest])(
+  def saveEpisodesUser(ids: String, requestBody: Option[SaveEpisodesUserRequest] = None)(
       accessToken: String
   )(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject, circe.Error], Unit] = {
 

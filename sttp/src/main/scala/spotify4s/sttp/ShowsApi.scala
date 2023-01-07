@@ -30,7 +30,7 @@ case class ShowsApi(baseUri: Uri = uri"https://api.spotify.com/v1") {
    * Get Show
    * Get Spotify catalog information for a single show identified by its unique Spotify ID.
    */
-  def getAShow(id: String, market: Option[String])(
+  def getAShow(id: String, market: Option[String] = None)(
       accessToken: String
   )(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject, circe.Error], ShowObject] = {
 
@@ -45,7 +45,7 @@ case class ShowsApi(baseUri: Uri = uri"https://api.spotify.com/v1") {
    * Get Show Episodes
    * Get Spotify catalog information about an show’s episodes. Optional parameters can be used to limit the number of episodes returned.
    */
-  def getAShowsEpisodes(id: String, market: Option[String], limit: Option[Int], offset: Option[Int])(
+  def getAShowsEpisodes(id: String, market: Option[String] = None, limit: Option[Int] = None, offset: Option[Int] = None)(
       accessToken: String
   )(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject, circe.Error], PagingObject] = {
 
@@ -60,7 +60,7 @@ case class ShowsApi(baseUri: Uri = uri"https://api.spotify.com/v1") {
    * Get Several Shows
    * Get Spotify catalog information for several shows based on their Spotify IDs.
    */
-  def getMultipleShows(ids: String, market: Option[String])(
+  def getMultipleShows(ids: String, market: Option[String] = None)(
       accessToken: String
   )(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject, circe.Error], GetMultipleShows200Response] = {
 
@@ -75,7 +75,7 @@ case class ShowsApi(baseUri: Uri = uri"https://api.spotify.com/v1") {
    * Get User's Saved Shows
    * Get a list of shows saved in the current Spotify user's library. Optional parameters can be used to limit the number of shows returned.
    */
-  def getUsersSavedShows(limit: Option[Int], offset: Option[Int])(
+  def getUsersSavedShows(limit: Option[Int] = None, offset: Option[Int] = None)(
       accessToken: String
   )(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject, circe.Error], PagingObject] = {
 
@@ -90,7 +90,7 @@ case class ShowsApi(baseUri: Uri = uri"https://api.spotify.com/v1") {
    * Remove User's Saved Shows
    * Delete one or more shows from current Spotify user's library.
    */
-  def removeShowsUser(ids: String, market: Option[String])(
+  def removeShowsUser(ids: String, market: Option[String] = None)(
       accessToken: String
   )(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject, circe.Error], Unit] = {
 

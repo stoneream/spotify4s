@@ -16,7 +16,7 @@ case class PlaylistsApi(baseUri: Uri = uri"https://api.spotify.com/v1") {
    * Add Items to Playlist
    * Add one or more items to a user's playlist.
    */
-  def addTracksToPlaylist(playlistId: String, position: Option[Int], uris: Option[String], requestBody: Option[AddTracksToPlaylistRequest])(
+  def addTracksToPlaylist(playlistId: String, position: Option[Int] = None, uris: Option[String] = None, requestBody: Option[AddTracksToPlaylistRequest])(
       accessToken: String
   )(
       client: SttpBackend[Identity, Any]
@@ -40,7 +40,7 @@ case class PlaylistsApi(baseUri: Uri = uri"https://api.spotify.com/v1") {
    * Change Playlist Details
    * Change a playlist's name and public/private state. (The user must, of course, own the playlist.)
    */
-  def changePlaylistDetails(playlistId: String, requestBody: Option[ChangePlaylistDetailsRequest])(
+  def changePlaylistDetails(playlistId: String, requestBody: Option[ChangePlaylistDetailsRequest] = None)(
       accessToken: String
   )(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject, circe.Error], Unit] = {
 
@@ -68,7 +68,7 @@ case class PlaylistsApi(baseUri: Uri = uri"https://api.spotify.com/v1") {
    * Create Playlist
    * Create a playlist for a Spotify user. (The playlist will be empty until you [add tracks](/documentation/web-api/reference/#/operations/add-tracks-to-playlist).)
    */
-  def createPlaylist(userId: String, requestBody: Option[CreatePlaylistRequest])(
+  def createPlaylist(userId: String, requestBody: Option[CreatePlaylistRequest] = None)(
       accessToken: String
   )(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject, circe.Error], PlaylistObject] = {
 
@@ -81,7 +81,7 @@ case class PlaylistsApi(baseUri: Uri = uri"https://api.spotify.com/v1") {
    * Follow Playlist
    * Add the current user as a follower of a playlist.
    */
-  def followPlaylist(playlistId: String, requestBody: Option[FollowPlaylistRequest])(
+  def followPlaylist(playlistId: String, requestBody: Option[FollowPlaylistRequest] = None)(
       accessToken: String
   )(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject, circe.Error], Unit] = {
 
@@ -94,7 +94,7 @@ case class PlaylistsApi(baseUri: Uri = uri"https://api.spotify.com/v1") {
    * Get Category's Playlists
    * Get a list of Spotify playlists tagged with a particular category.
    */
-  def getACategoriesPlaylists(categoryId: String, country: Option[String], limit: Option[Int], offset: Option[Int])(
+  def getACategoriesPlaylists(categoryId: String, country: Option[String] = None, limit: Option[Int] = None, offset: Option[Int] = None)(
       accessToken: String
   )(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject, circe.Error], PagingPlaylistObject] = {
 
@@ -110,7 +110,7 @@ case class PlaylistsApi(baseUri: Uri = uri"https://api.spotify.com/v1") {
    * Get Current User's Playlists
    * Get a list of the playlists owned or followed by the current Spotify user.
    */
-  def getAListOfCurrentUsersPlaylists(limit: Option[Int], offset: Option[Int])(
+  def getAListOfCurrentUsersPlaylists(limit: Option[Int] = None, offset: Option[Int] = None)(
       accessToken: String
   )(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject, circe.Error], PagingPlaylistObject] = {
 
@@ -125,7 +125,13 @@ case class PlaylistsApi(baseUri: Uri = uri"https://api.spotify.com/v1") {
    * Get Featured Playlists
    * Get a list of Spotify featured playlists (shown, for example, on a Spotify player's 'Browse' tab).
    */
-  def getFeaturedPlaylists(country: Option[String], locale: Option[String], timestamp: Option[String], limit: Option[Int], offset: Option[Int])(
+  def getFeaturedPlaylists(
+      country: Option[String] = None,
+      locale: Option[String] = None,
+      timestamp: Option[String] = None,
+      limit: Option[Int] = None,
+      offset: Option[Int] = None
+  )(
       accessToken: String
   )(
       client: SttpBackend[Identity, Any]
@@ -144,7 +150,7 @@ case class PlaylistsApi(baseUri: Uri = uri"https://api.spotify.com/v1") {
    * Get User's Playlists
    * Get a list of the playlists owned or followed by a Spotify user.
    */
-  def getListUsersPlaylists(userId: String, limit: Option[Int], offset: Option[Int])(
+  def getListUsersPlaylists(userId: String, limit: Option[Int] = None, offset: Option[Int] = None)(
       accessToken: String
   )(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject, circe.Error], PagingPlaylistObject] = {
 
@@ -159,7 +165,7 @@ case class PlaylistsApi(baseUri: Uri = uri"https://api.spotify.com/v1") {
    * Get Playlist
    * Get a playlist owned by a Spotify user.
    */
-  def getPlaylist(playlistId: String, market: Option[String], fields: Option[String], additionalTypes: Option[String])(
+  def getPlaylist(playlistId: String, market: Option[String] = None, fields: Option[String] = None, additionalTypes: Option[String] = None)(
       accessToken: String
   )(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject, circe.Error], PlaylistObject] = {
 
@@ -191,11 +197,11 @@ case class PlaylistsApi(baseUri: Uri = uri"https://api.spotify.com/v1") {
    */
   def getPlaylistsTracks(
       playlistId: String,
-      market: Option[String],
-      fields: Option[String],
-      limit: Option[Int],
-      offset: Option[Int],
-      additionalTypes: Option[String]
+      market: Option[String] = None,
+      fields: Option[String] = None,
+      limit: Option[Int] = None,
+      offset: Option[Int] = None,
+      additionalTypes: Option[String] = None
   )(accessToken: String)(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject, circe.Error], PagingObject] = {
 
     val queryParams =
@@ -212,7 +218,7 @@ case class PlaylistsApi(baseUri: Uri = uri"https://api.spotify.com/v1") {
    * Remove Playlist Items
    * Remove one or more items from a user's playlist.
    */
-  def removeTracksPlaylist(playlistId: String, removeTracksPlaylistRequest: Option[RemoveTracksPlaylistRequest])(
+  def removeTracksPlaylist(playlistId: String, removeTracksPlaylistRequest: Option[RemoveTracksPlaylistRequest] = None)(
       accessToken: String
   )(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject, circe.Error], ReorderOrReplacePlaylistsTracks200Response] = {
 
@@ -236,7 +242,7 @@ case class PlaylistsApi(baseUri: Uri = uri"https://api.spotify.com/v1") {
    * This operation can be used for replacing or clearing items in a playlist.
    * Note** Replace and reorder are mutually exclusive operations which share the same endpoint, but have different parameters. These operations can't be applied together in a single request.
    * todo fix
-   *  def reorderOrReplacePlaylistsTracks(playlistId: String, uris: Option[String], requestBody: Option[Map[String, oas_any_type_not_mapped]])(
+   *  def reorderOrReplacePlaylistsTracks(playlistId: String, uris: Option[String] = None, requestBody: Option[Map[String, oas_any_type_not_mapped]])(
    *      client: SttpBackend[Identity, Any]
    *  ) = {
    *

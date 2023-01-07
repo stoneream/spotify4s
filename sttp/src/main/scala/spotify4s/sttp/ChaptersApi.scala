@@ -15,7 +15,7 @@ case class ChaptersApi(baseUri: Uri = uri"https://api.spotify.com/v1") {
    * Get a Chapter
    * Get Spotify catalog information for a single chapter.<br /> **Note: Chapters are only available for the US, UK, Ireland, New Zealand and Australia markets.**
    */
-  def getAChapter(id: String, market: Option[String])(
+  def getAChapter(id: String, market: Option[String] = None)(
       accessToken: String
   )(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject, circe.Error], ChapterObject] = {
 
@@ -30,7 +30,7 @@ case class ChaptersApi(baseUri: Uri = uri"https://api.spotify.com/v1") {
    * Get Audiobook Chapters
    * Get Spotify catalog information about an audiobook's chapters.<br /> **Note: Audiobooks are only available for the US, UK, Ireland, New Zealand and Australia markets.**
    */
-  def getAudiobookChapters(id: String, market: Option[String], limit: Option[Int], offset: Option[Int])(
+  def getAudiobookChapters(id: String, market: Option[String] = None, limit: Option[Int] = None, offset: Option[Int] = None)(
       accessToken: String
   )(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject, circe.Error], PagingObject] = {
 
@@ -45,7 +45,7 @@ case class ChaptersApi(baseUri: Uri = uri"https://api.spotify.com/v1") {
    * Get Several Chapters
    * Get Spotify catalog information for several chapters identified by their Spotify IDs.<br /> **Note: Chapters are only available for the US, UK, Ireland, New Zealand and Australia markets.**
    */
-  def getSeveralChapters(ids: String, market: Option[String])(
+  def getSeveralChapters(ids: String, market: Option[String] = None)(
       accessToken: String
   )(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject, circe.Error], GetSeveralChapters200Response] = {
 

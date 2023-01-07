@@ -16,7 +16,7 @@ case class TracksApi(baseUri: Uri = uri"https://api.spotify.com/v1") {
    * Add Items to Playlist
    * Add one or more items to a user's playlist.
    */
-  def addTracksToPlaylist(playlistId: String, position: Option[Int], uris: Option[String], requestBody: Option[AddTracksToPlaylistRequest])(
+  def addTracksToPlaylist(playlistId: String, position: Option[Int] = None, uris: Option[String] = None, requestBody: Option[AddTracksToPlaylistRequest])(
       accessToken: String
   )(
       client: SttpBackend[Identity, Any]
@@ -55,7 +55,7 @@ case class TracksApi(baseUri: Uri = uri"https://api.spotify.com/v1") {
    * Get Album Tracks
    * Get Spotify catalog information about an album’s tracks. Optional parameters can be used to limit the number of tracks returned.
    */
-  def getAnAlbumsTracks(id: String, market: Option[String], limit: Option[Int], offset: Option[Int])(
+  def getAnAlbumsTracks(id: String, market: Option[String] = None, limit: Option[Int] = None, offset: Option[Int] = None)(
       accessToken: String
   )(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject, circe.Error], PagingObject] = {
 
@@ -70,7 +70,7 @@ case class TracksApi(baseUri: Uri = uri"https://api.spotify.com/v1") {
    * Get Artist's Top Tracks
    * Get Spotify catalog information about an artist's top tracks by country.
    */
-  def getAnArtistsTopTracks(id: String, market: Option[String])(
+  def getAnArtistsTopTracks(id: String, market: Option[String] = None)(
       accessToken: String
   )(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject, circe.Error], GetAnArtistsTopTracks200Response] = {
 
@@ -113,11 +113,11 @@ case class TracksApi(baseUri: Uri = uri"https://api.spotify.com/v1") {
    */
   def getPlaylistsTracks(
       playlistId: String,
-      market: Option[String],
-      fields: Option[String],
-      limit: Option[Int],
-      offset: Option[Int],
-      additionalTypes: Option[String]
+      market: Option[String] = None,
+      fields: Option[String] = None,
+      limit: Option[Int] = None,
+      offset: Option[Int] = None,
+      additionalTypes: Option[String] = None
   )(accessToken: String)(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject, circe.Error], PagingObject] = {
 
     val queryParams =
@@ -138,50 +138,50 @@ case class TracksApi(baseUri: Uri = uri"https://api.spotify.com/v1") {
       seedArtists: String,
       seedGenres: String,
       seedTracks: String,
-      limit: Option[Int],
-      market: Option[String],
-      minAcousticness: Option[BigDecimal],
-      maxAcousticness: Option[BigDecimal],
-      targetAcousticness: Option[BigDecimal],
-      minDanceability: Option[BigDecimal],
-      maxDanceability: Option[BigDecimal],
-      targetDanceability: Option[BigDecimal],
-      minDurationMs: Option[Int],
-      maxDurationMs: Option[Int],
-      targetDurationMs: Option[Int],
-      minEnergy: Option[BigDecimal],
-      maxEnergy: Option[BigDecimal],
-      targetEnergy: Option[BigDecimal],
-      minInstrumentalness: Option[BigDecimal],
-      maxInstrumentalness: Option[BigDecimal],
-      targetInstrumentalness: Option[BigDecimal],
-      minKey: Option[Int],
-      maxKey: Option[Int],
-      targetKey: Option[Int],
-      minLiveness: Option[BigDecimal],
-      maxLiveness: Option[BigDecimal],
-      targetLiveness: Option[BigDecimal],
-      minLoudness: Option[BigDecimal],
-      maxLoudness: Option[BigDecimal],
-      targetLoudness: Option[BigDecimal],
-      minMode: Option[Int],
-      maxMode: Option[Int],
-      targetMode: Option[Int],
-      minPopularity: Option[Int],
-      maxPopularity: Option[Int],
-      targetPopularity: Option[Int],
-      minSpeechiness: Option[BigDecimal],
-      maxSpeechiness: Option[BigDecimal],
-      targetSpeechiness: Option[BigDecimal],
-      minTempo: Option[BigDecimal],
-      maxTempo: Option[BigDecimal],
-      targetTempo: Option[BigDecimal],
-      minTimeSignature: Option[Int],
-      maxTimeSignature: Option[Int],
-      targetTimeSignature: Option[Int],
-      minValence: Option[BigDecimal],
-      maxValence: Option[BigDecimal],
-      targetValence: Option[BigDecimal]
+      limit: Option[Int] = None,
+      market: Option[String] = None,
+      minAcousticness: Option[BigDecimal] = None,
+      maxAcousticness: Option[BigDecimal] = None,
+      targetAcousticness: Option[BigDecimal] = None,
+      minDanceability: Option[BigDecimal] = None,
+      maxDanceability: Option[BigDecimal] = None,
+      targetDanceability: Option[BigDecimal] = None,
+      minDurationMs: Option[Int] = None,
+      maxDurationMs: Option[Int] = None,
+      targetDurationMs: Option[Int] = None,
+      minEnergy: Option[BigDecimal] = None,
+      maxEnergy: Option[BigDecimal] = None,
+      targetEnergy: Option[BigDecimal] = None,
+      minInstrumentalness: Option[BigDecimal] = None,
+      maxInstrumentalness: Option[BigDecimal] = None,
+      targetInstrumentalness: Option[BigDecimal] = None,
+      minKey: Option[Int] = None,
+      maxKey: Option[Int] = None,
+      targetKey: Option[Int] = None,
+      minLiveness: Option[BigDecimal] = None,
+      maxLiveness: Option[BigDecimal] = None,
+      targetLiveness: Option[BigDecimal] = None,
+      minLoudness: Option[BigDecimal] = None,
+      maxLoudness: Option[BigDecimal] = None,
+      targetLoudness: Option[BigDecimal] = None,
+      minMode: Option[Int] = None,
+      maxMode: Option[Int] = None,
+      targetMode: Option[Int] = None,
+      minPopularity: Option[Int] = None,
+      maxPopularity: Option[Int] = None,
+      targetPopularity: Option[Int] = None,
+      minSpeechiness: Option[BigDecimal] = None,
+      maxSpeechiness: Option[BigDecimal] = None,
+      targetSpeechiness: Option[BigDecimal] = None,
+      minTempo: Option[BigDecimal] = None,
+      maxTempo: Option[BigDecimal] = None,
+      targetTempo: Option[BigDecimal] = None,
+      minTimeSignature: Option[Int] = None,
+      maxTimeSignature: Option[Int] = None,
+      targetTimeSignature: Option[Int] = None,
+      minValence: Option[BigDecimal] = None,
+      maxValence: Option[BigDecimal] = None,
+      targetValence: Option[BigDecimal] = None
   )(accessToken: String)(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject, circe.Error], RecommendationsObject] = {
 
     val queryParams = Map.empty[String, String] ++ limit.map("limit" -> _.toString) ++ market.map(
@@ -237,7 +237,7 @@ case class TracksApi(baseUri: Uri = uri"https://api.spotify.com/v1") {
    * Get Several Tracks
    * Get Spotify catalog information for multiple tracks based on their Spotify IDs.
    */
-  def getSeveralTracks(ids: String, market: Option[String])(
+  def getSeveralTracks(ids: String, market: Option[String] = None)(
       accessToken: String
   )(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject, circe.Error], GetAnArtistsTopTracks200Response] = {
 
@@ -252,7 +252,7 @@ case class TracksApi(baseUri: Uri = uri"https://api.spotify.com/v1") {
    * Get Track
    * Get Spotify catalog information for a single track identified by its unique Spotify ID.
    */
-  def getTrack(id: String, market: Option[String])(
+  def getTrack(id: String, market: Option[String] = None)(
       accessToken: String
   )(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject, circe.Error], TrackObject] = {
 
@@ -267,7 +267,7 @@ case class TracksApi(baseUri: Uri = uri"https://api.spotify.com/v1") {
    * Get User's Saved Tracks
    * Get a list of the songs saved in the current Spotify user's 'Your Music' library.
    */
-  def getUsersSavedTracks(market: Option[String], limit: Option[Int], offset: Option[Int])(
+  def getUsersSavedTracks(market: Option[String] = None, limit: Option[Int] = None, offset: Option[Int] = None)(
       accessToken: String
   )(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject, circe.Error], PagingObject] = {
 
@@ -282,7 +282,7 @@ case class TracksApi(baseUri: Uri = uri"https://api.spotify.com/v1") {
    * Get User's Top Items
    * Get the current user's top artists or tracks based on calculated affinity.
    */
-  def getUsersTopArtistsAndTracks(`type`: String, timeRange: Option[String], limit: Option[Int], offset: Option[Int])(
+  def getUsersTopArtistsAndTracks(`type`: String, timeRange: Option[String] = None, limit: Option[Int] = None, offset: Option[Int] = None)(
       accessToken: String
   )(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject, circe.Error], PagingObject] = {
 
@@ -298,7 +298,7 @@ case class TracksApi(baseUri: Uri = uri"https://api.spotify.com/v1") {
    * Remove Playlist Items
    * Remove one or more items from a user's playlist.
    */
-  def removeTracksPlaylist(playlistId: String, removeTracksPlaylistRequest: Option[RemoveTracksPlaylistRequest])(
+  def removeTracksPlaylist(playlistId: String, removeTracksPlaylistRequest: Option[RemoveTracksPlaylistRequest] = None)(
       accessToken: String
   )(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject, circe.Error], ReorderOrReplacePlaylistsTracks200Response] = {
 
@@ -318,7 +318,7 @@ case class TracksApi(baseUri: Uri = uri"https://api.spotify.com/v1") {
    * Remove User's Saved Tracks
    * Remove one or more tracks from the current user's 'Your Music' library.
    */
-  def removeTracksUser(ids: String, requestBody: Option[RemoveTracksUserRequest])(
+  def removeTracksUser(ids: String, requestBody: Option[RemoveTracksUserRequest] = None)(
       accessToken: String
   )(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject, circe.Error], Unit] = {
 
@@ -333,7 +333,7 @@ case class TracksApi(baseUri: Uri = uri"https://api.spotify.com/v1") {
    * Update Playlist Items
    * Either reorder or replace items in a playlist depending on the request's parameters. To reorder items, include `range_start`, `insert_before`, `range_length` and `snapshot_id` in the request's body. To replace items, include `uris` as either a query parameter or in the request's body. Replacing items in a playlist will overwrite its existing items. This operation can be used for replacing or clearing items in a playlist. <br> **Note**: Replace and reorder are mutually exclusive operations which share the same endpoint, but have different parameters. These operations can't be applied together in a single request.
    * todo fix
-   *  def reorderOrReplacePlaylistsTracks(playlistId: String, uris: Option[String], requestBody: Option[Map[String, oas_any_type_not_mapped]])(
+   *  def reorderOrReplacePlaylistsTracks(playlistId: String, uris: Option[String] = None, requestBody: Option[Map[String, oas_any_type_not_mapped]])(
    *      client: SttpBackend[Identity, Any]
    *  ) = {
    *
@@ -349,7 +349,7 @@ case class TracksApi(baseUri: Uri = uri"https://api.spotify.com/v1") {
    * Save Tracks for Current User
    * Save one or more tracks to the current user's 'Your Music' library.
    */
-  def saveTracksUser(ids: String, requestBody: Option[SaveTracksUserRequest])(
+  def saveTracksUser(ids: String, requestBody: Option[SaveTracksUserRequest] = None)(
       accessToken: String
   )(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject, circe.Error], Unit] = {
 
