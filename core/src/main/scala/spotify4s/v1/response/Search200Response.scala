@@ -1,13 +1,13 @@
 package spotify4s.v1.response
 
-import spotify4s.v1.model.PagingObject
+import spotify4s.v1.model.{ArtistObject, PagingObject, SimplifiedAlbumObject, SimplifiedAudiobookObject, SimplifiedPlaylistObject, SimplifiedShowObject, TrackObject}
 
 case class Search200Response(
-    tracks: Option[PagingObject] = None,
-    artists: Option[PagingObject] = None,
-    albums: Option[PagingObject] = None,
-    playlists: Option[PagingObject] = None,
-    shows: Option[PagingObject] = None,
-    episodes: Option[PagingObject] = None,
-    audiobooks: Option[PagingObject] = None
+    tracks: Option[PagingObject[TrackObject]] = None,
+    artists: Option[PagingObject[ArtistObject]] = None,
+    albums: Option[PagingObject[SimplifiedAlbumObject]] = None,
+    playlists: Option[PagingObject[SimplifiedPlaylistObject]] = None,
+    shows: Option[PagingObject[SimplifiedShowObject]] = None,
+    episodes: Option[PagingObject[SimplifiedShowObject]] = None,
+    audiobooks: Option[PagingObject[SimplifiedAudiobookObject]] = None
 )

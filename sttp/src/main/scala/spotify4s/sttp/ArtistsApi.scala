@@ -3,7 +3,7 @@ package spotify4s.sttp
 import io.circe
 import io.circe.generic.extras.auto._
 import spotify4s.v1.circe.CirceConfiguration.jsonConfig
-import spotify4s.v1.model.{ArtistObject, ErrorObject, PagingObject}
+import spotify4s.v1.model.{ArtistObject, ErrorObject, PagingObject, SimplifiedAlbumObject}
 import spotify4s.v1.request.{FollowArtistsUsersRequest, UnfollowArtistsUsersRequest}
 import spotify4s.v1.response.{GetAnArtistsTopTracks200Response, GetFollowed200Response, GetMultipleArtists200Response}
 import sttp.client3._
@@ -65,15 +65,15 @@ case class ArtistsApi(baseUri: Uri = uri"https://api.spotify.com/v1") {
       offset: Option[Int] = None
   )(accessToken: String)(
       client: SttpBackend[Identity, Any]
-  ): Either[ResponseException[ErrorObject, circe.Error], PagingObject] = {
+  ): Either[ResponseException[ErrorObject, circe.Error], PagingObject[SimplifiedAlbumObject]] = {
 
     val queryParams = Map.empty[String, String] ++ includeGroups.map("includeGroups" -> _) ++ market.map("market" -> _) ++ limit.map(
       "limit" -> _.toString
     ) ++ offset.map("offset" -> _.toString)
 
-    val requestUrl = baseUri.addPath("/artists/albums").addPath(s"/$id").addParams(queryParams)
+    val requestUrl = baseUri.addPath("/artists").addPath(s"/$id").addPath("/albums").addParams(queryParams)
 
-    basicRequest.get(requestUrl).response(asJsonEither[ErrorObject, PagingObject]).auth.bearer(accessToken).send(client).body
+    basicRequest.get(requestUrl).response(asJsonEither[ErrorObject, PagingObject[SimplifiedAlbumObject]]).auth.bearer(accessToken).send(client).body
   }
 
   /**

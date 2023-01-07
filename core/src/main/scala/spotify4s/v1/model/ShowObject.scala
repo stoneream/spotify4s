@@ -33,5 +33,5 @@ case class ShowObject(
     /* The [Spotify URI](/documentation/web-api/#spotify-uris-and-ids) for the show.  */
     uri: String,
     /* The episodes of the show.  */
-    episodes: PagingObject
+    episodes: PagingObject[SimplifiedEpisodeObject]
 )

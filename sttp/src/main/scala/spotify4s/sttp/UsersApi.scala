@@ -127,22 +127,6 @@ case class UsersApi(baseUri: Uri = uri"https://api.spotify.com/v1") {
   }
 
   /**
-   * Get User's Top Items
-   * Get the current user's top artists or tracks based on calculated affinity.
-   */
-  def getUsersTopArtistsAndTracks(`type`: String, timeRange: Option[String] = None, limit: Option[Int] = None, offset: Option[Int] = None)(
-      accessToken: String
-  )(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject, circe.Error], PagingObject] = {
-
-    val queryParams =
-      Map.empty[String, String] ++ timeRange.map("timeRange" -> _) ++ limit.map("limit" -> _.toString) ++ offset.map("offset" -> _.toString)
-
-    val requestUrl = baseUri.addPath("/me/top").addPath(s"/${`type`}").addParams(queryParams)
-
-    basicRequest.get(requestUrl).response(asJsonEither[ErrorObject, PagingObject]).auth.bearer(accessToken).send(client).body
-  }
-
-  /**
    * Unfollow Artists or Users
    * Remove the current user as a follower of one or more artists or other Spotify users.
    */

@@ -36,5 +36,5 @@ case class AudiobookObject(
     /* The number of chapters in this audiobook.  */
     totalChapters: Int,
     /* The chapters of the audiobook.  */
-    chapters: PagingObject
+    chapters: PagingObject[SimplifiedAudiobookObject]
 )

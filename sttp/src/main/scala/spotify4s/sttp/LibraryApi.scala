@@ -3,7 +3,7 @@ package spotify4s.sttp
 import io.circe
 import io.circe.generic.extras.auto._
 import spotify4s.v1.circe.CirceConfiguration.jsonConfig
-import spotify4s.v1.model.{ErrorObject, PagingObject, PagingPlaylistObject, PlaylistObject}
+import spotify4s.v1.model.{ErrorObject, PagingObject, PagingPlaylistObject, PlaylistObject, SavedAlbumObject, SavedEpisodeObject, SavedShowObject, SavedTrackObject}
 import spotify4s.v1.request._
 import spotify4s.v1.response.GetFollowed200Response
 import sttp.client3._
@@ -179,28 +179,13 @@ case class LibraryApi(baseUri: Uri = uri"https://api.spotify.com/v1") {
    */
   def getUsersSavedAlbums(limit: Option[Int] = None, offset: Option[Int] = None, market: Option[String] = None)(
       accessToken: String
-  )(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject, circe.Error], PagingObject] = {
+  )(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject, circe.Error], PagingObject[SavedAlbumObject]] = {
 
     val queryParams = Map.empty[String, String] ++ limit.map("limit" -> _.toString) ++ offset.map("offset" -> _.toString) ++ market.map("market" -> _)
 
     val requestUrl = baseUri.addPath("/me/albums").addParams(queryParams)
 
-    basicRequest.get(requestUrl).response(asJsonEither[ErrorObject, PagingObject]).auth.bearer(accessToken).send(client).body
-  }
-
-  /**
-   * Get User's Saved Audiobooks
-   * Get a list of the audiobooks saved in the current Spotify user's 'Your Music' library.
-   */
-  def getUsersSavedAudiobooks(limit: Option[Int] = None, offset: Option[Int] = None)(
-      accessToken: String
-  )(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject, circe.Error], PagingObject] = {
-
-    val queryParams = Map.empty[String, String] ++ limit.map("limit" -> _.toString) ++ offset.map("offset" -> _.toString)
-
-    val requestUrl = baseUri.addPath("/me/audiobooks").addParams(queryParams)
-
-    basicRequest.get(requestUrl).response(asJsonEither[ErrorObject, PagingObject]).auth.bearer(accessToken).send(client).body
+    basicRequest.get(requestUrl).response(asJsonEither[ErrorObject, PagingObject[SavedAlbumObject]]).auth.bearer(accessToken).send(client).body
   }
 
   /**
@@ -211,13 +196,13 @@ case class LibraryApi(baseUri: Uri = uri"https://api.spotify.com/v1") {
    */
   def getUsersSavedEpisodes(market: Option[String] = None, limit: Option[Int] = None, offset: Option[Int] = None)(
       accessToken: String
-  )(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject, circe.Error], PagingObject] = {
+  )(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject, circe.Error], PagingObject[SavedEpisodeObject]] = {
 
     val queryParams = Map.empty[String, String] ++ market.map("market" -> _) ++ limit.map("limit" -> _.toString) ++ offset.map("offset" -> _.toString)
 
     val requestUrl = baseUri.addPath("/me/episodes").addParams(queryParams)
 
-    basicRequest.get(requestUrl).response(asJsonEither[ErrorObject, PagingObject]).auth.bearer(accessToken).send(client).body
+    basicRequest.get(requestUrl).response(asJsonEither[ErrorObject, PagingObject[SavedEpisodeObject]]).auth.bearer(accessToken).send(client).body
   }
 
   /**
@@ -226,13 +211,13 @@ case class LibraryApi(baseUri: Uri = uri"https://api.spotify.com/v1") {
    */
   def getUsersSavedShows(limit: Option[Int] = None, offset: Option[Int] = None)(
       accessToken: String
-  )(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject, circe.Error], PagingObject] = {
+  )(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject, circe.Error], PagingObject[SavedShowObject]] = {
 
     val queryParams = Map.empty[String, String] ++ limit.map("limit" -> _.toString) ++ offset.map("offset" -> _.toString)
 
     val requestUrl = baseUri.addPath("/me/shows").addParams(queryParams)
 
-    basicRequest.get(requestUrl).response(asJsonEither[ErrorObject, PagingObject]).auth.bearer(accessToken).send(client).body
+    basicRequest.get(requestUrl).response(asJsonEither[ErrorObject, PagingObject[SavedShowObject]]).auth.bearer(accessToken).send(client).body
   }
 
   /**
@@ -241,29 +226,13 @@ case class LibraryApi(baseUri: Uri = uri"https://api.spotify.com/v1") {
    */
   def getUsersSavedTracks(market: Option[String] = None, limit: Option[Int] = None, offset: Option[Int] = None)(
       accessToken: String
-  )(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject, circe.Error], PagingObject] = {
+  )(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject, circe.Error], PagingObject[SavedTrackObject]] = {
 
     val queryParams = Map.empty[String, String] ++ market.map("market" -> _) ++ limit.map("limit" -> _.toString) ++ offset.map("offset" -> _.toString)
 
     val requestUrl = baseUri.addPath("/me/tracks").addParams(queryParams)
 
-    basicRequest.get(requestUrl).response(asJsonEither[ErrorObject, PagingObject]).auth.bearer(accessToken).send(client).body
-  }
-
-  /**
-   * Get User's Top Items
-   * Get the current user's top artists or tracks based on calculated affinity.
-   */
-  def getUsersTopArtistsAndTracks(`type`: String, timeRange: Option[String] = None, limit: Option[Int] = None, offset: Option[Int] = None)(
-      accessToken: String
-  )(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject, circe.Error], PagingObject] = {
-
-    val queryParams =
-      Map.empty[String, String] ++ timeRange.map("timeRange" -> _) ++ limit.map("limit" -> _.toString) ++ offset.map("offset" -> _.toString)
-
-    val requestUrl = baseUri.addPath("/me/top").addPath(s"/${`type`}").addParams(queryParams)
-
-    basicRequest.get(requestUrl).response(asJsonEither[ErrorObject, PagingObject]).auth.bearer(accessToken).send(client).body
+    basicRequest.get(requestUrl).response(asJsonEither[ErrorObject, PagingObject[SavedTrackObject]]).auth.bearer(accessToken).send(client).body
   }
 
   /**

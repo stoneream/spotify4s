@@ -1,11 +1,10 @@
 package spotify4s.v1.model
 
-case class PagingObject(
+case class PagingObject[T](
     /* A link to the Web API endpoint returning the full result of the request  */
     href: String,
     /* The requested content  */
-    // todo fix
-    // items: List[Any],
+    items: List[T],
     /* The maximum number of items in the response (as set in the query or by default).  */
     limit: Int,
     /* URL to the next page of items. ( `null` if none)  */

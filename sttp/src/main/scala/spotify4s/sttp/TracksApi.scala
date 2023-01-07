@@ -57,28 +57,13 @@ case class TracksApi(baseUri: Uri = uri"https://api.spotify.com/v1") {
    */
   def getAnAlbumsTracks(id: String, market: Option[String] = None, limit: Option[Int] = None, offset: Option[Int] = None)(
       accessToken: String
-  )(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject, circe.Error], PagingObject] = {
+  )(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject, circe.Error], PagingObject[SimplifiedTrackObject]] = {
 
     val queryParams = Map.empty[String, String] ++ market.map("market" -> _) ++ limit.map("limit" -> _.toString) ++ offset.map("offset" -> _.toString)
 
-    val requestUrl = baseUri.addPath("/albums/tracks").addPath(s"/$id").addParams(queryParams)
+    val requestUrl = baseUri.addPath("/albums").addPath(s"/$id").addPath("/tracks").addParams(queryParams)
 
-    basicRequest.get(requestUrl).response(asJsonEither[ErrorObject, PagingObject]).auth.bearer(accessToken).send(client).body
-  }
-
-  /**
-   * Get Artist's Top Tracks
-   * Get Spotify catalog information about an artist's top tracks by country.
-   */
-  def getAnArtistsTopTracks(id: String, market: Option[String] = None)(
-      accessToken: String
-  )(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject, circe.Error], GetAnArtistsTopTracks200Response] = {
-
-    val queryParams = Map.empty[String, String] ++ market.map("market" -> _)
-
-    val requestUrl = baseUri.addPath("/artists/top-tracks").addPath(s"/$id").addParams(queryParams)
-
-    basicRequest.get(requestUrl).response(asJsonEither[ErrorObject, GetAnArtistsTopTracks200Response]).auth.bearer(accessToken).send(client).body
+    basicRequest.get(requestUrl).response(asJsonEither[ErrorObject, PagingObject[SimplifiedTrackObject]]).auth.bearer(accessToken).send(client).body
   }
 
   /**
@@ -118,16 +103,16 @@ case class TracksApi(baseUri: Uri = uri"https://api.spotify.com/v1") {
       limit: Option[Int] = None,
       offset: Option[Int] = None,
       additionalTypes: Option[String] = None
-  )(accessToken: String)(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject, circe.Error], PagingObject] = {
+  )(accessToken: String)(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject, circe.Error], PagingObject[PlaylistTrackObject]] = {
 
     val queryParams =
       Map.empty[String, String] ++ market.map("market" -> _) ++ fields.map("fields" -> _) ++ limit.map("limit" -> _.toString) ++ offset.map(
         "offset" -> _.toString
       ) ++ additionalTypes.map("additionalTypes" -> _)
 
-    val requestUrl = baseUri.addPath("/playlists/tracks").addPath(s"/$playlistId").addParams(queryParams)
+    val requestUrl = baseUri.addPath("/playlists").addPath(s"/$playlistId").addPath("/tracks").addParams(queryParams)
 
-    basicRequest.get(requestUrl).response(asJsonEither[ErrorObject, PagingObject]).auth.bearer(accessToken).send(client).body
+    basicRequest.get(requestUrl).response(asJsonEither[ErrorObject, PagingObject[PlaylistTrackObject]]).auth.bearer(accessToken).send(client).body
   }
 
   /**
@@ -269,29 +254,13 @@ case class TracksApi(baseUri: Uri = uri"https://api.spotify.com/v1") {
    */
   def getUsersSavedTracks(market: Option[String] = None, limit: Option[Int] = None, offset: Option[Int] = None)(
       accessToken: String
-  )(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject, circe.Error], PagingObject] = {
+  )(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject, circe.Error], PagingObject[SavedTrackObject]] = {
 
     val queryParams = Map.empty[String, String] ++ market.map("market" -> _) ++ limit.map("limit" -> _.toString) ++ offset.map("offset" -> _.toString)
 
     val requestUrl = baseUri.addPath("/me/tracks").addParams(queryParams)
 
-    basicRequest.get(requestUrl).response(asJsonEither[ErrorObject, PagingObject]).auth.bearer(accessToken).send(client).body
-  }
-
-  /**
-   * Get User's Top Items
-   * Get the current user's top artists or tracks based on calculated affinity.
-   */
-  def getUsersTopArtistsAndTracks(`type`: String, timeRange: Option[String] = None, limit: Option[Int] = None, offset: Option[Int] = None)(
-      accessToken: String
-  )(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject, circe.Error], PagingObject] = {
-
-    val queryParams =
-      Map.empty[String, String] ++ timeRange.map("timeRange" -> _) ++ limit.map("limit" -> _.toString) ++ offset.map("offset" -> _.toString)
-
-    val requestUrl = baseUri.addPath("/me/top").addPath(s"/${`type`}").addParams(queryParams)
-
-    basicRequest.get(requestUrl).response(asJsonEither[ErrorObject, PagingObject]).auth.bearer(accessToken).send(client).body
+    basicRequest.get(requestUrl).response(asJsonEither[ErrorObject, PagingObject[SavedTrackObject]]).auth.bearer(accessToken).send(client).body
   }
 
   /**

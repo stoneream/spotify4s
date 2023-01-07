@@ -3,8 +3,8 @@ package spotify4s.sttp
 import io.circe
 import io.circe.generic.extras.auto._
 import spotify4s.v1.circe.CirceConfiguration.jsonConfig
-import spotify4s.v1.model.{EpisodeObject, ErrorObject, PagingObject}
-import spotify4s.v1.request.{RemoveEpisodesUserRequest, SaveEpisodesUserRequest}
+import spotify4s.v1.model.{EpisodeObject, ErrorObject, PagingObject, SimplifiedEpisodeObject}
+import spotify4s.v1.request.SaveEpisodesUserRequest
 import spotify4s.v1.response.GetMultipleEpisodes200Response
 import sttp.client3._
 import sttp.client3.circe._
@@ -36,13 +36,13 @@ case class EpisodesApi(baseUri: Uri = uri"https://api.spotify.com/v1") {
    */
   def getAShowsEpisodes(id: String, market: Option[String] = None, limit: Option[Int] = None, offset: Option[Int] = None)(
       accessToken: String
-  )(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject, circe.Error], PagingObject] = {
+  )(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject, circe.Error], PagingObject[SimplifiedEpisodeObject]] = {
 
     val queryParams = Map.empty[String, String] ++ market.map("market" -> _) ++ limit.map("limit" -> _.toString) ++ offset.map("offset" -> _.toString)
 
-    val requestUrl = baseUri.addPath("/shows/episodes").addPath(s"/$id").addParams(queryParams)
+    val requestUrl = baseUri.addPath("/shows").addPath(s"/$id").addPath("/episodes").addParams(queryParams)
 
-    basicRequest.get(requestUrl).response(asJsonEither[ErrorObject, PagingObject]).auth.bearer(accessToken).send(client).body
+    basicRequest.get(requestUrl).response(asJsonEither[ErrorObject, PagingObject[SimplifiedEpisodeObject]]).auth.bearer(accessToken).send(client).body
   }
 
   /**
@@ -73,40 +73,6 @@ case class EpisodesApi(baseUri: Uri = uri"https://api.spotify.com/v1") {
     val requestUrl = baseUri.addPath("/episodes").addParams(queryParams)
 
     basicRequest.get(requestUrl).response(asJsonEither[ErrorObject, GetMultipleEpisodes200Response]).auth.bearer(accessToken).send(client).body
-  }
-
-  /**
-   * Get User's Saved Episodes
-   * Get a list of the episodes saved in the current Spotify user's library.
-   * This API endpoint is in __beta__ and could change without warning.
-   * Please share any feedback that you have, or issues that you discover, in our [developer community forum](https://community.spotify.com/t5/Spotify-for-Developers/bd-p/Spotify_Developer).
-   */
-  def getUsersSavedEpisodes(market: Option[String] = None, limit: Option[Int] = None, offset: Option[Int] = None)(
-      accessToken: String
-  )(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject, circe.Error], PagingObject] = {
-
-    val queryParams = Map.empty[String, String] ++ market.map("market" -> _) ++ limit.map("limit" -> _.toString) ++ offset.map("offset" -> _.toString)
-
-    val requestUrl = baseUri.addPath("/me/episodes").addParams(queryParams)
-
-    basicRequest.get(requestUrl).response(asJsonEither[ErrorObject, PagingObject]).auth.bearer(accessToken).send(client).body
-  }
-
-  /**
-   * Remove User's Saved Episodes
-   * Remove one or more episodes from the current user's library.
-   * This API endpoint is in __beta__ and could change without warning.
-   * Please share any feedback that you have, or issues that you discover, in our [developer community forum](https://community.spotify.com/t5/Spotify-for-Developers/bd-p/Spotify_Developer).
-   */
-  def removeEpisodesUser(ids: String, requestBody: Option[RemoveEpisodesUserRequest] = None)(
-      accessToken: String
-  )(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject, circe.Error], Unit] = {
-
-    val queryParams = Map.empty[String, String] + ("ids" -> ids)
-
-    val requestUrl = baseUri.addPath("/me/episodes").addParams(queryParams)
-
-    basicRequest.delete(requestUrl).body(requestBody).response(asJsonEither[ErrorObject, Unit]).auth.bearer(accessToken).send(client).body
   }
 
   /**

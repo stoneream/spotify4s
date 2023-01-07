@@ -3,7 +3,7 @@ package spotify4s.sttp
 import io.circe
 import io.circe.generic.extras.auto._
 import spotify4s.v1.circe.CirceConfiguration.jsonConfig
-import spotify4s.v1.model.{AlbumObject, ErrorObject, PagingObject}
+import spotify4s.v1.model.{AlbumObject, ErrorObject, PagingObject, SavedTrackObject, SimplifiedAlbumObject, SimplifiedTrackObject}
 import spotify4s.v1.request.{RemoveAlbumsUserRequest, SaveAlbumsUserRequest}
 import spotify4s.v1.response.{GetMultipleAlbums200Response, GetNewReleases200Response}
 import sttp.client3._
@@ -49,13 +49,13 @@ case class AlbumsApi(baseUri: Uri = uri"https://api.spotify.com/v1") {
       accessToken: String
   )(
       client: SttpBackend[Identity, Any]
-  ): Either[ResponseException[ErrorObject, circe.Error], PagingObject] = {
+  ): Either[ResponseException[ErrorObject, circe.Error], PagingObject[SimplifiedTrackObject]] = {
 
     val queryParams = Map.empty[String, String] ++ market.map("market" -> _) ++ limit.map("limit" -> _.toString) ++ offset.map("offset" -> _.toString)
 
-    val requestUrl = baseUri.addPath("/albums/tracks").addPath(s"/$id").addParams(queryParams)
+    val requestUrl = baseUri.addPath("/albums").addPath(s"/$id").addPath("/tracks").addParams(queryParams)
 
-    basicRequest.get(requestUrl).response(asJsonEither[ErrorObject, PagingObject]).auth.bearer(accessToken).send(client).body
+    basicRequest.get(requestUrl).response(asJsonEither[ErrorObject, PagingObject[SimplifiedTrackObject]]).auth.bearer(accessToken).send(client).body
   }
 
   /**
@@ -70,15 +70,15 @@ case class AlbumsApi(baseUri: Uri = uri"https://api.spotify.com/v1") {
       offset: Option[Int] = None
   )(accessToken: String)(
       client: SttpBackend[Identity, Any]
-  ): Either[ResponseException[ErrorObject, circe.Error], PagingObject] = {
+  ): Either[ResponseException[ErrorObject, circe.Error], PagingObject[SimplifiedAlbumObject]] = {
 
     val queryParams = Map.empty[String, String] ++ includeGroups.map("includeGroups" -> _) ++ market.map("market" -> _) ++ limit.map(
       "limit" -> _.toString
     ) ++ offset.map("offset" -> _.toString)
 
-    val requestUrl = baseUri.addPath("/artists/albums").addPath(s"/$id").addParams(queryParams)
+    val requestUrl = baseUri.addPath("/artists").addPath(s"/$id").addPath("/albums").addParams(queryParams)
 
-    basicRequest.get(requestUrl).response(asJsonEither[ErrorObject, PagingObject]).auth.bearer(accessToken).send(client).body
+    basicRequest.get(requestUrl).response(asJsonEither[ErrorObject, PagingObject[SimplifiedAlbumObject]]).auth.bearer(accessToken).send(client).body
   }
 
   /**
@@ -118,13 +118,13 @@ case class AlbumsApi(baseUri: Uri = uri"https://api.spotify.com/v1") {
    */
   def getUsersSavedAlbums(limit: Option[Int] = None, offset: Option[Int] = None, market: Option[String] = None)(accessToken: String)(
       client: SttpBackend[Identity, Any]
-  ): Either[ResponseException[ErrorObject, circe.Error], PagingObject] = {
+  ): Either[ResponseException[ErrorObject, circe.Error], PagingObject[SavedTrackObject]] = {
 
     val queryParams = Map.empty[String, String] ++ limit.map("limit" -> _.toString) ++ offset.map("offset" -> _.toString) ++ market.map("market" -> _)
 
     val requestUrl = baseUri.addPath("/me/albums").addParams(queryParams)
 
-    basicRequest.get(requestUrl).response(asJsonEither[ErrorObject, PagingObject]).auth.bearer(accessToken).send(client).body
+    basicRequest.get(requestUrl).response(asJsonEither[ErrorObject, PagingObject[SavedTrackObject]]).auth.bearer(accessToken).send(client).body
   }
 
   /**

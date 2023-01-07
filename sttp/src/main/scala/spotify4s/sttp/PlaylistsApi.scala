@@ -3,7 +3,7 @@ package spotify4s.sttp
 import io.circe
 import io.circe.generic.extras.auto._
 import spotify4s.v1.circe.CirceConfiguration.jsonConfig
-import spotify4s.v1.model.{ErrorObject, ImageObject, PagingObject, PagingPlaylistObject, PlaylistObject}
+import spotify4s.v1.model.{ErrorObject, ImageObject, PagingObject, PagingPlaylistObject, PlaylistObject, PlaylistTrackObjectTrack}
 import spotify4s.v1.request.{AddTracksToPlaylistRequest, ChangePlaylistDetailsRequest, CreatePlaylistRequest, FollowPlaylistRequest, RemoveTracksPlaylistRequest}
 import spotify4s.v1.response.ReorderOrReplacePlaylistsTracks200Response
 import sttp.client3._
@@ -202,16 +202,16 @@ case class PlaylistsApi(baseUri: Uri = uri"https://api.spotify.com/v1") {
       limit: Option[Int] = None,
       offset: Option[Int] = None,
       additionalTypes: Option[String] = None
-  )(accessToken: String)(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject, circe.Error], PagingObject] = {
+  )(accessToken: String)(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject, circe.Error], PagingObject[PlaylistTrackObjectTrack]] = {
 
     val queryParams =
       Map.empty[String, String] ++ market.map("market" -> _) ++ fields.map("fields" -> _) ++ limit.map("limit" -> _.toString) ++ offset.map(
         "offset" -> _.toString
       ) ++ additionalTypes.map("additionalTypes" -> _)
 
-    val requestUrl = baseUri.addPath("/playlists/tracks").addPath(s"/$playlistId").addParams(queryParams)
+    val requestUrl = baseUri.addPath("/playlists").addPath(s"/$playlistId").addPath("/tracks").addParams(queryParams)
 
-    basicRequest.get(requestUrl).response(asJsonEither[ErrorObject, PagingObject]).auth.bearer(accessToken).send(client).body
+    basicRequest.get(requestUrl).response(asJsonEither[ErrorObject, PagingObject[PlaylistTrackObjectTrack]]).auth.bearer(accessToken).send(client).body
   }
 
   /**
@@ -222,7 +222,7 @@ case class PlaylistsApi(baseUri: Uri = uri"https://api.spotify.com/v1") {
       accessToken: String
   )(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject, circe.Error], ReorderOrReplacePlaylistsTracks200Response] = {
 
-    val requestUrl = baseUri.addPath("/playlists/tracks").addPath(s"/$playlistId")
+    val requestUrl = baseUri.addPath("/playlists").addPath(s"/$playlistId").addPath("/tracks")
 
     basicRequest
       .delete(requestUrl)
