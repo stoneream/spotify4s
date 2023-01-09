@@ -19,7 +19,7 @@ case class MarketsApi(baseUri: Uri = uri"https://api.spotify.com/v1") {
       accessToken: String
   )(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject, circe.Error], GetAvailableMarkets200Response] = {
 
-    val requestUrl = baseUri.addPath("/markets")
+    val requestUrl = baseUri.addPath("markets")
 
     basicRequest.get(requestUrl).response(asJsonEither[ErrorObject, GetAvailableMarkets200Response]).auth.bearer(accessToken).send(client).body
   }

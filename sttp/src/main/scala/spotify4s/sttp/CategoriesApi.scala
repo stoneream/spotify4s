@@ -22,7 +22,7 @@ case class CategoriesApi(baseUri: Uri = uri"https://api.spotify.com/v1") {
     val queryParams =
       Map.empty[String, String] ++ country.map("country" -> _) ++ limit.map("limit" -> _.toString) ++ offset.map("offset" -> _.toString)
 
-    val requestUrl = baseUri.addPath("/browse/categories/playlists").addPath(s"/$categoryId").addParams(queryParams)
+    val requestUrl = baseUri.addPath("browse", "categories", s"$categoryId", "playlists").addParams(queryParams)
 
     basicRequest.get(requestUrl).response(asJsonEither[ErrorObject, PagingPlaylistObject]).auth.bearer(accessToken).send(client).body
   }
@@ -37,7 +37,7 @@ case class CategoriesApi(baseUri: Uri = uri"https://api.spotify.com/v1") {
 
     val queryParams = Map.empty[String, String] ++ country.map("country" -> _) ++ locale.map("locale" -> _)
 
-    val requestUrl = baseUri.addPath("/browse/categories").addPath(s"/$categoryId").addParams(queryParams)
+    val requestUrl = baseUri.addPath("browse", "categories", s"$categoryId").addParams(queryParams)
 
     basicRequest.get(requestUrl).response(asJsonEither[ErrorObject, CategoryObject]).auth.bearer(accessToken).send(client).body
   }
@@ -55,7 +55,7 @@ case class CategoriesApi(baseUri: Uri = uri"https://api.spotify.com/v1") {
         "offset" -> _.toString
       )
 
-    val requestUrl = baseUri.addPath("/browse/categories").addParams(queryParams)
+    val requestUrl = baseUri.addPath("browse", "categories").addParams(queryParams)
 
     basicRequest.get(requestUrl).response(asJsonEither[ErrorObject, GetCategories200Response]).auth.bearer(accessToken).send(client).body
   }

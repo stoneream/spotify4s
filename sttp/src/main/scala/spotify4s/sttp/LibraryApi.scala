@@ -20,7 +20,7 @@ case class LibraryApi(baseUri: Uri = uri"https://api.spotify.com/v1") {
       accessToken: String
   )(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject, circe.Error], Unit] = {
 
-    val requestUrl = baseUri.addPath("/playlists").addPath(s"/$playlistId")
+    val requestUrl = baseUri.addPath("playlists", s"$playlistId")
 
     basicRequest.put(requestUrl).body(requestBody).response(asJsonEither[ErrorObject, Unit]).auth.bearer(accessToken).send(client).body
   }
@@ -35,7 +35,7 @@ case class LibraryApi(baseUri: Uri = uri"https://api.spotify.com/v1") {
 
     val queryParams = Map.empty[String, String] + ("type" -> `type`) + ("ids" -> ids)
 
-    val requestUrl = baseUri.addPath("/me/following/contains").addParams(queryParams)
+    val requestUrl = baseUri.addPath("me", "following", "contains").addParams(queryParams)
 
     basicRequest.get(requestUrl).response(asJsonEither[ErrorObject, List[Boolean]]).auth.bearer(accessToken).send(client).body
   }
@@ -50,7 +50,7 @@ case class LibraryApi(baseUri: Uri = uri"https://api.spotify.com/v1") {
 
     val queryParams = Map.empty[String, String] + ("ids" -> ids)
 
-    val requestUrl = baseUri.addPath("/me/albums/contains").addParams(queryParams)
+    val requestUrl = baseUri.addPath("me", "albums", "contains").addParams(queryParams)
 
     basicRequest.get(requestUrl).response(asJsonEither[ErrorObject, List[Boolean]]).auth.bearer(accessToken).send(client).body
   }
@@ -65,7 +65,7 @@ case class LibraryApi(baseUri: Uri = uri"https://api.spotify.com/v1") {
 
     val queryParams = Map.empty[String, String] + ("ids" -> ids)
 
-    val requestUrl = baseUri.addPath("/me/audiobooks/contains").addParams(queryParams)
+    val requestUrl = baseUri.addPath("me", "audiobooks", "contains").addParams(queryParams)
 
     basicRequest.get(requestUrl).response(asJsonEither[ErrorObject, List[Boolean]]).auth.bearer(accessToken).send(client).body
   }
@@ -80,7 +80,7 @@ case class LibraryApi(baseUri: Uri = uri"https://api.spotify.com/v1") {
 
     val queryParams = Map.empty[String, String] + ("ids" -> ids)
 
-    val requestUrl = baseUri.addPath("/me/episodes/contains").addParams(queryParams)
+    val requestUrl = baseUri.addPath("me", "episodes", "contains").addParams(queryParams)
 
     basicRequest.get(requestUrl).response(asJsonEither[ErrorObject, List[Boolean]]).auth.bearer(accessToken).send(client).body
   }
@@ -95,7 +95,7 @@ case class LibraryApi(baseUri: Uri = uri"https://api.spotify.com/v1") {
 
     val queryParams = Map.empty[String, String] + ("ids" -> ids)
 
-    val requestUrl = baseUri.addPath("/me/shows/contains").addParams(queryParams)
+    val requestUrl = baseUri.addPath("me", "shows", "contains").addParams(queryParams)
 
     basicRequest.get(requestUrl).response(asJsonEither[ErrorObject, List[Boolean]]).auth.bearer(accessToken).send(client).body
   }
@@ -110,7 +110,7 @@ case class LibraryApi(baseUri: Uri = uri"https://api.spotify.com/v1") {
 
     val queryParams = Map.empty[String, String] + ("ids" -> ids)
 
-    val requestUrl = baseUri.addPath("/me/tracks/contains").addParams(queryParams)
+    val requestUrl = baseUri.addPath("me", "tracks", "contains").addParams(queryParams)
 
     basicRequest.get(requestUrl).response(asJsonEither[ErrorObject, List[Boolean]]).auth.bearer(accessToken).send(client).body
   }
@@ -123,7 +123,7 @@ case class LibraryApi(baseUri: Uri = uri"https://api.spotify.com/v1") {
       accessToken: String
   )(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject, circe.Error], PlaylistObject] = {
 
-    val requestUrl = baseUri.addPath("/users/playlists").addPath(s"/$userId")
+    val requestUrl = baseUri.addPath("users", userId, "playlists")
 
     basicRequest.post(requestUrl).body(requestBody).response(asJsonEither[ErrorObject, PlaylistObject]).auth.bearer(accessToken).send(client).body
   }
@@ -138,7 +138,7 @@ case class LibraryApi(baseUri: Uri = uri"https://api.spotify.com/v1") {
 
     val queryParams = Map.empty[String, String] + ("type" -> `type`) + ("ids" -> ids)
 
-    val requestUrl = baseUri.addPath("/me/following").addParams(queryParams)
+    val requestUrl = baseUri.addPath("me", "following").addParams(queryParams)
 
     basicRequest.put(requestUrl).body(requestBody).response(asJsonEither[ErrorObject, Unit]).auth.bearer(accessToken).send(client).body
   }
@@ -153,7 +153,7 @@ case class LibraryApi(baseUri: Uri = uri"https://api.spotify.com/v1") {
 
     val queryParams = Map.empty[String, String] ++ limit.map("limit" -> _.toString) ++ offset.map("offset" -> _.toString)
 
-    val requestUrl = baseUri.addPath("/me/playlists").addParams(queryParams)
+    val requestUrl = baseUri.addPath("me", "playlists").addParams(queryParams)
 
     basicRequest.get(requestUrl).response(asJsonEither[ErrorObject, PagingPlaylistObject]).auth.bearer(accessToken).send(client).body
   }
@@ -168,7 +168,7 @@ case class LibraryApi(baseUri: Uri = uri"https://api.spotify.com/v1") {
 
     val queryParams = Map.empty[String, String] + ("type" -> `type`) ++ after.map("after" -> _) ++ limit.map("limit" -> _.toString)
 
-    val requestUrl = baseUri.addPath("/me/following").addParams(queryParams)
+    val requestUrl = baseUri.addPath("me", "following").addParams(queryParams)
 
     basicRequest.get(requestUrl).response(asJsonEither[ErrorObject, GetFollowed200Response]).auth.bearer(accessToken).send(client).body
   }
@@ -183,7 +183,7 @@ case class LibraryApi(baseUri: Uri = uri"https://api.spotify.com/v1") {
 
     val queryParams = Map.empty[String, String] ++ limit.map("limit" -> _.toString) ++ offset.map("offset" -> _.toString) ++ market.map("market" -> _)
 
-    val requestUrl = baseUri.addPath("/me/albums").addParams(queryParams)
+    val requestUrl = baseUri.addPath("me", "albums").addParams(queryParams)
 
     basicRequest.get(requestUrl).response(asJsonEither[ErrorObject, PagingObject[SavedAlbumObject]]).auth.bearer(accessToken).send(client).body
   }
@@ -200,7 +200,7 @@ case class LibraryApi(baseUri: Uri = uri"https://api.spotify.com/v1") {
 
     val queryParams = Map.empty[String, String] ++ market.map("market" -> _) ++ limit.map("limit" -> _.toString) ++ offset.map("offset" -> _.toString)
 
-    val requestUrl = baseUri.addPath("/me/episodes").addParams(queryParams)
+    val requestUrl = baseUri.addPath("me", "episodes").addParams(queryParams)
 
     basicRequest.get(requestUrl).response(asJsonEither[ErrorObject, PagingObject[SavedEpisodeObject]]).auth.bearer(accessToken).send(client).body
   }
@@ -215,7 +215,7 @@ case class LibraryApi(baseUri: Uri = uri"https://api.spotify.com/v1") {
 
     val queryParams = Map.empty[String, String] ++ limit.map("limit" -> _.toString) ++ offset.map("offset" -> _.toString)
 
-    val requestUrl = baseUri.addPath("/me/shows").addParams(queryParams)
+    val requestUrl = baseUri.addPath("me", "shows").addParams(queryParams)
 
     basicRequest.get(requestUrl).response(asJsonEither[ErrorObject, PagingObject[SavedShowObject]]).auth.bearer(accessToken).send(client).body
   }
@@ -230,7 +230,7 @@ case class LibraryApi(baseUri: Uri = uri"https://api.spotify.com/v1") {
 
     val queryParams = Map.empty[String, String] ++ market.map("market" -> _) ++ limit.map("limit" -> _.toString) ++ offset.map("offset" -> _.toString)
 
-    val requestUrl = baseUri.addPath("/me/tracks").addParams(queryParams)
+    val requestUrl = baseUri.addPath("me", "tracks").addParams(queryParams)
 
     basicRequest.get(requestUrl).response(asJsonEither[ErrorObject, PagingObject[SavedTrackObject]]).auth.bearer(accessToken).send(client).body
   }
@@ -245,7 +245,7 @@ case class LibraryApi(baseUri: Uri = uri"https://api.spotify.com/v1") {
 
     val queryParams = Map.empty[String, String] + ("ids" -> ids)
 
-    val requestUrl = baseUri.addPath("/me/albums").addParams(queryParams)
+    val requestUrl = baseUri.addPath("me", "albums").addParams(queryParams)
 
     basicRequest.delete(requestUrl).body(requestBody).response(asJsonEither[ErrorObject, Unit]).auth.bearer(accessToken).send(client).body
   }
@@ -258,7 +258,7 @@ case class LibraryApi(baseUri: Uri = uri"https://api.spotify.com/v1") {
 
     val queryParams = Map.empty[String, String] + ("ids" -> ids)
 
-    val requestUrl = baseUri.addPath("/me/audiobooks").addParams(queryParams)
+    val requestUrl = baseUri.addPath("me", "audiobooks").addParams(queryParams)
 
     basicRequest.delete(requestUrl).response(asJsonEither[ErrorObject, Unit]).auth.bearer(accessToken).send(client).body
   }
@@ -273,7 +273,7 @@ case class LibraryApi(baseUri: Uri = uri"https://api.spotify.com/v1") {
 
     val queryParams = Map.empty[String, String] + ("ids" -> ids)
 
-    val requestUrl = baseUri.addPath("/me/episodes").addParams(queryParams)
+    val requestUrl = baseUri.addPath("me", "episodes").addParams(queryParams)
 
     basicRequest.delete(requestUrl).body(requestBody).response(asJsonEither[ErrorObject, Unit]).auth.bearer(accessToken).send(client).body
   }
@@ -288,7 +288,7 @@ case class LibraryApi(baseUri: Uri = uri"https://api.spotify.com/v1") {
 
     val queryParams = Map.empty[String, String] + ("ids" -> ids) ++ market.map("market" -> _)
 
-    val requestUrl = baseUri.addPath("/me/shows").addParams(queryParams)
+    val requestUrl = baseUri.addPath("me", "shows").addParams(queryParams)
 
     basicRequest.delete(requestUrl).response(asJsonEither[ErrorObject, Unit]).auth.bearer(accessToken).send(client).body
   }
@@ -303,7 +303,7 @@ case class LibraryApi(baseUri: Uri = uri"https://api.spotify.com/v1") {
 
     val queryParams = Map.empty[String, String] + ("ids" -> ids)
 
-    val requestUrl = baseUri.addPath("/me/tracks").addParams(queryParams)
+    val requestUrl = baseUri.addPath("me", "tracks").addParams(queryParams)
 
     basicRequest.delete(requestUrl).body(requestBody).response(asJsonEither[ErrorObject, Unit]).auth.bearer(accessToken).send(client).body
   }
@@ -318,7 +318,7 @@ case class LibraryApi(baseUri: Uri = uri"https://api.spotify.com/v1") {
 
     val queryParams = Map.empty[String, String] + ("ids" -> ids)
 
-    val requestUrl = baseUri.addPath("/me/albums").addParams(queryParams)
+    val requestUrl = baseUri.addPath("me", "albums").addParams(queryParams)
 
     basicRequest.put(requestUrl).body(requestBody).response(asJsonEither[ErrorObject, Unit]).auth.bearer(accessToken).send(client).body
   }
@@ -331,7 +331,7 @@ case class LibraryApi(baseUri: Uri = uri"https://api.spotify.com/v1") {
 
     val queryParams = Map.empty[String, String] + ("ids" -> ids)
 
-    val requestUrl = baseUri.addPath("/me/audiobooks").addParams(queryParams)
+    val requestUrl = baseUri.addPath("me", "audiobooks").addParams(queryParams)
 
     basicRequest.put(requestUrl).response(asJsonEither[ErrorObject, Unit]).auth.bearer(accessToken).send(client).body
   }
@@ -347,7 +347,7 @@ case class LibraryApi(baseUri: Uri = uri"https://api.spotify.com/v1") {
 
     val queryParams = Map.empty[String, String] + ("ids" -> ids)
 
-    val requestUrl = baseUri.addPath("/me/episodes").addParams(queryParams)
+    val requestUrl = baseUri.addPath("me", "episodes").addParams(queryParams)
 
     basicRequest.put(requestUrl).body(requestBody).response(asJsonEither[ErrorObject, Unit]).auth.bearer(accessToken).send(client).body
   }
@@ -360,7 +360,7 @@ case class LibraryApi(baseUri: Uri = uri"https://api.spotify.com/v1") {
 
     val queryParams = Map.empty[String, String] + ("ids" -> ids)
 
-    val requestUrl = baseUri.addPath("/me/shows").addParams(queryParams)
+    val requestUrl = baseUri.addPath("me", "shows").addParams(queryParams)
 
     basicRequest.put(requestUrl).response(asJsonEither[ErrorObject, Unit]).auth.bearer(accessToken).send(client).body
   }
@@ -375,7 +375,7 @@ case class LibraryApi(baseUri: Uri = uri"https://api.spotify.com/v1") {
 
     val queryParams = Map.empty[String, String] + ("ids" -> ids)
 
-    val requestUrl = baseUri.addPath("/me/tracks").addParams(queryParams)
+    val requestUrl = baseUri.addPath("me", "tracks").addParams(queryParams)
 
     basicRequest.put(requestUrl).body(requestBody).response(asJsonEither[ErrorObject, Unit]).auth.bearer(accessToken).send(client).body
   }
@@ -390,7 +390,7 @@ case class LibraryApi(baseUri: Uri = uri"https://api.spotify.com/v1") {
 
     val queryParams = Map.empty[String, String] + ("type" -> `type`) + ("ids" -> ids)
 
-    val requestUrl = baseUri.addPath("/me/following").addParams(queryParams)
+    val requestUrl = baseUri.addPath("me", "following").addParams(queryParams)
 
     basicRequest.delete(requestUrl).body(requestBody).response(asJsonEither[ErrorObject, Unit]).auth.bearer(accessToken).send(client).body
   }

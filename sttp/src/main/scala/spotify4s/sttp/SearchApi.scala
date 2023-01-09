@@ -31,7 +31,7 @@ case class SearchApi(baseUri: Uri = uri"https://api.spotify.com/v1") {
       "limit" -> _.toString
     ) ++ offset.map("offset" -> _.toString) ++ includeExternal.map("includeExternal" -> _)
 
-    val requestUrl = baseUri.addPath("/search").addParams(queryParams)
+    val requestUrl = baseUri.addPath("search").addParams(queryParams)
 
     basicRequest.get(requestUrl).response(asJsonEither[ErrorObject, Search200Response]).auth.bearer(accessToken).send(client).body
   }

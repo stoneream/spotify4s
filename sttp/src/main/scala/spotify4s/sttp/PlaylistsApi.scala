@@ -24,7 +24,7 @@ case class PlaylistsApi(baseUri: Uri = uri"https://api.spotify.com/v1") {
 
     val queryParams = Map.empty[String, String] ++ position.map("position" -> _.toString) ++ uris.map("uris" -> _)
 
-    val requestUrl = baseUri.addPath("/playlists/tracks").addPath(s"/$playlistId").addParams(queryParams)
+    val requestUrl = baseUri.addPath("playlists",s"$playlistId","tracks").addParams(queryParams)
 
     basicRequest
       .post(requestUrl)
@@ -44,7 +44,7 @@ case class PlaylistsApi(baseUri: Uri = uri"https://api.spotify.com/v1") {
       accessToken: String
   )(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject, circe.Error], Unit] = {
 
-    val requestUrl = baseUri.addPath("/playlists").addPath(s"/$playlistId")
+    val requestUrl = baseUri.addPath("playlists",s"$playlistId")
 
     basicRequest.put(requestUrl).body(requestBody).response(asJsonEither[ErrorObject, Unit]).auth.bearer(accessToken).send(client).body
   }
@@ -59,7 +59,7 @@ case class PlaylistsApi(baseUri: Uri = uri"https://api.spotify.com/v1") {
 
     val queryParams = Map.empty[String, String] + ("ids" -> ids)
 
-    val requestUrl = baseUri.addPath("/playlists/followers/contains").addPath(s"/$playlistId").addParams(queryParams)
+    val requestUrl = baseUri.addPath("playlists",$playlistId,"followers","contains").addParams(queryParams)
 
     basicRequest.get(requestUrl).response(asJsonEither[ErrorObject, List[Boolean]]).auth.bearer(accessToken).send(client).body
   }
@@ -72,7 +72,7 @@ case class PlaylistsApi(baseUri: Uri = uri"https://api.spotify.com/v1") {
       accessToken: String
   )(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject, circe.Error], PlaylistObject] = {
 
-    val requestUrl = baseUri.addPath("/users/playlists").addPath(s"/$userId")
+    val requestUrl = baseUri.addPath("users",userId,"playlists")
 
     basicRequest.post(requestUrl).body(requestBody).response(asJsonEither[ErrorObject, PlaylistObject]).auth.bearer(accessToken).send(client).body
   }
@@ -85,7 +85,7 @@ case class PlaylistsApi(baseUri: Uri = uri"https://api.spotify.com/v1") {
       accessToken: String
   )(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject, circe.Error], Unit] = {
 
-    val requestUrl = baseUri.addPath("/playlists/followers").addPath(s"/$playlistId")
+    val requestUrl = baseUri.addPath("playlists",playlistId, "followers")
 
     basicRequest.put(requestUrl).body(requestBody).response(asJsonEither[ErrorObject, Unit]).auth.bearer(accessToken).send(client).body
   }
@@ -101,7 +101,7 @@ case class PlaylistsApi(baseUri: Uri = uri"https://api.spotify.com/v1") {
     val queryParams =
       Map.empty[String, String] ++ country.map("country" -> _) ++ limit.map("limit" -> _.toString) ++ offset.map("offset" -> _.toString)
 
-    val requestUrl = baseUri.addPath("/browse/categories/playlists").addPath(s"/$categoryId").addParams(queryParams)
+    val requestUrl = baseUri.addPath("browse/categories/playlists").addPath(s"/$categoryId").addParams(queryParams)
 
     basicRequest.get(requestUrl).response(asJsonEither[ErrorObject, PagingPlaylistObject]).auth.bearer(accessToken).send(client).body
   }
@@ -116,7 +116,7 @@ case class PlaylistsApi(baseUri: Uri = uri"https://api.spotify.com/v1") {
 
     val queryParams = Map.empty[String, String] ++ limit.map("limit" -> _.toString) ++ offset.map("offset" -> _.toString)
 
-    val requestUrl = baseUri.addPath("/me/playlists").addParams(queryParams)
+    val requestUrl = baseUri.addPath("me/playlists").addParams(queryParams)
 
     basicRequest.get(requestUrl).response(asJsonEither[ErrorObject, PagingPlaylistObject]).auth.bearer(accessToken).send(client).body
   }
@@ -141,7 +141,7 @@ case class PlaylistsApi(baseUri: Uri = uri"https://api.spotify.com/v1") {
       "timestamp" -> _
     ) ++ limit.map("limit" -> _.toString) ++ offset.map("offset" -> _.toString)
 
-    val requestUrl = baseUri.addPath("/browse/featured-playlists").addParams(queryParams)
+    val requestUrl = baseUri.addPath("browse/featured-playlists").addParams(queryParams)
 
     basicRequest.get(requestUrl).response(asJsonEither[ErrorObject, PagingPlaylistObject]).auth.bearer(accessToken).send(client).body
   }
@@ -156,7 +156,7 @@ case class PlaylistsApi(baseUri: Uri = uri"https://api.spotify.com/v1") {
 
     val queryParams = Map.empty[String, String] ++ limit.map("limit" -> _.toString) ++ offset.map("offset" -> _.toString)
 
-    val requestUrl = baseUri.addPath("/users/playlists").addPath(s"/$userId").addParams(queryParams)
+    val requestUrl = baseUri.addPath("users/playlists").addPath(s"/$userId").addParams(queryParams)
 
     basicRequest.get(requestUrl).response(asJsonEither[ErrorObject, PagingPlaylistObject]).auth.bearer(accessToken).send(client).body
   }
@@ -173,7 +173,7 @@ case class PlaylistsApi(baseUri: Uri = uri"https://api.spotify.com/v1") {
       "additionalTypes" -> _
     )
 
-    val requestUrl = baseUri.addPath("/playlists").addPath(s"/$playlistId").addParams(queryParams)
+    val requestUrl = baseUri.addPath("playlists").addPath(s"/$playlistId").addParams(queryParams)
 
     basicRequest.get(requestUrl).response(asJsonEither[ErrorObject, PlaylistObject]).auth.bearer(accessToken).send(client).body
   }
@@ -186,7 +186,7 @@ case class PlaylistsApi(baseUri: Uri = uri"https://api.spotify.com/v1") {
       playlistId: String
   )(accessToken: String)(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject, circe.Error], List[ImageObject]] = {
 
-    val requestUrl = baseUri.addPath("/playlists/images").addPath(s"/$playlistId")
+    val requestUrl = baseUri.addPath("playlists/images").addPath(s"/$playlistId")
 
     basicRequest.get(requestUrl).response(asJsonEither[ErrorObject, List[ImageObject]]).auth.bearer(accessToken).send(client).body
   }
@@ -209,7 +209,7 @@ case class PlaylistsApi(baseUri: Uri = uri"https://api.spotify.com/v1") {
         "offset" -> _.toString
       ) ++ additionalTypes.map("additionalTypes" -> _)
 
-    val requestUrl = baseUri.addPath("/playlists").addPath(s"/$playlistId").addPath("/tracks").addParams(queryParams)
+    val requestUrl = baseUri.addPath("playlists").addPath(s"/$playlistId").addPath("tracks").addParams(queryParams)
 
     basicRequest.get(requestUrl).response(asJsonEither[ErrorObject, PagingObject[PlaylistTrackObjectTrack]]).auth.bearer(accessToken).send(client).body
   }
@@ -222,7 +222,7 @@ case class PlaylistsApi(baseUri: Uri = uri"https://api.spotify.com/v1") {
       accessToken: String
   )(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject, circe.Error], ReorderOrReplacePlaylistsTracks200Response] = {
 
-    val requestUrl = baseUri.addPath("/playlists").addPath(s"/$playlistId").addPath("/tracks")
+    val requestUrl = baseUri.addPath("playlists").addPath(s"/$playlistId").addPath("tracks")
 
     basicRequest
       .delete(requestUrl)
@@ -248,7 +248,7 @@ case class PlaylistsApi(baseUri: Uri = uri"https://api.spotify.com/v1") {
    *
    *    val queryParams = Map.empty[String, String] ++ uris.map("uris" -> _.toString)
    *
-   *    val requestUrl = baseUri.addPath("/playlists/tracks").addPath(s"/${playlistId}").addParams(queryParams)
+   *    val requestUrl = baseUri.addPath("playlists/tracks").addPath(s"/${playlistId}").addParams(queryParams)
    *
    *    basicRequest.put(requestUrl).body(requestBody).response(asJsonEither[ErrorObject, ReorderOrReplacePlaylistsTracks200Response]).auth.bearer(accessToken).send(client).body
    *  }
@@ -262,7 +262,7 @@ case class PlaylistsApi(baseUri: Uri = uri"https://api.spotify.com/v1") {
       playlistId: String
   )(accessToken: String)(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject, circe.Error], Unit] = {
 
-    val requestUrl = baseUri.addPath("/playlists/followers").addPath(s"/$playlistId")
+    val requestUrl = baseUri.addPath("playlists/followers").addPath(s"/$playlistId")
 
     basicRequest.delete(requestUrl).response(asJsonEither[ErrorObject, Unit]).auth.bearer(accessToken).send(client).body
   }
@@ -275,7 +275,7 @@ case class PlaylistsApi(baseUri: Uri = uri"https://api.spotify.com/v1") {
       playlistId: String
   )(accessToken: String)(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject, circe.Error], Unit] = {
 
-    val requestUrl = baseUri.addPath("/playlists/images").addPath(s"/$playlistId")
+    val requestUrl = baseUri.addPath("playlists/images").addPath(s"/$playlistId")
 
     basicRequest.put(requestUrl).response(asJsonEither[ErrorObject, Unit]).auth.bearer(accessToken).send(client).body
   }

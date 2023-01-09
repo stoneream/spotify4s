@@ -19,7 +19,7 @@ case class GenresApi(baseUri: Uri = uri"https://api.spotify.com/v1") {
       accessToken: String
   )(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject, circe.Error], GetRecommendationGenres200Response] = {
 
-    val requestUrl = baseUri.addPath("/recommendations/available-genre-seeds")
+    val requestUrl = baseUri.addPath("recommendations", "available-genre-seeds")
 
     basicRequest.get(requestUrl).response(asJsonEither[ErrorObject, GetRecommendationGenres200Response]).auth.bearer(accessToken).send(client).body
   }

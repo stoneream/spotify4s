@@ -22,7 +22,7 @@ case class ArtistsApi(baseUri: Uri = uri"https://api.spotify.com/v1") {
 
     val queryParams = Map.empty[String, String] + ("type" -> `type`) + ("ids" -> ids)
 
-    val requestUrl = baseUri.addPath("/me/following/contains").addParams(queryParams)
+    val requestUrl = baseUri.addPath("me", "following", "contains").addParams(queryParams)
 
     basicRequest.get(requestUrl).response(asJsonEither[ErrorObject, List[Boolean]]).auth.bearer(accessToken).send(client).body
   }
@@ -37,7 +37,7 @@ case class ArtistsApi(baseUri: Uri = uri"https://api.spotify.com/v1") {
 
     val queryParams = Map.empty[String, String] + ("type" -> `type`) + ("ids" -> ids)
 
-    val requestUrl = baseUri.addPath("/me/following").addParams(queryParams)
+    val requestUrl = baseUri.addPath("me", "following").addParams(queryParams)
 
     basicRequest.put(requestUrl).body(requestBody).response(asJsonEither[ErrorObject, Unit]).auth.bearer(accessToken).send(client).body
   }
@@ -48,7 +48,7 @@ case class ArtistsApi(baseUri: Uri = uri"https://api.spotify.com/v1") {
    */
   def getAnArtist(id: String)(accessToken: String)(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject, circe.Error], ArtistObject] = {
 
-    val requestUrl = baseUri.addPath("/artists").addPath(s"/$id")
+    val requestUrl = baseUri.addPath("artists", s"$id")
 
     basicRequest.get(requestUrl).response(asJsonEither[ErrorObject, ArtistObject]).auth.bearer(accessToken).send(client).body
   }
@@ -71,37 +71,9 @@ case class ArtistsApi(baseUri: Uri = uri"https://api.spotify.com/v1") {
       "limit" -> _.toString
     ) ++ offset.map("offset" -> _.toString)
 
-    val requestUrl = baseUri.addPath("/artists").addPath(s"/$id").addPath("/albums").addParams(queryParams)
+    val requestUrl = baseUri.addPath("artists", s"$id", "albums").addParams(queryParams)
 
     basicRequest.get(requestUrl).response(asJsonEither[ErrorObject, PagingObject[SimplifiedAlbumObject]]).auth.bearer(accessToken).send(client).body
-  }
-
-  /**
-   * Get Artist's Related Artists
-   * Get Spotify catalog information about artists similar to a given artist. Similarity is based on analysis of the Spotify community's [listening history](http://news.spotify.com/se/2010/02/03/related-artists/).
-   */
-  def getAnArtistsRelatedArtists(
-      id: String
-  )(accessToken: String)(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject, circe.Error], GetMultipleArtists200Response] = {
-
-    val requestUrl = baseUri.addPath("/artists/related-artists").addPath(s"/$id")
-
-    basicRequest.get(requestUrl).response(asJsonEither[ErrorObject, GetMultipleArtists200Response]).auth.bearer(accessToken).send(client).body
-  }
-
-  /**
-   * Get Artist's Top Tracks
-   * Get Spotify catalog information about an artist's top tracks by country.
-   */
-  def getAnArtistsTopTracks(id: String, market: Option[String] = None)(
-      accessToken: String
-  )(client: SttpBackend[Identity, Any]): Either[ResponseException[ErrorObject, circe.Error], GetAnArtistsTopTracks200Response] = {
-
-    val queryParams = Map.empty[String, String] ++ market.map("market" -> _)
-
-    val requestUrl = baseUri.addPath("/artists/top-tracks").addPath(s"/$id").addParams(queryParams)
-
-    basicRequest.get(requestUrl).response(asJsonEither[ErrorObject, GetAnArtistsTopTracks200Response]).auth.bearer(accessToken).send(client).body
   }
 
   /**
@@ -114,7 +86,7 @@ case class ArtistsApi(baseUri: Uri = uri"https://api.spotify.com/v1") {
 
     val queryParams = Map.empty[String, String] + ("type" -> `type`) ++ after.map("after" -> _) ++ limit.map("limit" -> _.toString)
 
-    val requestUrl = baseUri.addPath("/me/following").addParams(queryParams)
+    val requestUrl = baseUri.addPath("me", "following").addParams(queryParams)
 
     basicRequest.get(requestUrl).response(asJsonEither[ErrorObject, GetFollowed200Response]).auth.bearer(accessToken).send(client).body
   }
@@ -129,7 +101,7 @@ case class ArtistsApi(baseUri: Uri = uri"https://api.spotify.com/v1") {
 
     val queryParams = Map.empty[String, String] + ("ids" -> ids)
 
-    val requestUrl = baseUri.addPath("/artists").addParams(queryParams)
+    val requestUrl = baseUri.addPath("artists").addParams(queryParams)
 
     basicRequest.get(requestUrl).response(asJsonEither[ErrorObject, GetMultipleArtists200Response]).auth.bearer(accessToken).send(client).body
   }
@@ -144,7 +116,7 @@ case class ArtistsApi(baseUri: Uri = uri"https://api.spotify.com/v1") {
 
     val queryParams = Map.empty[String, String] + ("type" -> `type`) + ("ids" -> ids)
 
-    val requestUrl = baseUri.addPath("/me/following").addParams(queryParams)
+    val requestUrl = baseUri.addPath("me", "following").addParams(queryParams)
 
     basicRequest.delete(requestUrl).body(requestBody).response(asJsonEither[ErrorObject, Unit]).auth.bearer(accessToken).send(client).body
   }
